@@ -1,6 +1,9 @@
+//User Model
+//Import module
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../config/db/db');
 
+// Định nghĩa mô hình
 const User = sequelize.define('User', {
     user_id: {
         type: DataTypes.INTEGER,
@@ -45,9 +48,11 @@ const User = sequelize.define('User', {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
     },
-}, {
-    timestamps: false, // Bỏ qua timestamps tự động của Sequelize nếu bạn muốn dùng cột đã định nghĩa
+}, 
+//Tùy chọn mô hình
+{
+    timestamps: false, 
     tableName: 'Users',
 });
-
+//Xuất mô hình
 module.exports = User;
