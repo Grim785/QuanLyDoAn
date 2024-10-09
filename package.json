@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "watch": "sass --watch src/resources/scss:src/public/css",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,8 @@
     "mysql2": "^3.11.3",
     "nodemon": "^3.1.7",
     "sequelize": "^6.37.4"
+  },
+  "devDependencies": {
+    "sass": "^1.79.4"
   }
 }
