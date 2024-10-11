@@ -1,1 +1,28 @@
+@import "variable";
 
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+html,body{
+    height: 100%;
+}
+
+.header{
+    height: 120px;
+}
+
+
+.text-red{
+    color: $red;
+}
+
+.font-xl{
+    font-size: $xl;
+}
+
+.inner-shadow{
+    box-shadow: inset 0px 1px 4px #c2bebe;
+}
