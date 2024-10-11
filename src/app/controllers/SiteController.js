@@ -4,13 +4,15 @@ class SiteController{
     //[GET] /
     index(req, res, next){
         res.render('home', {
-            showHeaderFooter: false
+            showHeaderFooter: true,
+            title: 'Home',
         });
     }
     login(req, res, next){
         res.render('login', {
             showHeaderFooter: false,
-            showNav: false
+            showNav: false,
+            title: 'Login',
         });
     }
     async getUser(req, res, next){
