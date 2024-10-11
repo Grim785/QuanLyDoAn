@@ -1,11 +1,11 @@
-// const express = require('express');
-// const router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-// const controllers = require('../app/controllers');
+const controllers = require('../app/controllers');
 
-// router.get('/', controllers.login.index); // home
-
-
+router.get('/', controllers.login.index); // home
 
 
-// module.exports = router;
+
+
+module.exports = router;
