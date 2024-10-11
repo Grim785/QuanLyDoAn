@@ -28,22 +28,20 @@
         {{/if}}
     </footer> --}}
     <div class="container-fluid">
-        <div class="row">
-            <header id="main_header">
-                {{#if showHeaderFooter}}
-                    {{>header}} <!-- Header chỉ hiển thị nếu showHeaderFooter là true -->
-                {{/if}}
-            </header>
-            <nav id="left">
-                {{>nav}}
-            </nav>
-                {{{body}}}
-            <footer>
-                {{#if showHeaderFooter}}
-                    {{>footer}} <!-- Footer chỉ hiển thị nếu showHeaderFooter là true -->
-                {{/if}}
-            </footer>
-        </div>
+        {{#if showHeaderFooter}}
+            {{>header}} <!-- Header chỉ hiển thị nếu showHeaderFooter là true -->
+        {{/if}}
+
+        {{#if showNav}}<!-- Nav chỉ hiển thị nếu showNav là true-->
+            {{>nav}}
+        {{/if}}
+        
+        {{!-- phần body --}}
+            {{{body}}}
+
+        {{#if showHeaderFooter}}
+            {{>footer}} <!-- Footer chỉ hiển thị nếu showHeaderFooter là true -->
+        {{/if}}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
