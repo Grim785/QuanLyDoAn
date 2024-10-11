@@ -15,6 +15,10 @@ app.engine(
   "hbs",
   engine({
     extname: ".hbs",
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,  // Cho phép truy cập vào các thuộc tính prototype
+      allowProtoMethodsByDefault: true,     // Cho phép truy cập vào các phương thức prototype
+    },
   })
 );
 app.set("view engine", "hbs");
