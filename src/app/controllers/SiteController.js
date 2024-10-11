@@ -8,6 +8,7 @@ class SiteController{
             title: 'Home',
         });
     }
+    //[GET] /login
     login(req, res, next){
         res.render('login', {
             showHeaderFooter: false,
@@ -15,35 +16,32 @@ class SiteController{
             title: 'Login',
         });
     }
-    // async getUser(req, res, next){
-    //     try{
-    //         const user = await User.findAll();
-    //         console.log(user);
-    //         res.render('home', { user });
-    //     }catch (error){
-    //         next(error);
-    //     }
+    // //[GET] /test
+    // test(req, res, next){
+    //     res.render('test', {
+    //         showHeaderFooter: false
+    //     });
     // }
-    //[GET] /test
-    test(req, res, next){
-        res.render('test', {
-            showHeaderFooter: false
-        });
-    }
 
 
 
-    //[POST] 
-    async testlogin(req, res, next) {
-        const { uname, upass } = req.body;
+    //[POST] /login
+    async chklogin(req, res, next) {
+        const { username, password, rememberMe } = req.body;
         console.log(req.body);
-        // Xử lý đăng nhập ở đây
+        // Xử lý đăng nhập
         try {
-            const user = await User.findOne({ where: { username: uname, password: upass } });
+            const user = await User.findOne({ where: { username, password} });
             if (user) {
                 // Đăng nhập thành công
-                // res.redirect('/home'); // Chuyển hướng đến trang chính
-                res.send('Đăng nhập thành công');
+                req.session.user = user;  // Lưu thông tin người dùng vào session
+                //Nếu người dùng check vào ô ghi nhớ đăng nhập
+                if (rememberMe) {
+                    res.cookie('userId', user.id, { maxAge: 7 * 24 * 60 * 60 * 1000 }); // Cookie tồn tại trong 7 ngày
+                }
+                
+                // res.send('Đăng nhập thành công');
+                res.redirect('/');
             } else {
                 // Đăng nhập thất bại
                 res.send('Đăng nhập thất bại');
