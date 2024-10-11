@@ -1,7 +1,6 @@
 const siteRoute = require('./site');
 const loginRoute = require('./login');
-function route(app){
-    app.use('/login',loginRoute);
+function route(app){    
     app.use('/', siteRoute);
 }
 
