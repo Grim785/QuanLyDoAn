@@ -7,8 +7,7 @@ router.get('/login', controllers.site.login); // /login
 // router.get('/getu', controllers.site.getUser);
 
 
-router.get('/test', controllers.site.test);
-router.post('/testlogin', controllers.site.testlogin);
+router.get('/getu', controllers.site.getUser);
 
 
 router.get('/', controllers.site.index); // /home
