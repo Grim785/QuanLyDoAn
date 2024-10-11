@@ -3,7 +3,9 @@ const User = require("../models/userModel");
 class SiteController{
     //[GET] /
     index(req, res, next){
-        res.render('home');
+        res.render('login', {
+            showHeaderFooter: false
+        });
     }
     async getUser(req, res, next){
         try{
