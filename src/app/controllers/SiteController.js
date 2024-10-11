@@ -9,7 +9,8 @@ class SiteController{
     }
     login(req, res, next){
         res.render('login', {
-            showHeaderFooter: false
+            showHeaderFooter: false,
+            showNav: false
         });
     }
     async getUser(req, res, next){
