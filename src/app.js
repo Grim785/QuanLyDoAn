@@ -10,6 +10,10 @@ const route = require("./routes"); //khởi tạo đến /route
 
 const db = require("./config/db/db");
 
+// Middleware để phân tích dữ liệu POST từ form
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // Xử lý dữ liệu JSON
+
 // Cấu hình Handlebars
 app.engine(
   "hbs",
