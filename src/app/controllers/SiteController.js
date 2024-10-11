@@ -3,6 +3,11 @@ const User = require("../models/userModel");
 class SiteController{
     //[GET] /
     index(req, res, next){
+        res.render('home', {
+            showHeaderFooter: false
+        });
+    }
+    login(req, res, next){
         res.render('login', {
             showHeaderFooter: false
         });
