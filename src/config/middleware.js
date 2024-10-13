@@ -10,7 +10,7 @@ module.exports = (app) => {
     let yourSecretKey = process.env.SECRET_KEY;
     if (!yourSecretKey) {
         yourSecretKey = crypto.randomBytes(32).toString('hex');
-        fs.appendFileSync('.env', `SECRET_KEY=${yourSecretKey}\n`, 'utf8'); // Đã sửa
+        fs.appendFileSync('.env', `SECRET_KEY=${yourSecretKey}\n`, 'utf8');
     }
     console.log('Secret Key saved to .env:', yourSecretKey);
 
