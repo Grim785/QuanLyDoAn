@@ -5,6 +5,7 @@ class SiteController{
     index(req, res, next){
         res.render('home', {
             showHeaderFooter: true,
+            showNav: true,
             title: 'Home',
         });
     }
