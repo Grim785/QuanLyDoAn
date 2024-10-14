@@ -42,9 +42,14 @@ html, body {
   color: #F67E29 !important;
 }
 
-.resign {
+.register {
   height: 500px !important;
   overflow-y: scroll;
+}
+
+.update {
+  height: calc(100% - 65px);
+  overflow-x: scroll;
 }
 
 /*# sourceMappingURL=app.css.map */
