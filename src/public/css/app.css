@@ -47,4 +47,9 @@ html, body {
   overflow-y: scroll;
 }
 
+.update {
+  height: calc(100% - 65px);
+  overflow-x: scroll;
+}
+
 /*# sourceMappingURL=app.css.map */

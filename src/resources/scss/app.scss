@@ -45,8 +45,16 @@ html,body{
     color: $orange !important;
 }
 
+// đăng kí đề tài css
+
 .register{
     height: 500px!important;
     overflow-y: scroll;
 }
 
+// cập nhập tiến độ css
+
+.update{
+    height: calc(100% - 65px);
+    overflow-x: scroll;
+}

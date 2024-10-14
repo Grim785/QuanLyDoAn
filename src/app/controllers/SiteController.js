@@ -3,7 +3,7 @@ const User = require("../models/userModel");
 class SiteController{
     //[GET] /
     index(req, res, next){
-        res.render('RegisterTopic', {
+        res.render('UpdateProcess', {
             showHeaderFooter: true,
             showNav: true,
             title: 'Home',
