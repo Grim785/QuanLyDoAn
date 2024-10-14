@@ -3,7 +3,7 @@ const User = require("../models/userModel");
 class SiteController{
     //[GET] /
     index(req, res, next){
-        res.render('dangkidetai', {
+        res.render('RegisterTopic', {
             showHeaderFooter: true,
             showNav: true,
             title: 'Home',
