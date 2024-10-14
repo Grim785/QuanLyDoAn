@@ -3,6 +3,9 @@ class StudentController{
     dashboard(req, res, next){
         res.render('student/dashboard', {
             title: 'Dashboard student',
+            user: req.session.user,
+            showHeaderFooter: true,
+            showNav: true,
         });
     }
 
