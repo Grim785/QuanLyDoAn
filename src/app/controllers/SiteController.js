@@ -41,8 +41,22 @@ class SiteController{
                     res.cookie('userId', user.id, { maxAge: 7 * 24 * 60 * 60 * 1000 }); // Cookie tồn tại trong 7 ngày
                 }
                 
-                // res.send('Đăng nhập thành công');
-                res.redirect('/');
+                // Render view theo role
+                switch (user.role) {
+                    case 'admin':
+                        res.render('admin/dashboard', { user }); // Render trang admin
+                        break;
+                    case 'advisor':
+                        res.render('advisor/dashboard', { user }); // Render trang advisor
+                        break;
+                    case 'student':
+                        res.render('student/dashboard', { user }); // Render trang student
+                        break;
+                    // default:
+                    //     res.redirect('/'); // Redirect về trang chủ nếu không có role phù hợp
+                    //     break;
+                }
+                // res.redirect('/');
             } else {
                 // Đăng nhập thất bại
                 res.send('Đăng nhập thất bại');
