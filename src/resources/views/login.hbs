@@ -1,44 +1,79 @@
+<div class="row justify-content-center align-items-center" style="background-color: #F4F4F4;">
+    <div class="header d-flex justify-content-evenly">
+        <img src="/img/logo_bkcNGANG-1.png" class="h-auto" alt="">
+        <img src="/img/image-removebg-preview_3.png" class="h-100" alt="">
+    </div>
+</div>
+<div class="row">
+    <h1 class="text-center text-red font-xl text-uppercase">
+        Hệ thống quản lý đồ án khoa Công Nghệ Thông Tin
+    </h1>
+</div>
+<div class="row">
+    <div class="col-9" style="height: 500px;">
+        <div class="container-fluid h-100" style="background-color: #D9D9D9;border: #000 1px solid;">
 
-        <div class="row justify-content-center align-items-center" style="background-color: #F4F4F4;">
-            <div class="header d-flex justify-content-evenly">
-                <img src="/img/logo_bkcNGANG-1.png" class="h-auto" alt="">
-                <img src="/img/image-removebg-preview_3.png" class="h-100" alt="">
-            </div>
         </div>
-        <div class="row">
-            <h1 class="text-center text-red font-xl text-uppercase">
-                Hệ thống quản lý đồ án khoa Công Nghệ Thông Tin
-            </h1>
-        </div>
-        <div class="row">
-            <div class="col-9" style="height: 500px;">
-                <div class="container-fluid h-100" style="background-color: #D9D9D9;border: #000 1px solid;">
-                    
-                </div>
+    </div>
+    <div class="col-3">
+        <div class="container-fluid py-3"
+            style="background-color: rgba(241, 241, 241, 0.37);border-radius: 5px; box-shadow: 4px 4px 4px #c2bebe;">
+            <div class="row">
+                <h2 class="text-center text-uppercase" style="color: #00B4D7;">Đăng nhập</h2>
             </div>
-            <div class="col-3">
-                <div class="container-fluid py-3" style="background-color: rgba(241, 241, 241, 0.37);border-radius: 5px; box-shadow: 4px 4px 4px #c2bebe;">
-                    <div class="row">
-                        <h2 class="text-center text-uppercase" style="color: #00B4D7;">Đăng nhập</h2>
+            <div class="row">
+                {{!-- Form đăng nhập --}}
+                <form action="login" method="post" class="login">
+                    <div class="mb-3">
+                        <input type="text" class="form-control inner-shadow" id="username" name="username"
+                            placeholder="Nhập mã sinh viên" required>
                     </div>
-                    <div class="row">
-                        {{!-- Form đăng nhập --}}
-                        <form action="/login" method="POST">
-                            <div class="mb-3">
-                                <input type="text" class="form-control inner-shadow" id="username" name="username" placeholder="Nhập mã sinh viên" required>
-                            </div>
-                            <div class="mb-3">
-                                <input type="password" class="form-control inner-shadow" id="password" name="password" placeholder="Nhập mật khẩu" required>
-                            </div>
-                            <div class="mb-3 form-check d-flex justify-content-end">
-                                <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
-                                <label class="form-check-label" for="rememberMe">Ghi nhớ đăng nhập</label>
-                            </div>
-                            <button type="submit" class="btn w-100 text-light text-uppercase mb-3" style="background-color: #ED3338;">Đăng nhập</button>
-                            <p class="text-center w-100"><a href="" class="text-red" >Quên mật khẩu</a></p>
-                        </form>
+                    <div class="mb-3">
+                        <input type="password" class="form-control inner-shadow" id="password" name="password"
+                            placeholder="Nhập mật khẩu" required>
                     </div>
-                </div>
+                    <div class="mb-3 form-check d-flex justify-content-end">
+                        <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Ghi nhớ đăng nhập</label>
+                    </div>
+                    <button type="submit" class="btn w-100 text-light text-uppercase mb-3"
+                        style="background-color: #ED3338;">Đăng nhập</button>
+                    <p class="text-center w-100"><a href="" class="text-red">Quên mật khẩu</a></p>
+                </form>
             </div>
         </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script> --}}
+<script>
+    $(document).ready(function () {
+        $('.login').on('submit', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/login',
+                type: 'post',
+                data: $(this).serialize(),
+                success: function (data) {
+                    {{!-- console.log(data); --}}
+                    if (data.message === "User login successfully") {
+                        // Chuyển hướng theo vai trò người dùng
+                        if (data.role === 'student') {
+                            window.location.href = '/student/dashboard'; // Đường dẫn đến trang dashboard sinh viên
+                        } else if (data.role === 'admin') {
+                            window.location.href = '/admin/dashboard'; // Đường dẫn cho admin
+                        }
+                    } else {
+                        $('#error-message').text(data.message); // Hiển thị thông báo lỗi
+                    }
+                },
+                error: function (xhr) {
+                    $('#error-message').text(xhr.responseText); // Hiển thị thông báo lỗi nếu có
+                }
+            });
+        });
+    });
+</script>

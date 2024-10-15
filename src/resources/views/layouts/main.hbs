@@ -1,35 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/cb945d65e9.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/app.css">
     <title>{{title}}</title>
 </head>
+
 <body>
     <div class="container-fluid h-100">
         <div class="row h-100">
             <div class="col-2 p-0">
                 {{#if showNav}}<!-- Nav chỉ hiển thị nếu showNav là true-->
-                    {{>nav}}
+                {{>nav}}
                 {{/if}}
             </div>
             <div class="col-10 p-0 d-flex flex-column">
                 {{#if showHeaderFooter}}
-                    {{>header}} <!-- Header chỉ hiển thị nếu showHeaderFooter là true -->
+                {{>header}} <!-- Header chỉ hiển thị nếu showHeaderFooter là true -->
                 {{/if}}
                 {{!-- phần body --}}
-                    {{{body}}}
-
+                {{{body}}}
+                
                 {{#if showHeaderFooter}}
-                    {{>footer}} <!-- Footer chỉ hiển thị nếu showHeaderFooter là true -->
+                {{>footer}} <!-- Footer chỉ hiển thị nếu showHeaderFooter là true -->
                 {{/if}}
             </div>
         </div>
-        
+
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
