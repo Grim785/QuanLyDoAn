@@ -7,7 +7,7 @@ const controllers = require('../app/controllers');
 router.get('/dashboard', controllers.advisor.dashboard);
 
 //[GET]
-router.get('/topic', controllers.advisor)
+router.get('/topic', controllers.advisor.topic);
 
 //[POST]
 // router.post('/login', controllers.site.chklogin);
