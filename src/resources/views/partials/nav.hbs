@@ -3,12 +3,30 @@
         <img class="" src="/img/image-removebg-preview_3.png" style="height: 50px; width:50px" alt="">
     </div>
     {{!-- menu --}}
-    <ul class="list-group border-0 mt-5"> 
+    <ul class="list-group border-0 mt-5">
+        {{#if student}}
         <li class="list-group-item bg-orange text-light active border-0" aria-current="true">Trang chủ</li>
-        <li class="list-group-item bg-orange text-light border-0">A second item</li>
-        <li class="list-group-item bg-orange text-light border-0">A third item</li>
-        <li class="list-group-item bg-orange text-light border-0">A fourth item</li>
-        <li class="list-group-item bg-orange text-light border-0">And a fifth one</li>
+        <li class="list-group-item bg-orange text-light border-0">Thông tin cá nhân</li>
+        <li class="list-group-item bg-orange text-light border-0">Đăng kí đề tài</li>
+        <li class="list-group-item bg-orange text-light border-0">Cập nhật tiến độ</li>
+        <li class="list-group-item bg-orange text-light border-0">Đăng xuất</li>
+        {{/if}}
+        {{#if advisor}}
+        <li class="list-group-item bg-orange text-light active border-0" aria-current="true">Trang chủ</li>
+        <li class="list-group-item bg-orange text-light border-0">Tra cứu đề tài</li>
+        <li class="list-group-item bg-orange text-light border-0">Chấm điểm đề tài</li>
+        <li class="list-group-item bg-orange text-light border-0">Thông tin cá nhân</li>
+        <li class="list-group-item bg-orange text-light border-0">Đăng xuất</li>
+        {{/if}}
+        {{#if admin}}
+        <li class="list-group-item bg-orange text-light active border-0" aria-current="true">Trang chủ</li>
+        <li class="list-group-item bg-orange text-light border-0">Quản lí danh sách đề tài</li>
+        <li class="list-group-item bg-orange text-light border-0">Danh sách đăng kí đề tài</li>
+        <li class="list-group-item bg-orange text-light border-0">Danh sách giảng viên</li>
+        <li class="list-group-item bg-orange text-light border-0">Phân công giảng viên</li>
+        <li class="list-group-item bg-orange text-light border-0">Quản lí tài khoản</li>
+        <li class="list-group-item bg-orange text-light border-0">Đăng xuất</li>
+        {{/if}}
     </ul>
 </nav>
 

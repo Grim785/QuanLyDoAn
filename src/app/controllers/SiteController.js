@@ -1,12 +1,14 @@
+const { student } = require(".");
 const User = require("../models/userModel");
 
 class SiteController {
     //[GET] /
     index(req, res, next){
-        res.render('admin/TopicList', {
+        res.render('student/dashboard', {
             showHeaderFooter: true,
             showNav: true,
             title: 'Home',
+            student: true,
         });
     }
     //[GET] /login
