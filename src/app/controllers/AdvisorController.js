@@ -1,7 +1,7 @@
 class AdvisorController{
     //[GET] /advisor/dashboard
     dashboard(req, res, next){
-        res.render('advisor/dashboard', {
+        res.render('roles/advisor/dashboard', {
             title: 'Dashboard advisor',
         });
     }

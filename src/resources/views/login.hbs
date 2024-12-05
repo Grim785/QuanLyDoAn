@@ -23,7 +23,7 @@
             </div>
             <div class="row">
                 {{!-- Form đăng nhập --}}
-                <form action="login" method="post" class="login">
+                <form action="chklogin" method="post" class="login">
                     <div class="mb-3">
                         <input type="text" class="form-control inner-shadow" id="username" name="username"
                             placeholder="Nhập mã sinh viên" required>
@@ -40,31 +40,40 @@
                         style="background-color: #ED3338;">Đăng nhập</button>
                     <p class="text-center w-100"><a href="" class="text-red">Quên mật khẩu</a></p>
                 </form>
+                <p id="error-message"></p>
             </div>
         </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-{{!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script> --}}
+    crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
         $('.login').on('submit', function (e) {
             e.preventDefault();
-
             $.ajax({
-                url: '/login',
+                url: '/chklogin',
                 type: 'post',
                 data: $(this).serialize(),
                 success: function (data) {
-                    {{!-- console.log(data); --}}
+                    // console.log(data);
                     if (data.message === "User login successfully") {
                         // Chuyển hướng theo vai trò người dùng
-                        if (data.role === 'student') {
-                            window.location.href = '/student/dashboard'; // Đường dẫn đến trang dashboard sinh viên
-                        } else if (data.role === 'admin') {
-                            window.location.href = '/admin/dashboard'; // Đường dẫn cho admin
+                        switch (data.role) {
+                            case 'student':
+                                window.location.href = '/student/dashboard'; // Đường dẫn đến trang dashboard sinh viên
+                                break;
+                            case 'advisor':
+                                window.location.href = '/advisor/dashboard'; // Đường dẫn cho advisor
+                                break;
+                            case 'admin':
+                                window.location.href = '/admin/dashboard'; // Đường dẫn cho admin
+                                break;
+                            default:
+                                $('#error-message').text('Vai trò người dùng không hợp lệ.'); // Thông báo lỗi vai trò không hợp lệ
+                                break;
                         }
                     } else {
                         $('#error-message').text(data.message); // Hiển thị thông báo lỗi

@@ -1,5 +1,5 @@
 {
-  "name": "quanlydoan",
+  "name": "qlda",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -7,29 +7,22 @@
     "watch": "sass --watch src/resources/scss:src/public/css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Grim785/QuanLyDoAn.git"
-  },
-  "author": "An",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Grim785/QuanLyDoAn/issues"
-  },
-  "homepage": "https://github.com/Grim785/QuanLyDoAn#readme",
   "description": "",
   "dependencies": {
     "bootstrap": "^5.3.3",
     "cookie-parser": "^1.4.7",
-    "dotenv": "^16.4.5",
-    "express": "^4.21.0",
+    "dotenv": "^16.4.6",
+    "express": "^4.21.1",
     "express-handlebars": "^8.0.1",
     "express-session": "^1.18.1",
-    "mysql2": "^3.11.3",
-    "nodemon": "^3.1.7",
-    "sequelize": "^6.37.4"
+    "mysql2": "^3.11.5",
+    "sequelize": "^6.37.5"
   },
   "devDependencies": {
-    "sass": "^1.79.4"
+    "nodemon": "^3.1.7",
+    "sass": "^1.81.1"
   }
 }

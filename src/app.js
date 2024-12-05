@@ -1,12 +1,9 @@
 const express = require("express");
 const path = require("path");
 const { engine } = require("express-handlebars");
-const mysql = require("mysql2"); //Khởi tạo thư viện mysql2
 require("dotenv").config();
 const app = express();
 const port = 3000;
-
-const db = require("./config/db/db");
 
 // Import và sử dụng middleware từ file riêng
 require("./config/middleware")(app);
@@ -29,7 +26,7 @@ app.set("views", path.join(__dirname, "resources", "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Sử dụng các route
-const route = require("./routes"); //khởi tạo route
+const route = require("./app/routes"); //khởi tạo route
 route(app);
 
 app.listen(port, () => {
