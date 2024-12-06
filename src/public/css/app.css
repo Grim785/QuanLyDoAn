@@ -32,24 +32,75 @@ html, body {
   background-color: #F67E29 !important;
 }
 
-.active {
-  background-color: white !important;
-  color: #F67E29 !important;
-}
-
 .list-group-item:hover {
   background-color: white !important;
   color: #F67E29 !important;
 }
 
-.register {
-  height: 500px !important;
+.active {
+  background-color: white !important;
+  color: #F67E29 !important;
+}
+
+.scroll {
   overflow-y: scroll;
 }
 
-.update {
-  height: calc(100% - 65px);
+.scroll-x {
   overflow-x: scroll;
+}
+
+#nav_mobile:checked ~ #list_group_mobile {
+  display: block !important;
+}
+
+.topic_active {
+  background-color: #F67E29 !important;
+  color: white !important;
+}
+
+@property --progress {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+[role=progressbar] {
+  --size:132px;
+  --bar-width:20px;
+  width: var(--size);
+  aspect-ratio: 1/1;
+  background: conic-gradient(rgba(122, 211, 255, 0.7) var(--progress, 0), rgba(122, 211, 255, 0.3) 0%);
+  margin: 2em auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  transition: --progress 500ms linear;
+}
+[role=progressbar]::after {
+  content: attr(aria-valuenow) "%";
+  background: white;
+  border-radius: inherit;
+  width: calc(100% - var(--bar-width));
+  aspect-ratio: 1/1;
+  display: grid;
+  place-items: center;
+}
+[role=progressbar] span {
+  display: none;
+}
+
+.progressbar:not([role=progressbar]) {
+  color: red;
+}
+
+hr {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
 }
 
 /*# sourceMappingURL=app.css.map */

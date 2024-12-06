@@ -1,4 +1,4 @@
-const { student } = require(".");
+const { student } = require("./StudentController");
 const User = require("../models/userModel");
 
 class SiteController {

@@ -6,6 +6,7 @@ class StudentController{
             user: req.session.user,
             showHeaderFooter: true,
             showNav: true,
+            student: true,
         });
     }
     //[GET] /student/registertopic
@@ -14,6 +15,7 @@ class StudentController{
             title: 'registertopic student',
             showHeaderFooter: true,
             showNav: true,
+            student: true,
         });
     }
 
@@ -23,6 +25,7 @@ class StudentController{
             title: 'UpdateProcess',
             showHeaderFooter: true,
             showNav: true,
+            student: true,
         });
     }
 
@@ -32,6 +35,7 @@ class StudentController{
             title: 'AccountInfo',
             showHeaderFooter: true,
             showNav: true,
+            student: true,
         });
     }
     //[POST]

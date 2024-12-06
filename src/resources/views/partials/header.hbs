@@ -1,8 +1,51 @@
-<header class="container-fluid border-bottom" style="height:10%;">
-    <div class="row h-100">    
-        <div class="col h-100">
-            <img class="h-100 w-100" src="/img/logo_bkcNGANG-1.png" alt="">
+<header class="container" style="height: 15vh;z-index:100;">
+    <div class="row h-50 px-2">
+        <div class="col-xl-6 col-8 h-100">
+            <div class="h-100 d-inline-block">
+                <img src="/img/logo_bkcNGANG-1.png"  class="h-100 w-100" alt="">
+            </div>
         </div>
-        <div class="col"></div>
+        <div class="col-xl-6 col-4 d-flex justify-content-end align-items-center gap-2">
+            <img src="/img/atsushi.png" class="border rounded-circle" style="height: 30px; width:30px;" alt="">
+            <i class="fa-regular fa-envelope fa-lg"></i>
+            <i class="fa-regular fa-bell fa-lg"></i>
+        </div>
+    </div>
+    <div class="row h-50 border-top border-bottom justify-content-center align-items-center px-3" style="height: 50px;">
+        <div class="col">
+            <b class="">Trang chủ</b>
+        </div>
+        <div class="col d-flex justify-content-end gap-2" style="z-index: 2;">
+            <div>
+                <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+            </div>
+            <label for="nav_mobile"><i class="d-sm-none fa-solid fa-bars fa-lg"></i></label>
+            <input type="checkbox" name="" id="nav_mobile" hidden>
+            <ul class="list-group border mt-5 d-none position-absolute" id="list_group_mobile">
+                {{#if student}}
+                <a href="/student/dashboard"class="list-group-item list-group-item-action bg-orange text-light active border-0" aria-current="true">Trang chủ</a>
+                <a href="/student/AccountInfo"class="list-group-item list-group-item-action bg-orange text-light border-0">Thông tin cá nhân</a>
+                <a href="/student/RegisterTopic"class="list-group-item list-group-item-action bg-orange text-light border-0">Đăng kí đề tài</a>
+                <a href="/student/UpdateProcess"class="list-group-item list-group-item-action bg-orange text-light border-0">Cập nhật tiến độ</a>
+                <a href=""class="list-group-item list-group-item-action bg-orange text-light border-0">Đăng xuất</a>
+                {{/if}}
+                {{#if advisor}}
+                <a href="/advisor/dashboard"class="list-group-item list-group-item-action bg-orange text-light active border-0" aria-current="true">Trang chủ</a>
+                <a href="/advisor/Topic"class="list-group-item list-group-item-action bg-orange text-light border-0">Tra cứu đề tài</a>
+                <a href="/advisor/"class="list-group-item list-group-item-action bg-orange text-light border-0">Chấm điểm đề tài</a>
+                <a href="/advisor/"class="list-group-item list-group-item-action bg-orange text-light border-0">Thông tin cá nhân</a>
+                <a href="/advisor/"class="list-group-item list-group-item-action bg-orange text-light border-0">Đăng xuất</a>
+                {{/if}}
+                {{#if admin}}
+                <a href="/admin/dashboard"class="list-group-item list-group-item-action bg-orange text-light active border-0" aria-current="true">Trang chủ</a>
+                <a href="/admin/TopicList"class="list-group-item list-group-item-action bg-orange text-light border-0">Quản lí danh sách đề tài</a>
+                <a href="/admin/"class="list-group-item list-group-item-action bg-orange text-light border-0">Danh sách đăng kí đề tài</a>
+                <a href="/admin/AdvisorList"class="list-group-item list-group-item-action bg-orange text-light border-0">Danh sách giảng viên</a>
+                <a href="/admin/"class="list-group-item list-group-item-action bg-orange text-light border-0">Phân công giảng viên</a>
+                <a href="/admin/AccountManagement"class="list-group-item list-group-item-action bg-orange text-light border-0">Quản lí tài khoản</a>
+                <a href="/admin/"class="list-group-item list-group-item-action bg-orange text-light border-0">Đăng xuất</a>
+                {{/if}}
+            </ul>
+        </div>
     </div>
 </header>

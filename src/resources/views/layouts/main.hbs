@@ -8,18 +8,19 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/cb945d65e9.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/app.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <title>{{title}}</title>
 </head>
 
 <body>
     <div class="container-fluid h-100">
         <div class="row h-100">
-            <div class="col-2 p-0">
+            <div class="d-none d-sm-block col-sm-2 p-0">
                 {{#if showNav}}<!-- Nav chỉ hiển thị nếu showNav là true-->
                 {{>nav}}
                 {{/if}}
             </div>
-            <div class="col-10 p-0 d-flex flex-column">
+            <div class="col-12 col-sm-10 p-0 d-flex flex-column h-100 justify-content-between">
                 {{#if showHeaderFooter}}
                 {{>header}} <!-- Header chỉ hiển thị nếu showHeaderFooter là true -->
                 {{/if}}
