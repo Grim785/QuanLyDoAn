@@ -12,7 +12,7 @@ class AdminController{
     }
 
     AccountManagement(req, res, next){
-        res.render('admin/AccountManagement', {
+        res.render('roles/admin/AccountManagement', {
             title: 'Dashboard admin',
             showHeaderFooter: true,
             showNav: true,
@@ -21,7 +21,7 @@ class AdminController{
     }
 
     AdvisorList(req, res, next){
-        res.render('admin/AdvisorList', {
+        res.render('roles/admin/AdvisorList', {
             title: 'Dashboard admin',
             showHeaderFooter: true,
             showNav: true,
@@ -30,7 +30,7 @@ class AdminController{
     }
 
     TopicList(req, res, next){
-        res.render('admin/TopicList', {
+        res.render('roles/admin/TopicList', {
             title: 'Dashboard admin',
             showHeaderFooter: true,
             showNav: true,

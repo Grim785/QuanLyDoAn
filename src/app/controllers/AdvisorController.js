@@ -13,7 +13,7 @@ class AdvisorController{
 
     //[GET] /advisor/topic
     topic(req, res, next){
-        res.render('advisor/Topic', {
+        res.render('roles/advisor/Topic', {
             title: 'Topic advisor',
             showHeaderFooter: true,
             showNav: true,
