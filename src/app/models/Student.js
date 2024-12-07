@@ -56,11 +56,11 @@ const Student = sequelize.define('Student', {
             key: 'classID',
         },
     },
-}, 
-{
-    timestamps: true, // Tự động thêm createdAt và updatedAt
-    tableName: 'Students',
-});
+},
+    {
+        timestamps: true, // Tự động thêm createdAt và updatedAt
+        tableName: 'Students',
+    });
 
 // Thiết lập quan hệ
 Student.belongsTo(Major, { foreignKey: 'majorsID', as: 'major' });
