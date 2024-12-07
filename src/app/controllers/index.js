@@ -8,7 +8,7 @@ module.exports = {
   login: loginControllers,
   student: studentController,
   advisor: AdvisorController,
-  admin: AdminController
+  admin: AdminController,
   
   // other: otherController,
 };

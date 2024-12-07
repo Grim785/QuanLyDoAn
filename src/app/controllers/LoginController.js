@@ -11,6 +11,24 @@ class LoginController {
             title: 'Login',
         });
     }
+    // [GET] /errlogin
+    errlogin(req, res, next) {
+        res.render('errlogin', {
+            showHeaderFooter: false,
+            showNav: false,
+            title: 'Err Login',
+        });
+    }
+    err403(req, res, next){
+        console.log(req.session.user);
+        res.render('err403', {
+            user: req.session.user,
+            showHeaderFooter: false,
+            showNav: false,
+            title: 'Home',
+            student: true,
+        });
+    }
 
     // [POST] /chklogin
 

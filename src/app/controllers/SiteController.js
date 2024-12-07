@@ -1,5 +1,4 @@
-const { student } = require("./StudentController");
-const User = require("../models/userModel");
+const User = require("../models/User");
 
 class SiteController {
     //[GET] /
@@ -11,5 +10,7 @@ class SiteController {
             student: true,
         });
     }
+    //[GET] /err
+
 }
 module.exports = new SiteController();
