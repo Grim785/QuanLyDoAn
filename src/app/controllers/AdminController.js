@@ -3,7 +3,7 @@
 class AdminController{
     //[GET] /student/dashboard
     dashboard(req, res, next){
-        res.render('admin/dashboard', {
+        res.render('roles/admin/dashboard', {
             title: 'Dashboard admin',
             showHeaderFooter: true,
             showNav: true,
@@ -39,6 +39,5 @@ class AdminController{
     }
 
     //[POST]
-
 }
 module.exports = new AdminController();
