@@ -15,12 +15,12 @@
 <body>
     <div class="container-fluid h-100">
         <div class="row h-100">
+            {{#if showNav}}<!-- Nav chỉ hiển thị nếu showNav là true-->
             <div class="d-none d-sm-block col-sm-2 p-0">
-                {{#if showNav}}<!-- Nav chỉ hiển thị nếu showNav là true-->
-                    {{>nav}}
-                {{/if}}
+                {{>nav}}   
             </div>
-            <div class="col-12 col-sm-10 p-0 d-flex flex-column h-100 justify-content-between">
+             {{/if}}
+            <div class="col-12{{#if showNav}} col-sm-10v{{/if}} p-0 d-flex flex-column h-100 justify-content-between">
                 {{#if showHeaderFooter}}
                 {{>header}} <!-- Header chỉ hiển thị nếu showHeaderFooter là true -->
                 {{/if}}
