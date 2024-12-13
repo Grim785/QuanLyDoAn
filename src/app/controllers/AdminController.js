@@ -1,5 +1,3 @@
-
-
 class AdminController{
     //[GET] /student/dashboard
     dashboard(req, res, next){
