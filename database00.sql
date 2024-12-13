@@ -306,6 +306,7 @@ REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `c
 	(4, 'Susu', '$2b$12$CDzI29.pvU6R7hm5TRm2durrollNLhh/airN05Ppxb2vm3WD8q4Xm', 'student', 'susu123@gmail.com', '0559391049', '2024-12-06 15:31:05', '2024-12-06 15:31:05', 1),
 	(5, 'SuaDua', '$2b$12$CDzI29.pvU6R7hm5TRm2durrollNLhh/airN05Ppxb2vm3WD8q4Xm', 'student', 'suadua123@gmail.com', '0374368872', '2024-12-06 15:32:00', '2024-12-06 15:32:00', 1);
 
+/*mk: 123123*/
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
