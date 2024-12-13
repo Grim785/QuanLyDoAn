@@ -1,5 +1,3 @@
-
-
 class AdvisorController{
     //[GET] /advisor/dashboard
     dashboard(req, res, next){

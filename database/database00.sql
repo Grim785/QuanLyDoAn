@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `class` (
   CONSTRAINT `class_ibfk_1` FOREIGN KEY (`majorsID`) REFERENCES `majors` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.class: ~2 rows (approximately)
+-- Dumping data for table database00.class: ~3 rows (approximately)
 REPLACE INTO `class` (`id`, `classID`, `status`, `majorsID`, `createdAt`, `updatedAt`) VALUES
 	(1, '22CPM01', 'active', 1, '2024-12-06 15:20:20', '2024-12-06 15:20:20'),
 	(2, '22QTM01', 'active', 2, '2024-12-06 15:20:41', '2024-12-06 15:20:41'),
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `majors` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.majors: ~2 rows (approximately)
+-- Dumping data for table database00.majors: ~3 rows (approximately)
 REPLACE INTO `majors` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
 	(1, 'Ứng dụng phần mềm', '2024-12-06 15:13:42', '2024-12-06 15:13:42'),
 	(2, 'Quản trị mạng', '2024-12-06 15:13:58', '2024-12-06 15:13:58'),
@@ -201,22 +201,19 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `status` enum('not_started','in_progress','completed') DEFAULT 'not_started',
   `advisorID` int NOT NULL,
   `majorID` int NOT NULL,
-  `fileID` int DEFAULT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `advisorID` (`advisorID`),
   KEY `majorID` (`majorID`),
-  KEY `fileID` (`fileID`),
   CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`advisorID`) REFERENCES `advisors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`majorID`) REFERENCES `majors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `projects_ibfk_3` FOREIGN KEY (`fileID`) REFERENCES `files` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`majorID`) REFERENCES `majors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projects: ~0 rows (approximately)
-REPLACE INTO `projects` (`id`, `title`, `description`, `field`, `start_date`, `end_date`, `status`, `advisorID`, `majorID`, `fileID`, `createdAt`, `updatedAt`) VALUES
-	(1, 'Ứng dụng quản lý đồ án khoa công nghệ thông tin Cao đẳng Bách Khoa Sài Gòn', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tin\r\nHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tài\r\nHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', 'Công nghệ phần mềm', '2024-12-06', NULL, 'not_started', 1, 1, NULL, '2024-12-06 15:28:12', '2024-12-06 15:29:49'),
-	(2, 'Web kinh doanh giày dép OA-Shop', 'Đăng bán sản phẩm, quảng bá, giới thiệu các mẫu giày mới, thực hiện mua sắm giày dép online ', 'Công nghệ phần mềm', '2024-12-07', NULL, 'not_started', 1, 1, NULL, '2024-12-07 15:23:34', '2024-12-07 15:23:34');
+-- Dumping data for table database00.projects: ~2 rows (approximately)
+REPLACE INTO `projects` (`id`, `title`, `description`, `field`, `start_date`, `end_date`, `status`, `advisorID`, `majorID`, `createdAt`, `updatedAt`) VALUES
+	(1, 'Ứng dụng quản lý đồ án khoa công nghệ thông tin Cao đẳng Bách Khoa Sài Gòn', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tin\r\nHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tài\r\nHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', 'Công nghệ phần mềm', '2024-12-06', NULL, 'not_started', 1, 1, '2024-12-06 15:28:12', '2024-12-06 15:29:49'),
+	(2, 'Web kinh doanh giày dép OA-Shop', 'Đăng bán sản phẩm, quảng bá, giới thiệu các mẫu giày mới, thực hiện mua sắm giày dép online ', 'Công nghệ phần mềm', '2024-12-07', NULL, 'not_started', 1, 1, '2024-12-07 15:23:34', '2024-12-07 15:23:34');
 
 -- Dumping structure for table database00.projectstudents
 DROP TABLE IF EXISTS `projectstudents`;
@@ -231,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `projectstudents` (
   CONSTRAINT `projectstudents_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectstudents: ~2 rows (approximately)
+-- Dumping data for table database00.projectstudents: ~3 rows (approximately)
 REPLACE INTO `projectstudents` (`project_id`, `student_id`, `createdAt`, `updatedAt`) VALUES
 	(1, 1, '2024-12-06 15:30:07', '2024-12-06 15:30:07'),
 	(1, 2, '2024-12-06 15:33:45', '2024-12-06 15:33:45'),
@@ -275,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `suggestedprojects` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.suggestedprojects: ~2 rows (approximately)
+-- Dumping data for table database00.suggestedprojects: ~3 rows (approximately)
 REPLACE INTO `suggestedprojects` (`id`, `title`) VALUES
 	(1, 'Ứng dụng quản lý nhà hàng tiệc cưới Mặt Trời Mới'),
 	(2, 'Giải pháp thiết kế hệ thống mạng trường Cao đẳng Bách Khoa Sài Gòn'),
@@ -306,7 +303,6 @@ REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `c
 	(4, 'Susu', '$2b$12$CDzI29.pvU6R7hm5TRm2durrollNLhh/airN05Ppxb2vm3WD8q4Xm', 'student', 'susu123@gmail.com', '0559391049', '2024-12-06 15:31:05', '2024-12-06 15:31:05', 1),
 	(5, 'SuaDua', '$2b$12$CDzI29.pvU6R7hm5TRm2durrollNLhh/airN05Ppxb2vm3WD8q4Xm', 'student', 'suadua123@gmail.com', '0374368872', '2024-12-06 15:32:00', '2024-12-06 15:32:00', 1);
 
-/*mk: 123123*/
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
