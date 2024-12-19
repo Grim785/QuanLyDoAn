@@ -16,8 +16,14 @@ router.get('/updateprocess', chkRoles('student'), controllers.student.updateproc
 //[GET] /student/accountinfo
 router.get('/accountinfo', chkRoles('student'), controllers.student.accountinfo);
 
-//[POST]
+//[GET] /student/project
+router.get('/project', chkRoles('student'), controllers.student.project);
 
+//[POST] /student/upload/project
+router.post('/upload/project', controllers.file.uploadFile); // Route upload file dự án (chỉ cho phép file nén)
+
+//[POST] /student/upload/project
+router.post('/upload/avatar', controllers.file.uploadFile); // Route upload avatar (chỉ cho phép file hình ảnh)
 
 
 module.exports = router;    

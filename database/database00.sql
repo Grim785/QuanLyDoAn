@@ -16,12 +16,10 @@
 
 
 -- Dumping database structure for database00
-DROP DATABASE IF EXISTS `database00`;
 CREATE DATABASE IF NOT EXISTS `database00` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `database00`;
 
 -- Dumping structure for procedure database00.AddTimestamps
-DROP PROCEDURE IF EXISTS `AddTimestamps`;
 DELIMITER //
 CREATE PROCEDURE `AddTimestamps`()
 BEGIN
@@ -81,7 +79,6 @@ END//
 DELIMITER ;
 
 -- Dumping structure for table database00.advisors
-DROP TABLE IF EXISTS `advisors`;
 CREATE TABLE IF NOT EXISTS `advisors` (
   `id` int NOT NULL AUTO_INCREMENT,
   `advisorID` varchar(10) NOT NULL,
@@ -99,14 +96,13 @@ CREATE TABLE IF NOT EXISTS `advisors` (
   KEY `userID` (`userID`),
   CONSTRAINT `advisors_ibfk_1` FOREIGN KEY (`majorsID`) REFERENCES `majors` (`id`),
   CONSTRAINT `advisors_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.advisors: ~1 rows (approximately)
+-- Dumping data for table database00.advisors: ~0 rows (approximately)
 REPLACE INTO `advisors` (`id`, `advisorID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `majorsID`, `userID`, `createdAt`, `updatedAt`) VALUES
 	(1, 'GV19772', 'Trần Thành', 'Giang', '1977-12-12', 'Nam', 1, 3, '2024-12-06 15:23:54', '2024-12-06 15:23:54');
 
 -- Dumping structure for table database00.class
-DROP TABLE IF EXISTS `class`;
 CREATE TABLE IF NOT EXISTS `class` (
   `id` int NOT NULL AUTO_INCREMENT,
   `classID` varchar(20) NOT NULL,
@@ -118,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `class` (
   UNIQUE KEY `classID` (`classID`),
   KEY `majorsID` (`majorsID`),
   CONSTRAINT `class_ibfk_1` FOREIGN KEY (`majorsID`) REFERENCES `majors` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table database00.class: ~3 rows (approximately)
 REPLACE INTO `class` (`id`, `classID`, `status`, `majorsID`, `createdAt`, `updatedAt`) VALUES
@@ -127,38 +123,39 @@ REPLACE INTO `class` (`id`, `classID`, `status`, `majorsID`, `createdAt`, `updat
 	(3, '22TMDT01', 'active', 3, '2024-12-06 15:20:55', '2024-12-06 15:20:55');
 
 -- Dumping structure for table database00.files
-DROP TABLE IF EXISTS `files`;
 CREATE TABLE IF NOT EXISTS `files` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `file_name` varchar(255) NOT NULL,
-  `file_path` text NOT NULL,
-  `uploaded_by` int NOT NULL,
-  `uploaded_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  `file_name` varchar(255) NOT NULL,  -- Tên file
+  `file_path` text NOT NULL,  -- Đường dẫn file trên S3
+  `uploaded_by` int NOT NULL,  -- ID người tải lên (liên kết với bảng User)
+  `uploaded_at` datetime DEFAULT CURRENT_TIMESTAMP,  -- Thời gian tải lên
+  `file_size` int NOT NULL,  -- Kích thước file tính bằng byte
+  `file_type` varchar(255) NOT NULL,  -- Loại file (ví dụ: image, document, etc.)
+  `is_avatar` tinyint(1) DEFAULT 0,  -- Cột xác định nếu file là avatar (1 nếu là avatar)
+  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,  -- Thời gian tạo bản ghi
+  `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- Thời gian cập nhật bản ghi
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`uploaded_by`) REFERENCES `users`(`id`)  -- Giả sử bạn có bảng `users` và `id` trong bảng đó là khóa chính
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table database00.files: ~0 rows (approximately)
 
 -- Dumping structure for table database00.majors
-DROP TABLE IF EXISTS `majors`;
 CREATE TABLE IF NOT EXISTS `majors` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.majors: ~3 rows (approximately)
+-- Dumping data for table database00.majors: ~2 rows (approximately)
 REPLACE INTO `majors` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
 	(1, 'Ứng dụng phần mềm', '2024-12-06 15:13:42', '2024-12-06 15:13:42'),
 	(2, 'Quản trị mạng', '2024-12-06 15:13:58', '2024-12-06 15:13:58'),
 	(3, 'Thương mại điện tử', '2024-12-06 15:14:18', '2024-12-06 15:14:18');
 
 -- Dumping structure for table database00.projectfeedback
-DROP TABLE IF EXISTS `projectfeedback`;
 CREATE TABLE IF NOT EXISTS `projectfeedback` (
   `id` int NOT NULL AUTO_INCREMENT,
   `project_id` int NOT NULL,
@@ -175,7 +172,6 @@ CREATE TABLE IF NOT EXISTS `projectfeedback` (
 -- Dumping data for table database00.projectfeedback: ~0 rows (approximately)
 
 -- Dumping structure for table database00.projectfiles
-DROP TABLE IF EXISTS `projectfiles`;
 CREATE TABLE IF NOT EXISTS `projectfiles` (
   `project_id` int NOT NULL,
   `file_id` int NOT NULL,
@@ -190,7 +186,6 @@ CREATE TABLE IF NOT EXISTS `projectfiles` (
 -- Dumping data for table database00.projectfiles: ~0 rows (approximately)
 
 -- Dumping structure for table database00.projects
-DROP TABLE IF EXISTS `projects`;
 CREATE TABLE IF NOT EXISTS `projects` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -208,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   KEY `majorID` (`majorID`),
   CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`advisorID`) REFERENCES `advisors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`majorID`) REFERENCES `majors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table database00.projects: ~2 rows (approximately)
 REPLACE INTO `projects` (`id`, `title`, `description`, `field`, `start_date`, `end_date`, `status`, `advisorID`, `majorID`, `createdAt`, `updatedAt`) VALUES
@@ -216,7 +211,6 @@ REPLACE INTO `projects` (`id`, `title`, `description`, `field`, `start_date`, `e
 	(2, 'Web kinh doanh giày dép OA-Shop', 'Đăng bán sản phẩm, quảng bá, giới thiệu các mẫu giày mới, thực hiện mua sắm giày dép online ', 'Công nghệ phần mềm', '2024-12-07', NULL, 'not_started', 1, 1, '2024-12-07 15:23:34', '2024-12-07 15:23:34');
 
 -- Dumping structure for table database00.projectstudents
-DROP TABLE IF EXISTS `projectstudents`;
 CREATE TABLE IF NOT EXISTS `projectstudents` (
   `project_id` int NOT NULL,
   `student_id` int NOT NULL,
@@ -235,7 +229,6 @@ REPLACE INTO `projectstudents` (`project_id`, `student_id`, `createdAt`, `update
 	(1, 3, '2024-12-06 15:33:51', '2024-12-06 15:33:51');
 
 -- Dumping structure for table database00.students
-DROP TABLE IF EXISTS `students`;
 CREATE TABLE IF NOT EXISTS `students` (
   `id` int NOT NULL AUTO_INCREMENT,
   `studentID` varchar(10) NOT NULL,
@@ -256,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   CONSTRAINT `FK_students_class` FOREIGN KEY (`classID`) REFERENCES `class` (`id`),
   CONSTRAINT `students_ibfk_1` FOREIGN KEY (`majorsID`) REFERENCES `majors` (`id`),
   CONSTRAINT `students_ibfk_2` FOREIGN KEY (`usersID`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table database00.students: ~3 rows (approximately)
 REPLACE INTO `students` (`id`, `studentID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `majorsID`, `usersID`, `classID`, `createdAt`, `updatedAt`) VALUES
@@ -265,12 +258,11 @@ REPLACE INTO `students` (`id`, `studentID`, `lastname`, `firstname`, `date_of_bi
 	(3, '22001978', 'Huỳnh Thị', 'B', '2024-12-06', 'Nữ', 1, 4, 1, '2024-12-06 15:33:32', '2024-12-06 15:33:32');
 
 -- Dumping structure for table database00.suggestedprojects
-DROP TABLE IF EXISTS `suggestedprojects`;
 CREATE TABLE IF NOT EXISTS `suggestedprojects` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table database00.suggestedprojects: ~3 rows (approximately)
 REPLACE INTO `suggestedprojects` (`id`, `title`) VALUES
@@ -279,7 +271,6 @@ REPLACE INTO `suggestedprojects` (`id`, `title`) VALUES
 	(3, 'Đánh giá hiệu quả của các chiến lược tiếp thị số trong kinh doanh thương mại điện tử ');
 
 -- Dumping structure for table database00.users
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -293,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `gmail` (`gmail`),
   UNIQUE KEY `phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table database00.users: ~5 rows (approximately)
 REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `createdAt`, `updatedAt`, `active`) VALUES
