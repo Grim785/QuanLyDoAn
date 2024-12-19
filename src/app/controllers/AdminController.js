@@ -6,6 +6,7 @@ class AdminController{
             showHeaderFooter: true,
             showNav: true,
             admin: true,
+            dashboardactive: true,
         });
     }
 
@@ -15,6 +16,7 @@ class AdminController{
             showHeaderFooter: true,
             showNav: true,
             admin: true,
+            accoumanagementactive: true,
         });
     }
 
@@ -24,6 +26,7 @@ class AdminController{
             showHeaderFooter: true,
             showNav: true,
             admin: true,
+            advisorlistactive: true,
         });
     }
 
@@ -33,6 +36,7 @@ class AdminController{
             showHeaderFooter: true,
             showNav: true,
             admin: true,
+            topiclistactive: true,
         });
     }
 
