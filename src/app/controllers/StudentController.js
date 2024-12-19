@@ -71,6 +71,15 @@ class StudentController{
             accountinfoactive: true,
         });
     }
+    //[GET] /student/project
+    project(req, res, next){
+        res.render('roles/student/testupload', {
+            title: 'AccountInfo',
+            showHeaderFooter: true,
+            showNav: true,
+            student: true,
+        });
+    }
     //[POST]
 
 }

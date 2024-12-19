@@ -1,67 +1,80 @@
+// mid.js
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const crypto = require('crypto');
-const multer = require('multer');
 const path = require('path');
+const multer = require('multer');  // Import Multer
 require('dotenv').config();
 
 module.exports = (app) => {
-    // Kiểm tra và thiết lập secret key
     let yourSecretKey = process.env.SECRET_KEY;
     if (!yourSecretKey) {
         yourSecretKey = crypto.randomBytes(32).toString('hex');
         fs.appendFileSync('.env', `SECRET_KEY=${yourSecretKey}\n`, 'utf8');
     }
+
     console.log('Secret Key saved to .env:', yourSecretKey);
 
-    // Cấu hình Multer
+    // Cấu hình Multer (middleware để xử lý file upload)
     const storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-            const uploadDir = path.join(__dirname, '../uploads'); // Thư mục lưu file
-            if (!fs.existsSync(uploadDir)) {
-                fs.mkdirSync(uploadDir, { recursive: true }); // Tạo thư mục nếu chưa tồn tại
-            }
-            cb(null, uploadDir);
+        destination: (req, file, cb) => {
+            cb(null, 'src/public/uploads');  // Lưu trữ file vào thư mục 'public/uploads'
         },
-        filename: function (req, file, cb) {
-            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-            cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+        filename: (req, file, cb) => {
+            cb(null, Date.now() + '-' + file.originalname);  // Đặt tên file với timestamp
         }
     });
 
-    const upload = multer({
+    // Middleware cho file upload dự án (chỉ cho phép file nén)
+    const uploadProject = multer({
         storage: storage,
-        limits: { fileSize: 100 * 1024 * 1024 }, // Giới hạn 100MB
-        fileFilter: function (req, file, cb) {
-            const fileTypes = /pdf|doc|docx|rar|7z|zip/;
-            const extName = fileTypes.test(path.extname(file.originalname).toLowerCase());
-            const mimeType = fileTypes.test(file.mimetype);
-
-            if (extName && mimeType) {
-                return cb(null, true);
+        fileFilter: (req, file, cb) => {
+            // Kiểm tra phần mở rộng của file
+            const fileTypes = /zip|tar|rar|gz|7z/;
+            const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    
+            if (extname) {
+                return cb(null, true);  // Cho phép file nếu phần mở rộng đúng
             } else {
-                cb(new Error('Chỉ chấp nhận các file PDF, DOC, DOCX, RAR, 7z, ZIP.'));
+                cb(new Error('Only compressed files are allowed!'), false);  // Nếu không phải file nén thì từ chối
+            }
+        }
+    });
+    
+
+    // Middleware cho file upload avatar (chỉ cho phép file hình ảnh)
+    const uploadAvatar = multer({
+        storage: storage,
+        fileFilter: (req, file, cb) => {
+            const fileTypes = /jpg|jpeg|png|gif/;
+            const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+            const mimetype = fileTypes.test(file.mimetype);
+
+            if (extname && mimetype) {
+                return cb(null, true);  // Cho phép tải lên
+            } else {
+                cb(new Error('Only image files are allowed!'), false);  // Nếu không phải file hình ảnh
             }
         }
     });
 
-    // Gắn multer vào app
-    app.set('upload', upload); // Lưu multer upload vào app để sử dụng trong các route/controller
-
-    // Sử dụng các middleware
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser());
 
-    // Cấu hình session
     app.use(session({
-        secret: yourSecretKey, // Sử dụng secret key từ .env
+        secret: yourSecretKey,
         resave: false,
         saveUninitialized: true,
-        cookie: { maxAge: 24 * 60 * 60 * 1000 } // Session tồn tại trong 1 ngày
+        cookie: { maxAge: 24 * 60 * 60 * 1000 }
     }));
 
-    // Thêm các middleware khác
+    // Sử dụng middleware cho trang upload dự án (chỉ cho phép file nén)
+    // app.use('/files/upload/project', uploadProject.single('file'));
+    app.use('/student/upload/project', uploadProject.single('file'));
+
+    // Sử dụng middleware cho trang upload avatar (chỉ cho phép hình ảnh)
+    app.use('/files/upload/avatar', uploadAvatar.single('file'));
 };
