@@ -33,7 +33,8 @@ class StudentController{
                 showHeaderFooter: true,
                 showNav: true,
                 student: true,
-                studentInfo: studentData, // Chuyển đổi dữ liệu để sử dụng trong view
+                studentInfo: studentData,
+                dashboardactive:true, // Chuyển đổi dữ liệu để sử dụng trong view
             });
         })
         .catch(next);
@@ -45,6 +46,7 @@ class StudentController{
             showHeaderFooter: true,
             showNav: true,
             student: true,
+            registertopicactive: true,
         });
     }
 
@@ -55,6 +57,7 @@ class StudentController{
             showHeaderFooter: true,
             showNav: true,
             student: true,
+            updateprocessactive: true,
         });
     }
 
@@ -65,6 +68,7 @@ class StudentController{
             showHeaderFooter: true,
             showNav: true,
             student: true,
+            accountinfoactive: true,
         });
     }
     //[GET] /student/project

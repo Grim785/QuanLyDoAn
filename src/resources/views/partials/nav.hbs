@@ -5,10 +5,10 @@
     {{!-- menu --}}
     <ul class="list-group border-0 mt-5">
         {{#if student}}
-        <a href="/student/dashboard" class="list-group-item list-group-item-action bg-orange text-light active border-0" aria-current="true">Trang chủ</a>
-        <a href="/student/AccountInfo" class="list-group-item list-group-item-action bg-orange text-light border-0">Thông tin cá nhân</a>
-        <a href="/student/RegisterTopic" class="list-group-item list-group-item-action bg-orange text-light border-0">Đăng kí đề tài</a>
-        <a href="/student/UpdateProcess" class="list-group-item list-group-item-action bg-orange text-light border-0">Cập nhật tiến độ</a>
+        <a href="/student/dashboard" class="list-group-item list-group-item-action bg-orange text-light {{#if dashboardactive}} active {{/if}} border-0" aria-current="true">Trang chủ</a>
+        <a href="/student/AccountInfo" class="list-group-item list-group-item-action bg-orange text-light  {{#if accountinfoactive}} active {{/if}} border-0">Thông tin cá nhân</a>
+        <a href="/student/RegisterTopic" class="list-group-item list-group-item-action bg-orange text-light {{#if registertopicactive}} active {{/if}} border-0">Đăng kí đề tài</a>
+        <a href="/student/UpdateProcess" class="list-group-item list-group-item-action bg-orange text-light {{#if updateprocessactive}} active {{/if}} border-0">Cập nhật tiến độ</a>
         <a href=""class="list-group-item list-group-item-action bg-orange text-light border-0">Đăng xuất</a>
         <a href="/student/project"class="list-group-item list-group-item-action bg-orange text-light border-0">Test upload file</a>
         {{/if}}
