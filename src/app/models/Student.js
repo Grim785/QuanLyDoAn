@@ -32,6 +32,10 @@ const Student = sequelize.define('Student', {
         type: DataTypes.ENUM('nam', 'nữ', 'khác'),
         allowNull: false,
     },
+    address: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
     majorsID: {
         type: DataTypes.INTEGER,
         allowNull: false,

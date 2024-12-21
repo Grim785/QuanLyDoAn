@@ -29,6 +29,10 @@ const Advisor = sequelize.define('Advisors', {
         type: DataTypes.ENUM('Nam', 'Nữ', 'Khác'),
         allowNull: false,
     },
+    address: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
     majorsID: {
         type: DataTypes.INTEGER,
         allowNull: false,

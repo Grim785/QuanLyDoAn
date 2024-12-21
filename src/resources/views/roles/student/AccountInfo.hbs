@@ -2,47 +2,69 @@
     <div class="row">
         <div class="col-12 col-sm-3">
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action active" aria-current="true"><i class="fa-solid fa-user"></i> Thông tin cá nhân</a>
-                <a href="#" class="list-group-item list-group-item-action"><i class="fa-solid fa-sliders"></i> Cài đặt chung</a>
+                <a href="#" class="list-group-item list-group-item-action active" aria-current="true"><i
+                        class="fa-solid fa-user"></i> Thông tin cá nhân</a>
+                <a href="#" class="list-group-item list-group-item-action"><i class="fa-solid fa-sliders"></i> Cài đặt
+                    chung</a>
                 <a href="#" class="list-group-item list-group-item-action"><i class="fa-solid fa-lock"></i> Bảo mật</a>
-                <a href="#" class="list-group-item list-group-item-action"><i class="fa-solid fa-circle-exclamation"></i> Giới thiệu</a>
+                <a href="#" class="list-group-item list-group-item-action"><i
+                        class="fa-solid fa-circle-exclamation"></i> Giới thiệu</a>
             </div>
         </div>
+        {{#if studentInfo}}
         <div class="col-12 col-sm-9">
-            <div class="d-flex justify-content-between mt-4">
-                <img src="/img/logo_khoabkc.jpg" style="height: 120px;width:120px" alt="">
-                <button class="border-0 bg-transparent ">Chỉnh sửa</button>
+            <div class="d-flex justify-content-between mt-4 position-relative">
+                <img src="/img/logo_khoabkc.jpg" style="height: 120px; width: 120px;" alt="Logo">
+                <button class="edit-btn border-0 bg-transparent">Chỉnh sửa</button>
             </div>
-            <div class="d-flex justify-content-between border-bottom mt-4">
-                <b>Tên</b>
-                <p>Nguyễn Quốc Bảo</p>
-                <button class="border-0 bg-transparent ">Chỉnh sửa</button>
-            </div>
-            <div class="d-flex justify-content-between border-bottom mt-4">
-                <b>Ngày sinh</b>
-                <p>29/08/2004</p>
-                <button class="border-0 bg-transparent ">Chỉnh sửa</button>
-            </div>
-            <div class="d-flex justify-content-between border-bottom mt-4">
-                <b>Số điện thoại</b>
-                <p>0795488914</p>
-                <button class="border-0 bg-transparent ">Chỉnh sửa</button>
-            </div>
-            <div class="d-flex justify-content-between border-bottom mt-4">
-                <b>Email</b>
-                <p>quocbaor2908@gmail.com</p>
-                <button class="border-0 bg-transparent ">Chỉnh sửa</button>
-            </div>
-            <div class="d-flex justify-content-between border-bottom mt-4">
-                <b>Giới tính</b>
-                <p>Nam</p>
-                <button class="border-0 bg-transparent ">Chỉnh sửa</button>
-            </div>
-            <div class="d-flex justify-content-between border-bottom mt-4">
-                <b>Địa chỉ</b>
-                <p>558 Nguyễn Văn Khối</p>
-                <button class="border-0 bg-transparent ">Chỉnh sửa</button>
-            </div>
+            <table class="table table-borderless mt-4">
+                <tbody>
+                    <tr class="border-bottom">
+                        <th class="text-start">Tên</th>
+                        <td class="text-center">{{studentInfo.lastname}} {{studentInfo.firstname}}</td>
+                        <td class="text-end">
+                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
+                        </td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <th class="text-start">Ngày sinh</th>
+                        <td class="text-center">{{studentInfo.date_of_birth}}</td>
+                        <td class="text-end">
+                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
+                        </td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <th class="text-start">Số điện thoại</th>
+                        <td class="text-center">{{studentInfo.user.phone}}</td>
+                        <td class="text-end">
+                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
+                        </td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <th class="text-start">Email</th>
+                        <td class="text-center">{{studentInfo.user.gmail}}</td>
+                        <td class="text-end">
+                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
+                        </td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <th class="text-start">Giới tính</th>
+                        <td class="text-center">{{studentInfo.gender}}</td>
+                        <td class="text-end">
+                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
+                        </td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <th class="text-start">Địa chỉ</th>
+                        <td class="text-center">{{studentInfo.address}}</td>
+                        <td class="text-end">
+                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+        {{else}}
+        {{/if}}
     </div>
 </div>
