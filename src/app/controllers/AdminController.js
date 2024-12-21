@@ -16,7 +16,7 @@ class AdminController{
             showHeaderFooter: true,
             showNav: true,
             admin: true,
-            accoumanagementactive: true,
+            accountmanagementactive: true,
         });
     }
 
