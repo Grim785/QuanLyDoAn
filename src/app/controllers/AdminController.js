@@ -40,6 +40,16 @@ class AdminController{
         });
     }
 
+    RegisterTopicList(req,res,next){
+        res.render('roles/admin/RegisterTopicList', {
+            title: 'Dashboard admin',
+            showHeaderFooter: true,
+            showNav: true,
+            admin: true,
+            registertopiclistactive: true,
+        });
+    }
+
     //[POST]
 }
 module.exports = new AdminController();

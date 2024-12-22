@@ -12,6 +12,8 @@ router.get('/TopicList', chkRoles('admin'), AdminController.TopicList);
 router.get('/AccountManagement', chkRoles('admin'), AdminController.AccountManagement);
 //[GET] /admin/AdvisorList
 router.get('/AdvisorList', chkRoles('admin'), AdminController.AdvisorList);
+//[GET] /admin/RegisterTopicList
+router.get('/RegisterTopicList', chkRoles('admin'), AdminController.RegisterTopicList);
 
 //[POST]
 // router.post('/login', controllers.site.chklogin);
