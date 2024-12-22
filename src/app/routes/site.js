@@ -16,7 +16,7 @@ router.post('/upload/project', uploadProject.single('file'), handleUpload, SiteC
 //[POST] /upload/avatar --Tải avatar lên cloud
 router.post('/upload/avatar', uploadAvatar.single('file'), handleUpload, SiteController.uploadFile);
 //[GET] /logout --Đăng xuất
-router.post('/logout', SiteController.logout);
+router.get('/logout', SiteController.logout);
 //[GET] /
 router.get('/', SiteController.login);
 module.exports = router;
