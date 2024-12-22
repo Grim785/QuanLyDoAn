@@ -139,5 +139,12 @@ class SiteController {
             res.status(500).json({ message: 'File upload failed' });
         }
     }    
+    // [GET] /logout
+    logout(req, res, next) {
+        req.session.destroy(()=>{
+            res.redirect('/');
+        });
+
+    }
 }
 module.exports = new SiteController();

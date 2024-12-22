@@ -28,7 +28,11 @@
         <a href="/admin/AccountManagement"class="list-group-item list-group-item-action bg-orange text-light {{#if accountmanagementactive}} active {{/if}} border-0">Quản lí tài khoản</a>
         <a href="/admin/"class="list-group-item list-group-item-action bg-orange text-light border-0">Đăng xuất</a>
         {{/if}}
-        <a href="/logout"class="list-group-item list-group-item-action bg-orange text-light border-0">Đăng xuất</a>
+        <li class="list-group-item list-group-item-action bg-orange text-light border-0">
+            <form action="/logout" method="post">
+                <button type="submit">Đăng xuất</button>
+            </form>
+        </li>
     </ul>
 </nav>
 

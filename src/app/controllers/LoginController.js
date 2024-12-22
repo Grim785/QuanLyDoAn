@@ -68,11 +68,6 @@ class LoginController {
     }
 
 
-    logout(req, res, next) {
-        req.session.destroy(()=>{
-            res.redirect('/');
-        });
 
-    }
 }
 module.exports = new LoginController();
