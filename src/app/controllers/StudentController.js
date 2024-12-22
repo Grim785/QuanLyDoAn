@@ -2,6 +2,7 @@ const Student = require('../models/Student'); // Import model Student
 const Major = require('../models/Major');     // Import model Major
 const Class = require('../models/Class');     // Import model Class
 const User = require("../models/User");
+const File = require('../models/File');
 
 class StudentController{
     //[GET] /student/dashboard
@@ -12,6 +13,7 @@ class StudentController{
             include: [
                 { model: Major, as: 'major', attributes: ['name'] }, // Tham chiếu bảng Major
                 { model: Class, as: 'class', attributes: ['classID'] }, // Tham chiếu bảng Class
+                { model: File, as: 'file', attributes: ['file_path'] }, // Tham chiếu bảng File
             ],
             attributes: ['studentID', 'lastname', 'firstname', 'date_of_birth', 'gender'],
         })
@@ -26,14 +28,14 @@ class StudentController{
             // Định dạng ngày sinh
             const dob = new Date(studentData.date_of_birth);
             studentData.date_of_birth = `${dob.getDate().toString().padStart(2, '0')}-${(dob.getMonth() + 1).toString().padStart(2, '0')}-${dob.getFullYear()}`;
-            // console.log(studentData);
+            console.log(studentData);
             res.render('roles/student/dashboard', {
                 title: 'Dashboard student',
                 user: req.session.user,
                 showHeaderFooter: true,
                 showNav: true,
                 student: true,
-                studentInfo: studentData,
+                data: studentData,
                 dashboardactive:true, // Chuyển đổi dữ liệu để sử dụng trong view
             });
         })
@@ -68,6 +70,7 @@ class StudentController{
             where: { usersID: userId }, // Tìm sinh viên dựa trên userID
             include: [
                 { model: User, as: 'user', attributes: ['gmail', 'phone'] }, // Tham chiếu bảng Major
+                { model: File, as: 'file', attributes: ['file_path'] } // Tham chiếu bảng File
                 // { model: Class, as: 'class', attributes: ['classID'] }, // Tham chiếu bảng Class
             ],
             attributes: ['studentID', 'lastname', 'firstname', 'date_of_birth', 'gender', 'address'],
@@ -84,13 +87,14 @@ class StudentController{
             const dob = new Date(studentData.date_of_birth);
             studentData.date_of_birth = `${dob.getDate().toString().padStart(2, '0')}-${(dob.getMonth() + 1).toString().padStart(2, '0')}-${dob.getFullYear()}`;
             console.log(studentData);
+            console.log(req.session.user)
             res.render('roles/student/AccountInfo', {
                 title: 'Thông tin tài khoản',
                 // user: req.session.user,
                 showHeaderFooter: true,
                 showNav: true,
                 student: true,
-                studentInfo: studentData,
+                data: studentData,
                 dashboardactive:true, // Chuyển đổi dữ liệu để sử dụng trong view
             });
         })

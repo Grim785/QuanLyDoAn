@@ -78,66 +78,80 @@ class SiteController {
             const file = req.file;
             const fileSize = file.size;
             console.log(fileSize);
-    
+
             // Nếu không có file, trả lỗi
             if (!file) {
                 return res.status(400).json({ message: 'No file uploaded' });
             }
-    
+
             const fileName = Date.now() + '-' + file.originalname; // Đổi tên file để tránh trùng lặp
             const filePath = path.join(__dirname, '..', 'public', 'uploads', fileName);
-            
+
             // Đọc nội dung file
             const fileContent = fs.readFileSync(file.path);
             console.log(fileName + "ffffff");
-    
+
             const params = {
                 Bucket: process.env.AWS_BUCKET_NAME,
                 Key: fileName,  // Tên file chứa thời gian để lưu giữ lịch sử
                 Body: fileContent,
                 ContentType: file.mimetype,
+                // ACL: 'public-read',
             };
-    
+
+            // Upload file lên S3
+            const uploadResult = await s3.upload(params).promise();
+
             // Kiểm tra xem người dùng có đã có file trước đó không
             const existingFile = await File.findOne({ where: { uploaded_by: req.session.user.id, is_avatar: req.body.is_avatar || 0 } });
-    
+            console.log(existingFile + "Kiểm tra tồn tại");
+
             if (existingFile) {
                 // Nếu đã có file cũ, xóa file trên S3
                 const deleteParams = {
                     Bucket: process.env.AWS_BUCKET_NAME,
                     Key: existingFile.file_name,  // Tên file cũ đã lưu trong cơ sở dữ liệu
                 };
-    
+                console.log(deleteParams + "Xóa file trùng");
+
                 // Xóa file cũ trên S3
                 await s3.deleteObject(deleteParams).promise();
                 console.log('File deleted from S3:', existingFile.file_name);
+
+                // Cập nhật bản ghi cũ trong cơ sở dữ liệu
+                await File.update({
+                    file_name: fileName,
+                    file_path: uploadResult.Location,
+                    file_size: fileSize,
+                    file_type: file.mimetype,
+                    is_avatar: req.body.is_avatar || 0,
+                }, { where: { id: existingFile.id } });
+                console.log('File record updated');
+            } else {
+                // Nếu không có file cũ, tạo mới một bản ghi
+                const isAvatar = req.body.is_avatar || 0;
+                const newFile = await File.create({
+                    file_name: fileName,  // Lưu tên file mới với timestamp
+                    file_path: uploadResult.Location,  // Đường dẫn file trên S3
+                    uploaded_by: req.session.user.id,  // ID người dùng tải lên
+                    file_size: fileSize,  // Kích thước file
+                    file_type: file.mimetype,  // Loại MIME của file
+                    is_avatar: isAvatar,  // Chỉ xác định là avatar nếu có
+                });
+
+                console.log('New file record created');
             }
-    
-            // Upload file mới lên S3
-            const uploadResult = await s3.upload(params).promise();
-    
-            // Kiểm tra xem đây là avatar hay project
-            const isAvatar = req.body.is_avatar || 0;
-    
-            // Lưu thông tin file vào cơ sở dữ liệu
-            const newFile = await File.create({
-                file_name: fileName,  // Lưu tên file mới với timestamp
-                file_path: uploadResult.Location,  // Đường dẫn file trên S3
-                uploaded_by: req.session.user.id,  // ID người dùng tải lên
-                file_size: fileSize,  // Kích thước file
-                file_type: file.mimetype,  // Loại MIME của file
-                is_avatar: isAvatar,  // Chỉ xác định là avatar nếu có
-            });
-    
+
             // Xóa file tạm sau khi upload
             fs.unlinkSync(file.path);
-    
+
             // Trả về thông tin của file mới vừa upload
-            res.json({ message: 'File uploaded successfully', file: newFile });
+            res.json({ message: 'File uploaded successfully', file: uploadResult });
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: 'File upload failed' });
         }
-    }    
+    }
+
 }
 module.exports = new SiteController();

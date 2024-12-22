@@ -7,17 +7,17 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-4 col d-flex align-items-center flex-column">
-                        <img class="mb-3 border rounded-circle" src="/img/atsushi.png" alt="" style="height: 100px; width:100px;">
+                        <img class="mb-3 border rounded-circle" src="{{#if data.file.file_path}}{{data.file.file_path}}{{else}}/img/atsushi.png{{/if}}" alt="" style="height: 100px; width:100px;">
                         <a class="mb-3" href="">Chỉnh sửa thông tin</a>
                     </div>
                     <div class="col-8">
-                        {{#if studentInfo}}
-                            <p>MSSV: {{studentInfo.studentID}}</p>
-                            <p>Họ và Tên: {{studentInfo.lastname}} {{studentInfo.firstname}}</p>
-                            <p>Giới tính: {{studentInfo.gender}}</p>
-                            <p>Ngày sinh: {{studentInfo.date_of_birth}}</p>
-                            <p>Chuyên Ngành: {{studentInfo.major.name}}</p>
-                            <p>Lớp: {{studentInfo.class.classID}}</p>
+                        {{#if data}}
+                            <p>MSSV: {{data.studentID}}</p>
+                            <p>Họ và Tên: {{data.lastname}} {{data.firstname}}</p>
+                            <p>Giới tính: {{data.gender}}</p>
+                            <p>Ngày sinh: {{data.date_of_birth}}</p>
+                            <p>Chuyên Ngành: {{data.major.name}}</p>
+                            <p>Lớp: {{data.class.classID}}</p>
                         {{else}}
                             <p>No student information found.</p>
                         {{/if}}

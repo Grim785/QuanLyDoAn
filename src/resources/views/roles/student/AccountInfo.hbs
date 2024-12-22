@@ -1,4 +1,4 @@
-<div class="container my-2 scroll flex-fill" style="">
+<div class="container my-2 scroll flex-fill student-accountinfo">
     <div class="row">
         <div class="col-12 col-sm-3">
             <div class="list-group">
@@ -11,55 +11,46 @@
                         class="fa-solid fa-circle-exclamation"></i> Giới thiệu</a>
             </div>
         </div>
-        {{#if studentInfo}}
+        {{#if data}}
         <div class="col-12 col-sm-9">
             <div class="d-flex justify-content-between mt-4 position-relative">
-                <img src="/img/logo_khoabkc.jpg" style="height: 120px; width: 120px;" alt="Logo">
-                <button class="edit-btn border-0 bg-transparent">Chỉnh sửa</button>
+                <div class="position-relative">
+                    <img src="{{#if data.file.file_path}}{{data.file.file_path}}{{else}}/img/atsushi.png{{/if}}" style="height: 120px; width: 120px;" alt="Logo">
+                    <!-- Form để upload ảnh -->
+                    <form id="avatarForm" action="/upload/avatar" method="POST" enctype="multipart/form-data" class="position-absolute top-50 end-0 translate-middle-y">
+                        <input type="file" name="file" required class="d-none" id="avatarInput">
+                        <input type="hidden" name="is_avatar" value="1">
+                        <label for="avatarInput" class="edit-btn border-0 bg-transparent">
+                            <i class="fa-solid fa-pen"></i>
+                        </label>
+                    </form>
+                </div>
             </div>
             <table class="table table-borderless mt-4">
                 <tbody>
                     <tr class="border-bottom">
                         <th class="text-start">Tên</th>
-                        <td class="text-center">{{studentInfo.lastname}} {{studentInfo.firstname}}</td>
-                        <td class="text-end">
-                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
-                        </td>
+                        <td class="text-center">{{data.lastname}} {{data.firstname}}</td>
                     </tr>
                     <tr class="border-bottom">
                         <th class="text-start">Ngày sinh</th>
-                        <td class="text-center">{{studentInfo.date_of_birth}}</td>
-                        <td class="text-end">
-                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
-                        </td>
+                        <td class="text-center">{{data.date_of_birth}}</td>
                     </tr>
                     <tr class="border-bottom">
                         <th class="text-start">Số điện thoại</th>
-                        <td class="text-center">{{studentInfo.user.phone}}</td>
-                        <td class="text-end">
-                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
-                        </td>
+                        <td class="text-center">{{data.user.phone}}</td>
                     </tr>
                     <tr class="border-bottom">
                         <th class="text-start">Email</th>
-                        <td class="text-center">{{studentInfo.user.gmail}}</td>
-                        <td class="text-end">
-                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
-                        </td>
+                        <td class="text-center">{{data.user.gmail}}</td>
                     </tr>
                     <tr class="border-bottom">
                         <th class="text-start">Giới tính</th>
-                        <td class="text-center">{{studentInfo.gender}}</td>
-                        <td class="text-end">
-                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
-                        </td>
+                        <td class="text-center">{{data.gender}}</td>
                     </tr>
                     <tr class="border-bottom">
                         <th class="text-start">Địa chỉ</th>
-                        <td class="text-center">{{studentInfo.address}}</td>
-                        <td class="text-end">
-                            <button class="border-0 bg-transparent">Chỉnh sửa</button>
-                        </td>
+                        <td class="text-center">{{data.address}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -68,3 +59,45 @@
         {{/if}}
     </div>
 </div>
+
+
+<!-- Modal dialog xác nhận -->
+<div class="modal" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Xác nhận tải lên ảnh đại diện</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn thay đổi ảnh đại diện không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="confirmUpload">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thêm JavaScript để xử lý việc gửi form và hiển thị modal -->
+<script>
+    // Lắng nghe sự kiện thay đổi của input file
+    document.getElementById('avatarInput').addEventListener('change', function() {
+        const avatarInput = document.getElementById('avatarInput');
+        if (avatarInput.files.length === 0) {
+            alert('Vui lòng chọn ảnh!');
+            return;
+        }
+
+        // Hiển thị modal để xác nhận
+        var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        confirmationModal.show();
+    });
+
+    // Xử lý xác nhận tải lên sau khi nhấn "Đồng ý"
+    document.getElementById('confirmUpload').addEventListener('click', function() {
+        // Gửi form khi người dùng xác nhận
+        document.getElementById('avatarForm').submit();
+    });
+</script>

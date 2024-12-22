@@ -4,6 +4,7 @@ const sequelize = require('../../config/db');
 const Major = require('./Major'); // Import mô hình Major
 const User = require('./User');   // Import mô hình User
 const Class = require('./Class'); // Import mô hình Class
+const File = require('./File');
 
 const Student = sequelize.define('Student', {
     id: {
@@ -70,6 +71,9 @@ const Student = sequelize.define('Student', {
 Student.belongsTo(Major, { foreignKey: 'majorsID', as: 'major' });
 Student.belongsTo(User, { foreignKey: 'usersID', as: 'user' });
 Student.belongsTo(Class, { foreignKey: 'classID', as: 'class' });
+// Trong mô hình Student
+Student.hasOne(File, { foreignKey: 'uploaded_by', as: 'file' });
+
 
 // Xuất mô hình
 module.exports = Student;
