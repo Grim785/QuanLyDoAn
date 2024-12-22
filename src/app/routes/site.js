@@ -15,6 +15,8 @@ router.post('/chklogin', SiteController.chklogin);
 router.post('/upload/project', uploadProject.single('file'), SiteController.uploadFile);
 //[POST] /upload/avatar --Tải avatar lên cloud
 router.post('/upload/avatar', uploadAvatar.single('file'), SiteController.uploadFile);
+//[GET] /
+router.get('/',SiteController.login)
 
 
 module.exports = router;

@@ -50,6 +50,16 @@ class AdminController{
         });
     }
 
+    EditAccount(req, res, next) {
+        res.render('roles/admin/EditAccount', {
+            title: 'Dashboard admin',
+            showHeaderFooter: true,
+            showNav: true,
+            admin: true,
+            editaccountactive: true,
+        });
+    }
+
     //[POST]
 }
 module.exports = new AdminController();
