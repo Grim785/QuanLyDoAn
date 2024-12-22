@@ -1,4 +1,6 @@
-@import "variable";
+@use "variable";
+@use "errlogin";
+@use "nav";
 
 *{
     margin: 0;
@@ -20,11 +22,11 @@ html,body{
 
 
 .text-red{
-    color: $red;
+    color: variable.$red;
 }
 
 .font-xl{
-    font-size: $xl;
+    font-size: variable.$xl;
 }
 
 .inner-shadow{
@@ -32,18 +34,18 @@ html,body{
 }
 
 .bg-orange{
-    background-color: $orange !important;
+    background-color: variable.$orange !important;
 }
 
 
 .list-group-item:hover{
     background-color: white !important;
-    color: $orange !important;
+    color: variable.$orange !important;
 }
 
 .active{
     background-color: white!important;
-    color: $orange !important;
+    color: variable.$orange !important;
 }
 
 
@@ -65,7 +67,7 @@ html,body{
 }
 
 .topic_active{
-    background-color: $orange !important;
+    background-color: variable.$orange !important;
     color: white !important;
 }
 

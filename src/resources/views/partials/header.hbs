@@ -13,7 +13,7 @@
     </div>
     <div class="row h-50 border-top border-bottom justify-content-center align-items-center px-3" style="height: 50px;">
         <div class="col">
-            <b class="">Trang chủ</b>
+            <a href="{{#if user}}/{{user.role}}/dashboard{{else}}/{{/if}}" class="">Trang chủ</a>
         </div>
         <div class="col d-flex justify-content-end gap-2" style="z-index: 2;">
             <div>
@@ -21,7 +21,7 @@
             </div>
             <label for="nav_mobile"><i class="d-sm-none fa-solid fa-bars fa-lg"></i></label>
             <input type="checkbox" name="" id="nav_mobile" hidden>
-            <ul class="list-group border mt-5 d-none position-absolute" id="list_group_mobile">
+            {{!-- <ul class="list-group border mt-5 d-none position-absolute" id="list_group_mobile">
                 {{#if student}}
                 <a href="/student/dashboard"class="list-group-item list-group-item-action bg-orange text-light active border-0" aria-current="true">Trang chủ</a>
                 <a href="/student/AccountInfo"class="list-group-item list-group-item-action bg-orange text-light border-0">Thông tin cá nhân</a>
@@ -45,7 +45,7 @@
                 <a href="/admin/AccountManagement"class="list-group-item list-group-item-action bg-orange text-light border-0">Quản lí tài khoản</a>
                 <a href="/admin/"class="list-group-item list-group-item-action bg-orange text-light border-0">Đăng xuất</a>
                 {{/if}}
-            </ul>
+            </ul> --}}
         </div>
     </div>
 </header>

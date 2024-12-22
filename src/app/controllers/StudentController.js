@@ -1,4 +1,3 @@
-const { student } = require(".");
 const Student = require('../models/Student'); // Import model Student
 const Major = require('../models/Major');     // Import model Major
 const Class = require('../models/Class');     // Import model Class
