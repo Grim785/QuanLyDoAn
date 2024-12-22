@@ -4,8 +4,7 @@ const router = express.Router();
 const SiteController = require('../controllers/SiteController');
 const { uploadProject, uploadAvatar} = require('../../config/file');
 
-//[GET] /
-router.get('/', SiteController.login);
+
 //[GET] /errlogin
 router.get('/errlogin', SiteController.errlogin);
 //[GET] /err403
@@ -15,7 +14,7 @@ router.post('/chklogin', SiteController.chklogin);
 //[POST] /upload/project --Tải đồ án lên cloud
 router.post('/upload/project', uploadProject.single('file'), SiteController.uploadFile);
 //[POST] /upload/avatar --Tải avatar lên cloud
-router.post('/upload/avatar', uploadAvatar.single('file'), SiteController.uploadFile);
+router.post('/upload/avatar', uploadAvatar.single('file'), handleUpload, SiteController.uploadFile);
 
 
 module.exports = router;

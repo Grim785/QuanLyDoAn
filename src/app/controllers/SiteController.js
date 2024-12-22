@@ -151,7 +151,6 @@ class SiteController {
             console.error(error);
             res.status(500).json({ message: 'File upload failed' });
         }
-    }
-
+    }    
 }
 module.exports = new SiteController();

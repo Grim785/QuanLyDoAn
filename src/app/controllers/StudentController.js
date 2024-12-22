@@ -92,7 +92,7 @@ class StudentController{
                 title: 'Thông tin tài khoản',
                 // user: req.session.user,
                 showHeaderFooter: true,
-                showNav: true,
+                showNav: true,  
                 student: true,
                 data: studentData,
                 dashboardactive:true, // Chuyển đổi dữ liệu để sử dụng trong view
