@@ -1,3 +1,8 @@
-<h1>Bạn không có quyền truy cập vào tài nguyên này, 
-    <a href="{{#if user}}/{{user.role}}/dashboard{{else}}/{{/if}}">quay lại</a>
-</h1>
+<div class="container errlogin">
+    <div class="icon">
+        <img src="/img/logo_khoabkc.jpg" alt="Error icon" class="error-image">
+        <img src="/img/logo_bkc.png" alt="Error icon" class="error-image">
+    </div>
+    <h1>Bạn không có quyền truy cập vào tài nguyên này!!!</h1>
+    <p>Vui lòng<a href="{{#if user}}/{{user.role}}/dashboard{{else}}/{{/if}}" class="cta-link">quay lại</a>.</p>
+</div>

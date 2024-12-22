@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const controllers = require('../controllers');
+const AdvisorController = require('../controllers/AdvisorController');
 const chkRoles = require('../../config/chkRoles');
-//[GET]
-router.get('/dashboard', chkRoles('advisor'), controllers.advisor.dashboard);
+//[GET] /advisor/dashboard
+router.get('/dashboard', chkRoles('advisor'), AdvisorController.dashboard);
 
-//[GET]
-router.get('/topic', chkRoles('advisor'), controllers.advisor.topic);
+//[GET] /advisor/topic
+router.get('/topic', chkRoles('advisor'), AdvisorController.topic);
 
 //[POST]
 // router.post('/login', controllers.site.chklogin);
