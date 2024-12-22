@@ -2,8 +2,20 @@
     <div class="row p-2 h-100">
           <div class="h-100">
             <div class="border rounded-3 h-100">
-                <div class="text-light bg-orange border rounded-top p-2" style="height: 50px;">Danh sách tài khoản</div>
-                <div class="scroll" style="height: calc(100% - 100px);">
+                <div class="text-light bg-orange border rounded-top p-2 container" style="height: 60px;">
+                    <div class="row h-100 align-items-center">
+                        <div class="col-12 col-sm-6">
+                            Danh sách tài khoản
+                        </div>
+                        <div class="col-12 col-sm-6 d-flex justify-content-end">
+                            <form action="" class="d-flex">
+                                <input type="text" class="inner-shadow border rounded mx-1" placeholder="tìm kiếm">
+                                <button class="border-0 bg-transparent mx-1" type="submit"><i class="fa-solid fa-magnifying-glass fa-lg text-light"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="scroll" style="height: calc(100% - 150px);">
                     <table class="table table-hover">
                         <thead>
                             <tr class="position-sticky top-0 p-2 text-nowrap">
@@ -17,28 +29,20 @@
                         </thead>
                         <tbody class="text-nowrap">
                             {{!-- render dữ liệu ở đây --}}
-                            <tr  class='clickable-row' data-href='/student/dashboard'>
+                            <tr class="">
                                 <th scope="row">22002070</th>
                                 <td>Nguyễn Văn An</td>   
                                 <td>Sinh viên</td>
                                 <td>21/12/2024</td>
                                 <td>21/12/2024</td>
-                                <td><button>xóa</button></td>
+                                <td><button type="button" class="btn btn-warning mx-1">Sửa</button><button type="button" class="btn btn-danger mx-1">Xóa</button></td>
                             </tr>
                             {{!-- kết thúc ở đây --}}
                         </tbody>
                     </table>
                 </div>
-                <div class="text-light border rounded-bottom p-2" style="height: 50px;"><Button>Thêm tài khoản</Button></div>
+                <div class="text-light border rounded-bottom p-2 d-grid justify-content-end" style="height: 50px;"><button type="button" class="btn btn-success">Thêm tài khoản</button></div>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        window.location = $(this).data("href");
-    });
-});
-</script>

@@ -1,1 +1,104 @@
-<a href="/admin/TopicList">abc</a>
+<article class="container scroll my-2 flex-fill">
+    <div class="row g-4 mb-2">
+        <div class="col-xl-6">
+            <div class="container border rounded py-1" style="border-color: rgba(122,211,255,0.7) !important; background-color: rgba(122,211,255,0.3)">
+                <div class="row mb-2">
+                    <b class="">Thông tin sinh viên</b>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 col d-flex align-items-center flex-column">
+                        <img class="mb-3 border rounded-circle" src="/img/atsushi.png" alt="" style="height: 100px; width:100px;">
+                        <a class="mb-3" href="">Chỉnh sửa thông tin</a>
+                    </div>
+                    <div class="col-8">
+                        {{#if studentInfo}}
+                            <p>MSSV: {{studentInfo.studentID}}</p>
+                            <p>Họ và Tên: {{studentInfo.lastname}} {{studentInfo.firstname}}</p>
+                            <p>Giới tính: {{studentInfo.gender}}</p>
+                            <p>Ngày sinh: {{studentInfo.date_of_birth}}</p>
+                            <p>Chuyên Ngành: {{studentInfo.major.name}}</p>
+                            <p>Lớp: {{studentInfo.class.classID}}</p>
+                        {{else}}
+                            <p>No student information found.</p>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="container border border rounded p-3">
+                <div class="row mb-1">
+                    <div class="col-xl-6 col-12 mb-1">
+                        <p>Task 1</p>
+                    </div>
+                    <div class="col-xl-6 col-12 d-sm-flex justify-content-end align-items-center mb-1">
+                        <p>| 10/02/2024 - 15/02/2024</p>
+                    </div>
+                    <div class="col-sm-9 col-12 mb-1">
+                        Tình trạng : đang thực hiện còn 3 ngày
+                    </div>
+                    <div class="col-sm-3 col-12 d-sm-flex justify-content-end align-items-center mb-1">
+                        <a class="" href="">Thực hiện</a>
+                    </div>
+                </div>
+                <hr>
+                <div class="row mb-1">
+                    <div class="col-xl-6 col-12 mb-1">
+                        <p>Task 1</p>
+                    </div>
+                    <div class="col-xl-6 col-12 d-sm-flex justify-content-end align-items-center mb-1">
+                        <p>| 10/02/2024 - 15/02/2024</p>
+                    </div>
+                    <div class="col-sm-9 col-12 mb-1">
+                        Tình trạng : đang thực hiện còn 3 ngày
+                    </div>
+                    <div class="col-sm-3 col-12 d-sm-flex justify-content-end align-items-center mb-1">
+                        <a class="" href="">Thực hiện</a>
+                    </div>
+                </div>
+                <hr>
+                <div class="row p-1">
+                    <a href="" class="text-end">xem chi tiết</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-xl-6">
+            <div class="container border rounded">
+                <b>Thông tin đồ án</b>
+                <p style="min-height:200px;">
+
+                </p>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="text-center w-100"><b>Tiến độ đồ án</b></div>
+            <div class="progressbar"></div>
+        </div>
+    </div>
+    {{#if user}}
+    <div class="user-info">
+        <h2>Xin chào, {{user.username}}!</h2> <!-- Giả sử bạn có thuộc tính username trong user -->
+        <p>Vai trò: {{user.role}}</p> <!-- Hiển thị vai trò của người dùng -->
+    </div>
+    {{else}}
+    <div class="alert alert-warning">
+        <p>Người dùng không được xác thực. Vui lòng đăng nhập.</p>
+    </div>
+    {{/if}}
+</article>
+
+<script>
+    const progressbar = document.querySelector('.progressbar');
+    let progress=90
+
+    function enableProgressbar() {
+        progressbar.setAttribute("role","progressbar");
+        progressbar.setAttribute("aria-valuenow",progress);
+        progressbar.setAttribute("aria-live","polite");
+        progressbar.style.setProperty("--progress",progress+ "%")
+    }
+
+    enableProgressbar()
+</script>
