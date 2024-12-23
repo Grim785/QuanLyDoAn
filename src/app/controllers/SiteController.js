@@ -10,7 +10,7 @@ require('dotenv').config();
 class SiteController {
     // [GET] /
     login(req, res, next) {
-        res.render('login', {
+        res.render('loginnew', {
             showHeaderFooter: false,
             showNav: false,
             title: 'Login',

@@ -1,0 +1,23 @@
+.login-c .img-logo-1,
+.login-c .img-logo-2{
+    width: 10rem;
+}
+
+
+.login-c .divider:after,
+.login-c .divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+.login-c .h-custom {
+    height: calc(100% - 73px);
+}
+
+@media (max-width: 450px) {
+    .login-c .h-custom {
+        height: 100%;
+    }
+}
