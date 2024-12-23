@@ -1,8 +1,20 @@
+nav{
+    background-color: rgb(25 25 161);
+}
 nav .fit-icon {
     background-color: white;
+    padding-bottom: .5rem;
+}
+
+nav .list-group{
+    border-radius: unset;
 }
 
 nav img {
     width: auto;
     height: 50px;
+}
+
+nav .list-group-item{
+    background-color: rgb(25 25 161);
 }

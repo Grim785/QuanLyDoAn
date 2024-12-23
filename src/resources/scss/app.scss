@@ -2,7 +2,10 @@
 @use "errlogin";
 @use "nav";
 @use "student_accountinfo";
+@use "student_registertopic";
 @use "login";
+@use "header";
+@use "footer";
 *{
     margin: 0;
     padding: 0;
@@ -32,21 +35,6 @@ html,body{
 
 .inner-shadow{
     box-shadow: inset 0px 1px 4px #c2bebe;
-}
-
-.bg-orange{
-    background-color: variable.$orange !important;
-}
-
-
-.list-group-item:hover{
-    background-color: white !important;
-    color: variable.$orange !important;
-}
-
-.active{
-    background-color: white!important;
-    color: variable.$orange !important;
 }
 
 

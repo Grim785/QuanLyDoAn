@@ -35,7 +35,26 @@ class SiteController {
             student: true,
         });
     }
-
+    // [GET] /logout
+    async logout(req, res, next) {
+        try {
+            // Xóa thông tin người dùng khỏi session
+            req.session.destroy(err => {
+                if (err) {
+                    return next(err); // Xử lý lỗi nếu xảy ra
+                }
+    
+                // Xóa cookie (nếu có)
+                res.clearCookie('userId');
+                
+                // Phản hồi hoặc chuyển hướng sau khi đăng xuất
+                res.redirect('/');
+            });
+        } catch (error) {
+            next(error); // Xử lý lỗi nếu xảy ra trong quá trình đăng xuất
+        }
+    }
+    
 
     // [POST] /chklogin
     async chklogin(req, res, next) {

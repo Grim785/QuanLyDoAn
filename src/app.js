@@ -9,16 +9,18 @@ const port = 3000;
 require("./config/middleware")(app);
 
 // Cấu hình Handlebars
-app.engine(
-  "hbs",
-  engine({
-    extname: ".hbs",
-    runtimeOptions: {
-      allowProtoPropertiesByDefault: true, // Cho phép truy cập vào các thuộc tính prototype
-      allowProtoMethodsByDefault: true, // Cho phép truy cập vào các phương thức prototype
-    },
-  })
-);
+app.engine("hbs", engine({
+  extname: ".hbs",
+  runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+      allowProtoMethodsByDefault: true
+  },
+  helpers: {
+      json: function (context) {
+          return JSON.stringify(context); // Chuyển đổi đối tượng thành chuỗi JSON
+      }
+  }
+}));
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "resources", "views"));
 

@@ -3,6 +3,7 @@ const Major = require('../models/Major');     // Import model Major
 const Class = require('../models/Class');     // Import model Class
 const User = require("../models/User");
 const File = require('../models/File');
+const SuggestedProjects = require('../models/SuggestedProjects');
 
 class StudentController{
     //[GET] /student/dashboard
@@ -30,7 +31,7 @@ class StudentController{
             studentData.date_of_birth = `${dob.getDate().toString().padStart(2, '0')}-${(dob.getMonth() + 1).toString().padStart(2, '0')}-${dob.getFullYear()}`;
             console.log(studentData);
             res.render('roles/student/dashboard', {
-                title: 'Dashboard student',
+                title: 'Trang chủ',
                 user: req.session.user,
                 showHeaderFooter: true,
                 showNav: true,
@@ -41,10 +42,22 @@ class StudentController{
         })
         .catch(next);
     }
-    // //[GET] /student/registertopic
-    registertopic(req, res, next){
+    //[GET] /student/registertopic
+    async registertopic(req, res, next){
+        //Lấy danh sách tên đề tài có sẵn 
+        const suggestedProjects = await SuggestedProjects.findAll();
+        //Lấy danh sách tên chuyên ngành
+        const major = await Major.findAll();
+        //Lấy danh sách sinh viên
+        const students = await Student.findAll({ attributes: ['studentID']});
+        //Chuyển đổi thành dạng [...,...,...]
+        // const students = student.map(s => s.studentID); 
+        console.log(students);
         res.render('roles/student/RegisterTopic', {
-            title: 'registertopic student',
+            title: 'Đăng ký đề tài',
+            suggestedProjects: suggestedProjects,
+            major: major,
+            studentID: students,
             showHeaderFooter: true,
             showNav: true,
             student: true,
@@ -55,7 +68,7 @@ class StudentController{
     // //[GET] /student/updateprocess
     updateprocess(req, res, next){
         res.render('roles/student/UpdateProcess', {
-            title: 'UpdateProcess',
+            title: 'Cập nhật tiến độ',
             showHeaderFooter: true,
             showNav: true,
             student: true,

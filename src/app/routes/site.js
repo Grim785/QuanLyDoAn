@@ -9,6 +9,8 @@ const { uploadProject, uploadAvatar} = require('../../config/file');
 router.get('/errlogin', SiteController.errlogin);
 //[GET] /err403
 router.get('/err403', SiteController.err403);
+//[GET] /logout
+router.get('/logout', SiteController.logout);
 //[POST] /chklogin -- Kiểm tra đăng nhập
 router.post('/chklogin', SiteController.chklogin);
 //[POST] /upload/project --Tải đồ án lên cloud

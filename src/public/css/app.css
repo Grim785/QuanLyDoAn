@@ -62,13 +62,26 @@
     font-size: 16px;
   }
 }
+nav {
+  background-color: rgb(25, 25, 161);
+}
+
 nav .fit-icon {
   background-color: white;
+  padding-bottom: 0.5rem;
+}
+
+nav .list-group {
+  border-radius: unset;
 }
 
 nav img {
   width: auto;
   height: 50px;
+}
+
+nav .list-group-item {
+  background-color: rgb(25, 25, 161);
 }
 
 .student-accountinfo .edit-btn {
@@ -92,9 +105,29 @@ input[type=file] {
   font-size: 20px;
 }
 
+#searchResults {
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #ccc;
+  width: 100%;
+  display: none;
+}
+
+#searchResults li {
+  max-height: 40px;
+  overflow: hidden;
+}
+
 .login-c .img-logo-1,
 .login-c .img-logo-2 {
   width: 10rem;
+}
+
+.login-c .ico-bkc {
+  width: 30px;
 }
 
 .login-c .divider:after,
@@ -114,6 +147,14 @@ input[type=file] {
     height: 100%;
   }
 }
+header .title {
+  align-items: flex-end;
+}
+
+footer {
+  height: 7vh;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -142,20 +183,6 @@ html, body {
 
 .inner-shadow {
   box-shadow: inset 0px 1px 4px #c2bebe;
-}
-
-.bg-orange {
-  background-color: #F67E29 !important;
-}
-
-.list-group-item:hover {
-  background-color: white !important;
-  color: #F67E29 !important;
-}
-
-.active {
-  background-color: white !important;
-  color: #F67E29 !important;
 }
 
 .scroll {

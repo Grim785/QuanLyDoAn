@@ -1,0 +1,15 @@
+#searchResults {
+    max-height: 200px; 
+    overflow-y: auto; 
+    position: absolute; 
+    z-index: 1000;
+    background-color: white; 
+    border: 1px solid #ccc; 
+    width: 100%; 
+    display: none;
+}
+
+#searchResults li {
+    max-height: 40px; 
+    overflow: hidden; 
+}
