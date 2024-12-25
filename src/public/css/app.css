@@ -258,4 +258,8 @@ a {
   text-decoration: none;
 }
 
+.reset {
+  all: revert;
+}
+
 /*# sourceMappingURL=app.css.map */
