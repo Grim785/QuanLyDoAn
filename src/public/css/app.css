@@ -16,7 +16,7 @@
 
 .errlogin .error-image {
   width: auto; /* Hoặc kích thước mong muốn */
-  height: 100px; /* Hoặc kích thước mong muốn */
+  height: 4.5rem; /* Hoặc kích thước mong muốn */
   display: block;
   margin: 0 auto;
 }
