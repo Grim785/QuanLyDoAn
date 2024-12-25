@@ -15,8 +15,11 @@ router.get('/AdvisorList', chkRoles('admin'), AdminController.AdvisorList);
 //[GET] /admin/RegisterTopicList
 router.get('/RegisterTopicList', chkRoles('admin'), AdminController.RegisterTopicList);
 //[GET] /admin/EditAccount
-router.get('/EditAccount', AdminController.EditAccount);
-
+router.get('/EditAccount', chkRoles('admin'), AdminController.EditAccount);
+//[GET] /admin/EditAccount
+router.get('/create-toppic', chkRoles('admin'), AdminController.createToppic);
+//[GET] /admin/search
+router.get('/search', chkRoles('admin'), AdminController.searchStudents);
 //[POST]
 // router.post('/login', controllers.site.chklogin);
 

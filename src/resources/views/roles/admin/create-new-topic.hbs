@@ -1,0 +1,238 @@
+<form method="post" action="/admin/create-new-toppic" class="container my-2 scroll create-toppic" style="height: 70vh;">
+    <div class="row gy-2">
+        <h3>Tạo mới đề tài</h3>
+        <div class="col-12">
+            <fieldset class="reset">
+                <legend class="reset">THÔNG TIN ĐỀ TÀI</legend>
+                <div class="container">
+                    <div class="row">
+                        {{!-- --}}
+                        <div class="col-lg-4 col-12 ">
+                            <p class="mb-1">Tên đề tài</p>
+                            <input type="text" class="form-control mb-1" name="title" id="" placeholder="Nhập tên đề tài">
+                            <p class="mb-1">Chuyên ngành liên quan</p>
+                            <select name="" id="" class="form-select mb-1">
+                                <option value="">-- Chọn chuyên ngành --</option>
+                                {{#each major}}
+                                <option value="{{id}}">{{name}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        {{!-- --}}
+                        <div class="col-lg-5 col-12 d-flex flex-column">
+                            <p class="mb-1">Mô tả</p>
+                            <textarea class="form-control flex-fill mb-1" name="" id=""></textarea>
+                        </div>
+                        {{!-- --}}
+                        <div class="col-lg-3 col-12 d-flex flex-column">
+                            <fieldset class="reset flex-fill mb-1">
+                                <legend class="reset">Trạng thái tạo mới</legend>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="flexRadioDefault1" value="not_started" checked>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Chưa bắt đầu
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="flexRadioDefault2" value="started">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Bắt đầu
+                                    </label>
+                                </div>
+                                <!-- Thêm thẻ hiển thị ngày -->
+                                <div id="current-date" class="mt-2" style="display: none;">
+                                    Ngày bắt đầu: <span id="date-display"></span>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        {{!-- --}}
+        <div class="col-sm-7 formfor-student">
+            <fieldset class="reset">
+                <legend class="reset">Sinh viên tham gia</legend>
+                <div class="container gy-1">
+                    <div class="row gy-1">
+                        <!-- Ô tìm kiếm -->
+                        <div class="col-lg-3 d-flex align-items-center">
+                            <label for="tim-sinh-vien" class="text-nowrap">Tìm sinh viên:</label>
+                        </div>
+                        <div class="col-lg-7">
+                            <input type="text" id="tim-sinh-vien" class="form-control" placeholder="Nhập mã sinh viên">
+                        </div>
+                        <div class="col-lg-2 d-flex justify-content-end text-center">
+                            <button type="button" id="btn-tim" class="btn btn-info text-white"><i class="fa-solid fa-magnifying-glass me-2 text-white"></i>Tìm</button>
+                        </div>
+                    </div>
+                    <div id="card-tabs" class="mt-2"></div>
+                    <!-- Popup danh sách kết quả -->
+                    <div id="popup-ket-qua" class="popup-results"></div>
+                </div>
+            </fieldset>
+        </div>
+        {{!-- --}}
+        <div class="col-sm-5 d-flex formfor-advisor">
+            <fieldset class="reset flex-fill">
+                <legend class="reset">Giảng viên hướng dẫn</legend>
+                <select name="" id="" class="form-select">
+                    <option value="">-- Chọn giảng viên --</option>
+                    {{#each advisors}}
+                    <option value="{{id}}">{{lastname}} {{firstname}}</option>
+                    {{/each}}
+                </select>
+            </fieldset>
+        </div>
+        {{!--  --}}
+        <div class="col-12 d-flex justify-content-end">
+            <button type="submit" class="btn btn-success">Tạo mới</button>
+        </div>
+    </div>
+</form>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('tim-sinh-vien');
+        const popup = document.getElementById('popup-ket-qua');
+        const cardTabs = document.getElementById('card-tabs');
+        let cardCount = 0;
+
+        // Gửi yêu cầu tìm kiếm khi người dùng nhấn "Tìm"
+        document.getElementById('btn-tim').addEventListener('click', () => {
+            const query = input.value.trim();
+            if (!query) {
+                popup.style.display = 'none';
+                return;
+            }
+            
+            // Gửi AJAX yêu cầu tìm kiếm
+            fetch(`/admin/search?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        // Hiển thị danh sách kết quả
+                        popup.innerHTML = `
+                            <span class="close-popup">&times;</span>
+                            ${data
+                                .map(
+                                    student => `
+                                    <div class="result-item" data-studentid="${student.studentID}" data-id="${student.id}" data-name="${student.firstname} ${student.lastname}">
+                                        ${student.studentID} - ${student.lastname} ${student.firstname}
+                                    </div>`
+                                )
+                                .join('')}
+                        `;
+                        popup.style.display = 'block';
+                    } else {
+                        popup.innerHTML = `
+                            <span class="close-popup">&times;</span>
+                            <div class="result-item">Không tìm thấy kết quả. Vui lòng kiểm tra lại giá trị tìm kiếm!!</div>`;
+                        popup.style.display = 'block';
+                        // Ngừng sự kiện click trên các kết quả không có
+                        const resultItem = popup.querySelector('.result-item');
+                        resultItem.style.pointerEvents = 'none';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+
+        });
+
+        // Xử lý khi người dùng chọn 1 kết quả
+        popup.addEventListener('click', (e) => {
+            if (e.target.classList.contains('result-item')) {
+                const id = e.target.dataset.id;
+                const name = e.target.dataset.name;
+                const studentId = e.target.dataset.studentid;
+                
+                
+
+                // Hiện thông báo xác nhận
+                const confirmAdd = confirm(`Bạn có muốn chọn sinh viên ${name} (MSSV: ${studentId})?`);
+                if (confirmAdd) {
+                    addCardTab({ id, name, studentId});
+                }
+
+                popup.style.display = 'none';
+            }
+        });
+        // Thêm card-tab
+        function addCardTab(student) {
+            // Kiểm tra nếu vượt quá giới hạn
+            if (cardCount >= 4) {
+                alert('Đã đạt giới hạn 4 sinh viên. Không thể thêm sinh viên.');
+                return;
+            }
+            // Kiểm tra nếu đã tồn tại card-tab cho sinh viên này
+            if (document.getElementById(`card-${student.id}`)) {
+                alert('Sinh viên này đã được thêm. Vui lòng chọn lại!');
+                return;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'card-tab';
+            card.id = `card-${student.id}`;
+            card.innerHTML = `
+                <p>Sinh viên: ${student.studentId} - ${student.name}</p>
+                <input type="hidden" name="students[]" value="${student.id}">
+                <button class="remove-btn">&times;</button>
+            `;
+
+            // Xóa card-tab khi nhấn nút x
+            card.querySelector('.remove-btn').addEventListener('click', () => {
+                card.remove();
+                cardCount--;
+            });
+
+            cardTabs.appendChild(card);
+        }
+            // Ẩn popup khi click bên ngoài
+        document.addEventListener('click', (e) => {
+            if (!popup.contains(e.target) && e.target !== input) {
+                popup.style.display = 'none';
+            }
+        });
+        // Đóng popup khi nhấn nút x
+        popup.addEventListener('click', (e) => {
+            if (e.target.classList.contains('close-popup')) {
+                popup.style.display = 'none';
+            }
+        });
+
+        // Ẩn popup khi click bên ngoài
+        document.addEventListener('click', (e) => {
+            if (!popup.contains(e.target) && e.target !== input) {
+                popup.style.display = 'none';
+            }
+        });
+
+        const startedRadio = document.getElementById('flexRadioDefault2');
+        const notStartedRadio = document.getElementById('flexRadioDefault1');
+        const dateDisplayContainer = document.getElementById('current-date');
+        const dateDisplay = document.getElementById('date-display');
+
+        // Lắng nghe sự kiện thay đổi trên cả hai radio button
+        startedRadio.addEventListener('change', () => {
+            if (startedRadio.checked) {
+                // Lấy ngày hiện hành
+                const currentDate = new Date();
+                const formattedDate = currentDate.toLocaleDateString('vi-VN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                });
+
+                // Hiển thị ngày và bật phần tử
+                dateDisplay.textContent = formattedDate;
+                dateDisplayContainer.style.display = 'block';
+            }
+        });
+
+        notStartedRadio.addEventListener('change', () => {
+            if (notStartedRadio.checked) {
+                // Ẩn ngày nếu chọn "Chưa bắt đầu"
+                dateDisplayContainer.style.display = 'none';
+            }
+        });
+    });
+    
+</script>
