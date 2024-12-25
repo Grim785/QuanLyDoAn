@@ -121,6 +121,18 @@ input[type=file] {
   overflow: hidden;
 }
 
+.student-dashboard .student-listtopic {
+  height: 15rem;
+  align-items: center;
+}
+
+.student-dashboard .student-listtopic .card .card-body p {
+  width: 15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .login-c .img-logo-1,
 .login-c .img-logo-2 {
   width: 10rem;

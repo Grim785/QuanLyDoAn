@@ -1,25 +1,28 @@
-<article class="container scroll my-2 flex-fill">
+<article class="container scroll my-2 flex-fill student-dashboard">
     <div class="row g-4 mb-2">
         <div class="col-xl-6">
-            <div class="container border rounded py-1" style="border-color: rgba(122,211,255,0.7) !important; background-color: rgba(122,211,255,0.3)">
+            <div class="container border rounded py-1"
+                style="border-color: rgba(122,211,255,0.7) !important; background-color: rgba(122,211,255,0.3)">
                 <div class="row mb-2">
                     <b class="">Thông tin sinh viên</b>
                 </div>
                 <div class="row">
                     <div class="col-sm-4 col d-flex align-items-center flex-column">
-                        <img class="mb-3 border rounded-circle" src="{{#if data.file.file_path}}{{data.file.file_path}}{{else}}/img/atsushi.png{{/if}}" alt="" style="height: 100px; width:100px;">
+                        <img class="mb-3 border rounded-circle"
+                            src="{{#if data.file.file_path}}{{data.file.file_path}}{{else}}/img/atsushi.png{{/if}}"
+                            alt="" style="height: 100px; width:100px;">
                         <a class="mb-3" href="">Chỉnh sửa thông tin</a>
                     </div>
                     <div class="col-8">
                         {{#if data}}
-                            <p>MSSV: {{data.studentID}}</p>
-                            <p>Họ và Tên: {{data.lastname}} {{data.firstname}}</p>
-                            <p>Giới tính: {{data.gender}}</p>
-                            <p>Ngày sinh: {{data.date_of_birth}}</p>
-                            <p>Chuyên Ngành: {{data.major.name}}</p>
-                            <p>Lớp: {{data.class.classID}}</p>
+                        <p>MSSV: {{data.studentID}}</p>
+                        <p>Họ và Tên: {{data.lastname}} {{data.firstname}}</p>
+                        <p>Giới tính: {{data.gender}}</p>
+                        <p>Ngày sinh: {{data.date_of_birth}}</p>
+                        <p>Chuyên Ngành: {{data.major.name}}</p>
+                        <p>Lớp: {{data.class.classID}}</p>
                         {{else}}
-                            <p>No student information found.</p>
+                        <p>No student information found.</p>
                         {{/if}}
                     </div>
                 </div>
@@ -65,11 +68,32 @@
     </div>
     <div class="row g-4">
         <div class="col-xl-6">
-            <div class="container border rounded">
+            <div class="container border rounded ">
                 <b>Thông tin đồ án</b>
-                <p style="min-height:200px;">
+                <div class="jumbotron scroll student-listtopic">
+                    {{#each project_data}}
+                    <div class="card mt-3 me-3 border-1 shadow-sm rounded {{#if (eq status 'in_progress')}}bg-info{{else if (eq status 'completed')}}bg-success{{/if}}">
+                        <div class="card-body p-3 d-flex flex-wrap">
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Đề tài:</strong> {{title}}</p>
+                                <p class="mb-1"><strong>GVHD:</strong> {{advisor.lastname}} {{advisor.firstname}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Tình trạng:</strong> {{#if (eq status 'in_progress')}}Đang thực hiện{{else if (eq status 'completed')}}Đã hoàn thành{{else}} Chưa bắt đầu{{/if}}</p>
+                                {{#if (eq status 'completed')}}
+                                    <p class="mb-1"><strong>Từ:</strong> {{start_date}} <strong>Đến:</strong> {{end_date}}</p>
+                                {{else}}
+                                    <p class="mb-1"><strong>Ngày bắt đầu:</strong> {{start_date}}</p>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                                            {{!-- <div class="mt-3">
+                            Bạn chưa có đề tài nào!
+                        </div> --}}
+                </div>
 
-                </p>
             </div>
         </div>
         <div class="col-xl-6">
@@ -77,27 +101,17 @@
             <div class="progressbar"></div>
         </div>
     </div>
-    {{!-- {{#if user}}
-    <div class="user-info">
-        <h2>Xin chào, {{user.username}}!</h2> <!-- Giả sử bạn có thuộc tính username trong user -->
-        <p>Vai trò: {{user.role}}</p> <!-- Hiển thị vai trò của người dùng -->
-    </div>
-    {{else}}
-    <div class="alert alert-warning">
-        <p>Người dùng không được xác thực. Vui lòng đăng nhập.</p>
-    </div>
-    {{/if}} --}}
 </article>
 
 <script>
     const progressbar = document.querySelector('.progressbar');
-    let progress=90
+    let progress = 90
 
     function enableProgressbar() {
-        progressbar.setAttribute("role","progressbar");
-        progressbar.setAttribute("aria-valuenow",progress);
-        progressbar.setAttribute("aria-live","polite");
-        progressbar.style.setProperty("--progress",progress+ "%")
+        progressbar.setAttribute("role", "progressbar");
+        progressbar.setAttribute("aria-valuenow", progress);
+        progressbar.setAttribute("aria-live", "polite");
+        progressbar.style.setProperty("--progress", progress + "%")
     }
 
     enableProgressbar()

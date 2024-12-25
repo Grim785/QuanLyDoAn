@@ -12,13 +12,16 @@ require("./config/middleware")(app);
 app.engine("hbs", engine({
   extname: ".hbs",
   runtimeOptions: {
-      allowProtoPropertiesByDefault: true,
-      allowProtoMethodsByDefault: true
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true
   },
   helpers: {
-      json: function (context) {
-          return JSON.stringify(context); // Chuyển đổi đối tượng thành chuỗi JSON
-      }
+    json: function (context) {
+      return JSON.stringify(context); // Chuyển đổi đối tượng thành chuỗi JSON
+    },
+    eq: function (a, b) {
+      return a === b;
+    }
   }
 }));
 app.set("view engine", "hbs");

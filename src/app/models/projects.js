@@ -15,13 +15,9 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    field: {
-      type: DataTypes.STRING(255),
-      allowNull: false
-    },
     start_date: {
       type: DataTypes.DATEONLY,
-      allowNull: false
+      allowNull: true
     },
     end_date: {
       type: DataTypes.DATEONLY,
