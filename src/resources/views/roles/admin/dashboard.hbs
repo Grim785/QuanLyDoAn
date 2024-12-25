@@ -61,15 +61,15 @@
                             <p class="text-nowrap">Tên đề tài</p>
                         </div>
                         <div class="col-12 col-sm-10 col-lg-9">
-                            <input type="text" name="" id="" class="form-control">
+                            <input type="text" name="" id="" class="form-control tag_input">
                         </div>
                         <div class="col-12 col-sm-2 col-lg-1 d-flex justify-content-end">
-                            <input type="button" class="btn btn-success" value="Tìm">
+                            <input type="button" class="btn btn-success search_btn" value="Tìm">
                         </div>
                         <div class="col-12 col-sm-8 col-lg-10 border rounded p-1 bg-gray">
                             <div class="container">
                                 <div class="row">
-                                    <div class="col d-flex flex-wrap align-items-start">
+                                    <div class="col d-flex flex-wrap align-items-start tag_container">
                                         <div class="border bg-success rounded d-flex align-items-center p-1 text-light">
                                             <p class="mx-1">Quản trị mạng</p><i><i class="fa-solid fa-x fa-sm mx-1"></i></i>
                                         </div>
@@ -77,8 +77,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-4 col-lg-2 d-flex justify-items-end">
-                            <input type="button" class="btn btn-danger" value="Xóa tất cả">
+                        <div class="col-12 col-sm-4 col-lg-2 d-flex justify-content-end">
+                            <input type="button" class="btn btn-danger" onclick="removeAllTags()" value="Xóa tất cả">
                         </div>
                     </div>
                 </div>
@@ -89,3 +89,46 @@
         </div>
     </div>
 </form>
+
+<script>
+    var tag_container = document.querySelector('.tag_container');
+    var tag_input = document.querySelector('.tag_input');
+    var search_btn = document.querySelector('.search_btn');
+
+    var tags = [];
+
+    function createTags(){
+       
+        tag_container.innerHTML = '';
+        for(let i = 0; i < tags.length; i++){
+            const tag = tags[i];
+            tag_container.innerHTML +=`                                        <div class="border bg-success rounded d-flex align-items-center p-1 text-light">
+                                            <p class="mx-1 text-break">${tag}</p><i class="fa-solid fa-x fa-sm mx-1" onclick="removeTag(${i})"></i>
+                                        </div>`
+        }
+    };
+
+    createTags()
+
+    search_btn.addEventListener("click",function(event){
+        if(!tag_input.value)
+        {
+            return; 
+        }
+        tags.push(tag_input.value.trim());
+        tag_input.value = '';
+        createTags();
+    })
+
+    function removeTag(index){
+        tags.splice(index,1);
+        createTags();
+    }
+
+    function removeAllTags(){
+        tags = [];
+        createTags();
+    }
+
+
+</script>
