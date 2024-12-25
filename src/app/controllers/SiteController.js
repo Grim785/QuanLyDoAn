@@ -24,9 +24,9 @@ class SiteController {
     }
     // [GET] /errlogin
     errlogin(req, res, next) {
-        res.render('errlogin', {
-            showHeaderFooter: false,
-            showNav: false,
+        res.render('roles/admin/dashboard', {
+            // showHeaderFooter: false,
+            // showNav: false,
             title: 'Err Login',
         });
     }
