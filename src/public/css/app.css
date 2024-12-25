@@ -97,7 +97,7 @@ nav .list-group-item {
 
 /* Ẩn input file và hiển thị chỉ label */
 input[type=file] {
-  display: none;
+  display: block;
 }
 
 .student-accountinfo .edit-btn i {

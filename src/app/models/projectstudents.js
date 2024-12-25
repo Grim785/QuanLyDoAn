@@ -1,35 +1,27 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('projectfeedback', {
-    id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
+  return sequelize.define('projectstudents', {
     project_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
       references: {
         model: 'projects',
         key: 'id'
       }
     },
-    user_id: {
+    student_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
       references: {
-        model: 'users',
+        model: 'students',
         key: 'id'
       }
-    },
-    message: {
-      type: DataTypes.TEXT,
-      allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'projectfeedback',
+    tableName: 'projectstudents',
     timestamps: true,
     indexes: [
       {
@@ -37,21 +29,15 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
-        ]
-      },
-      {
-        name: "project_id",
-        using: "BTREE",
-        fields: [
           { name: "project_id" },
+          { name: "student_id" },
         ]
       },
       {
-        name: "user_id",
+        name: "student_id",
         using: "BTREE",
         fields: [
-          { name: "user_id" },
+          { name: "student_id" },
         ]
       },
     ]

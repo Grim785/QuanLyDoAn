@@ -1,62 +1,64 @@
-const Student = require('../models/Student'); // Import model Student
-const Major = require('../models/Major');     // Import model Major
-const Class = require('../models/Class');     // Import model Class
-const User = require("../models/User");
-const File = require('../models/File');
-const SuggestedProjects = require('../models/SuggestedProjects');
+const sequelize = require("../../config/db");
+const initModels = require("../models/init-models");
+// Khởi tạo tất cả các model và quan hệ
+const models = initModels(sequelize);
+// Truy cập model
+const {users, students, files, majors, class_ } = models;
 
 class StudentController{
     //[GET] /student/dashboard
-    dashboard(req, res, next){
-        const userId = req.session.user.id;
-        Student.findOne({
-            where: { usersID: userId }, // Tìm sinh viên dựa trên userID
-            include: [
-                { model: Major, as: 'major', attributes: ['name'] }, // Tham chiếu bảng Major
-                { model: Class, as: 'class', attributes: ['classID'] }, // Tham chiếu bảng Class
-                { model: File, as: 'file', attributes: ['file_path'] }, // Tham chiếu bảng File
-            ],
-            attributes: ['studentID', 'lastname', 'firstname', 'date_of_birth', 'gender'],
-        })
-        .then(student => {
+    async dashboard(req, res, next){
+        try {
+            const user_id = req.session.user.id;
+            const student = await students.findOne({
+                where: {usersID: user_id},
+                include: [
+                    { model: majors, as: 'major', attributes: ['name']},
+                    { model: class_, as: 'class', attributes: ['classID']},
+                    // { model: files, as: 'files', attributes: ['file_path']},
+                ],
+                attributes: ['studentID', 'lastname', 'firstname', 'date_of_birth', 'gender'],
+            });
             if (!student) {
                 return res.status(404).render('error', {
                     title: 'Error',
                     message: 'Student not found',
                 });
             }
-            const studentData = student.toJSON();
-            // Định dạng ngày sinh
-            const dob = new Date(studentData.date_of_birth);
-            studentData.date_of_birth = `${dob.getDate().toString().padStart(2, '0')}-${(dob.getMonth() + 1).toString().padStart(2, '0')}-${dob.getFullYear()}`;
-            console.log(studentData);
+            const student_data = student.toJSON();
+            // Định dạng ngày sinh ----------------------
+            const dob = new Date(student_data.date_of_birth);
+            student_data.date_of_birth = `${dob.getDate().toString().padStart(2, '0')}-${(dob.getMonth() + 1).toString().padStart(2, '0')}-${dob.getFullYear()}`;
+            // -----------------------------------------
             res.render('roles/student/dashboard', {
                 title: 'Trang chủ',
-                user: req.session.user,
+                data: student_data,
+                dashboardactive:true,
+                //Truyền dữ liệu hiển thị thành phần------
                 showHeaderFooter: true,
                 showNav: true,
                 student: true,
-                data: studentData,
-                dashboardactive:true, // Chuyển đổi dữ liệu để sử dụng trong view
+                //----------------------------------------
             });
-        })
-        .catch(next);
+        } catch (error) {
+            console.log(error);
+        }
     }
     //[GET] /student/registertopic
     async registertopic(req, res, next){
-        //Lấy danh sách tên đề tài có sẵn 
-        const suggestedProjects = await SuggestedProjects.findAll();
-        //Lấy danh sách tên chuyên ngành
-        const major = await Major.findAll();
-        //Lấy danh sách sinh viên
-        const students = await Student.findAll({ attributes: ['studentID']});
-        //Chuyển đổi thành dạng [...,...,...]
-        // const students = student.map(s => s.studentID); 
-        console.log(students);
+        // //Lấy danh sách tên đề tài có sẵn 
+        // const suggestedProjects = await SuggestedProjects.findAll();
+        // //Lấy danh sách tên chuyên ngành
+        // const major = await Major.findAll();
+        // //Lấy danh sách sinh viên
+        // const students = await Student.findAll({ attributes: ['studentID']});
+        // //Chuyển đổi thành dạng [...,...,...]
+        // // const students = student.map(s => s.studentID); 
+        // console.log(students);
         res.render('roles/student/RegisterTopic', {
             title: 'Đăng ký đề tài',
-            suggestedProjects: suggestedProjects,
-            major: major,
+            // suggestedProjects: suggestedProjects,
+            // major: major,
             studentID: students,
             showHeaderFooter: true,
             showNav: true,
@@ -77,41 +79,41 @@ class StudentController{
     }
 
     // //[GET] /student/AccountInfo
-    accountinfo(req, res, next){
-        const userId = req.session.user.id;
-        Student.findOne({
-            where: { usersID: userId }, // Tìm sinh viên dựa trên userID
-            include: [
-                { model: User, as: 'user', attributes: ['gmail', 'phone'] }, // Tham chiếu bảng Major
-                { model: File, as: 'file', attributes: ['file_path'] } // Tham chiếu bảng File
-                // { model: Class, as: 'class', attributes: ['classID'] }, // Tham chiếu bảng Class
-            ],
-            attributes: ['studentID', 'lastname', 'firstname', 'date_of_birth', 'gender', 'address'],
-        })
-        .then(student => {
+    async accountinfo(req, res, next){
+        try {
+            const user_id = req.session.user.id;
+            const student = await students.findOne({
+                where: {usersID: user_id},
+                include: [
+                    {model: users, as: 'user', attributes: ['gmail', 'phone']},
+                    // {model: files, as: 'files', attributes: ['file_path']}
+                ],
+                attributes: ['studentID', 'lastname', 'firstname', 'date_of_birth', 'gender', 'address'],            
+            });
             if (!student) {
                 return res.status(404).render('error', {
                     title: 'Error',
                     message: 'Student not found',
                 });
             }
-            const studentData = student.toJSON();
-            // Định dạng ngày sinh
-            const dob = new Date(studentData.date_of_birth);
-            studentData.date_of_birth = `${dob.getDate().toString().padStart(2, '0')}-${(dob.getMonth() + 1).toString().padStart(2, '0')}-${dob.getFullYear()}`;
-            console.log(studentData);
-            console.log(req.session.user)
+            const student_data = student.toJSON();
+            // Định dạng ngày sinh ----------------------
+            const dob = new Date(student_data.date_of_birth);
+            student_data.date_of_birth = `${dob.getDate().toString().padStart(2, '0')}-${(dob.getMonth() + 1).toString().padStart(2, '0')}-${dob.getFullYear()}`;
+            // -----------------------------------------
             res.render('roles/student/AccountInfo', {
                 title: 'Thông tin tài khoản',
-                // user: req.session.user,
+                data: student_data,
+                dashboardactive:true,
+                //Truyền dữ liệu hiển thị thành phần------
                 showHeaderFooter: true,
-                showNav: true,  
+                showNav: true,
                 student: true,
-                data: studentData,
-                dashboardactive:true, // Chuyển đổi dữ liệu để sử dụng trong view
+                //----------------------------------------
             });
-        })
-        .catch(next);
+        } catch (error) {
+            console.log(error);
+        }
     }
     //[GET] /student/project
     project(req, res, next){

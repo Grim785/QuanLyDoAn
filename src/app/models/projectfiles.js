@@ -1,35 +1,27 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('projectfeedback', {
-    id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
+  return sequelize.define('projectfiles', {
     project_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
       references: {
         model: 'projects',
         key: 'id'
       }
     },
-    user_id: {
+    file_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
       references: {
-        model: 'users',
+        model: 'files',
         key: 'id'
       }
-    },
-    message: {
-      type: DataTypes.TEXT,
-      allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'projectfeedback',
+    tableName: 'projectfiles',
     timestamps: true,
     indexes: [
       {
@@ -37,21 +29,15 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
-        ]
-      },
-      {
-        name: "project_id",
-        using: "BTREE",
-        fields: [
           { name: "project_id" },
+          { name: "file_id" },
         ]
       },
       {
-        name: "user_id",
+        name: "file_id",
         using: "BTREE",
         fields: [
-          { name: "user_id" },
+          { name: "file_id" },
         ]
       },
     ]

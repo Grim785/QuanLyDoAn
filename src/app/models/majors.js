@@ -1,19 +1,19 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('suggestedprojects', {
+  return sequelize.define('majors', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    title: {
-      type: DataTypes.STRING(255),
+    name: {
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'suggestedprojects',
+    tableName: 'majors',
     timestamps: true,
     indexes: [
       {
