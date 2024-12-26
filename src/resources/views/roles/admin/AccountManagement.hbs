@@ -1,47 +1,74 @@
-<div class="container my-2" style="height:70vh;">
+<div class="container my-2" style="height: 70vh;">
     <div class="row p-2 h-100">
-          <div class="h-100">
-            <div class="border rounded-3 h-100">
-                <div class="text-light bg-orange border rounded-top p-2 container" style="height: 60px;">
-                    <div class="row h-100 align-items-center">
-                        <div class="col-12 col-sm-6">
-                            Danh sách tài khoản
-                        </div>
-                        <div class="col-12 col-sm-6 d-flex justify-content-end">
-                            <form action="" class="d-flex">
-                                <input type="text" class="inner-shadow border rounded mx-1" placeholder="tìm kiếm">
-                                <button class="border-0 bg-transparent mx-1" type="submit"><i class="fa-solid fa-magnifying-glass fa-lg text-light"></i></button>
-                            </form>
-                        </div>
+        <div class="h-100 w-100">
+            <div class="border rounded-3 h-100 d-flex flex-column">
+                <!-- Header -->
+                <div class="text-light bg-orange border rounded-top p-2 d-flex align-items-center justify-content-between" style="height: 60px;">
+                    <div class="fw-bold">Danh sách tài khoản</div>
+                    <form action="" class="d-flex">
+                        <input type="text" class="form-control form-control-sm me-2" placeholder="Tìm kiếm" aria-label="Tìm kiếm">
+                        <button class="btn btn-sm btn-light border" type="submit" aria-label="Tìm kiếm">
+                            <i class="fa-solid fa-magnifying-glass fa-lg text-dark"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Table content -->
+                <div class="scroll flex-grow-1 overflow-auto">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr class="text-nowrap">
+                                    <th scope="col">Tên đăng nhập</th>
+                                    <th scope="col">Họ tên</th>
+                                    <th scope="col">Quyền</th>
+                                    <th scope="col">Ngày tạo</th>
+                                    <th scope="col">Ngày cập nhật</th>
+                                    <th scope="col" class="text-end"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-nowrap scoll">
+                                {{!-- render dữ liệu ở đây --}}
+                                {{#each listUsers}}
+                                <tr class="align-middle {{#unless active}}table-secondary opacity-50{{/unless}}">
+                                    <th scope="row">{{username}}</th>
+                                    <td>
+                                        {{#if (eq role "student")}}
+                                            {{#if students.length}}
+                                                {{students.[0].lastname}} {{students.[0].firstname}} 
+                                            {{else}}
+                                                Không đăng ký họ tên
+                                            {{/if}}
+                                        {{else}}
+                                            {{#if advisors.length}}
+                                                {{advisors.[0].lastname}} {{advisors.[0].firstname}} 
+                                            {{else}}
+                                                Không đăng ký họ tên
+                                            {{/if}}
+                                        {{/if}}
+                                    </td>
+                                    <td>{{role}}</td>
+                                    <td>21/12/2024</td>
+                                    <td>21/12/2024</td>
+                                    <td class="text-end">
+                                        {{#if (eq role 'student')}}
+                                            <a href="/student/details/{{id}}" class="btn btn-primary btn-sm me-1">Chi tiết</a>
+                                        {{else if (eq role 'advisor')}}
+                                        <a href="/admin/EditAccount" class="btn btn-warning btn-sm me-1">Sửa</a>
+                                        <button type="button" class="btn btn-danger btn-sm">Xóa</button>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                                {{!-- kết thúc ở đây --}}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="scroll" style="height: calc(100% - 150px);">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr class="position-sticky top-0 p-2 text-nowrap">
-                                <th scope="col">Tên đăng nhập</th>
-                                <th scope="col">Họ tên</th>
-                                <th scope="col">Quyền</th>
-                                <th scope="col">Ngày tạo</th>
-                                <th scope="col">Ngày cập nhật</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-nowrap">
-                            {{!-- render dữ liệu ở đây --}}
-                            <tr class="">
-                                <th scope="row">22002070</th>
-                                <td>Nguyễn Văn An</td>   
-                                <td>Sinh viên</td>
-                                <td>21/12/2024</td>
-                                <td>21/12/2024</td>
-                                <td><button type="button" class="btn btn-warning mx-1"><a href="/admin/EditAccount">Sửa</a></button><button type="button" class="btn btn-danger mx-1">Xóa</button></td>
-                            </tr>
-                            {{!-- kết thúc ở đây --}}
-                        </tbody>
-                    </table>
+
+                <!-- Footer -->
+                <div class="border rounded-bottom p-2 d-flex justify-content-end align-items-center" style="height: 50px;">
+                    <button type="button" class="btn btn-success btn-sm">Thêm tài khoản</button>
                 </div>
-                <div class="text-light border rounded-bottom p-2 d-grid justify-content-end" style="height: 50px;"><button type="button" class="btn btn-success">Thêm tài khoản</button></div>
             </div>
         </div>
     </div>

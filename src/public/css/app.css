@@ -184,6 +184,10 @@ nav .list-group-item {
   height: 5rem;
 }
 
+.formfor-student {
+  height: 15rem;
+}
+
 .student-accountinfo .edit-btn {
   visibility: hidden;
   opacity: 0;

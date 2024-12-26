@@ -6,7 +6,7 @@ const models = initModels(sequelize);
 // Truy cập model
 const { users, students, advisors, majors, class_, projects, projectstudents, projectadvisors} = models;
 class AdminController{
-    //[GET] /student/dashboard
+    //[GET] /admin/dashboard
     dashboard(req, res, next){
         res.render('roles/admin/dashboard', {
             title: 'Dashboard admin',
@@ -16,15 +16,29 @@ class AdminController{
             dashboardactive: true,
         });
     }
-
-    AccountManagement(req, res, next){
-        res.render('roles/admin/AccountManagement', {
-            title: 'Dashboard admin',
-            showHeaderFooter: true,
-            showNav: true,
-            admin: true,
-            accountmanagementactive: true,
-        });
+    //[GET] /admin/AccountManagement
+    async AccountManagement(req, res, next){
+        try {
+            const listUsers = await users.findAll({
+                include: [
+                    {model: students, as: 'students', attributes: ['lastname','firstname']},
+                    {model: advisors, as: 'advisors', attributes: ['lastname','firstname']}
+                ],
+                attributes: ['username', 'role', 'active']
+            });
+            console.log(JSON.stringify(listUsers, null, 2));  // Để xem dữ liệu chi tiết hơn trong listUsers
+            res.render('roles/admin/AccountManagement', {
+                title: 'Danh sách tài khoản',
+                listUsers: listUsers,
+                //Truyền dữ liệu hiển thị thành phần------
+                showHeaderFooter: true,
+                showNav: true,
+                admin: true,
+                //----------------------------------------
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     AdvisorList(req, res, next){
@@ -115,13 +129,11 @@ class AdminController{
     }
 
     //[POST] /admin/create-toppic
-    async createToppic(req, res, next){
-        // Lấy dữ liệu từ views
+    async createToppic(req, res, next) {
         const data = req.body;
         const studentlist = Array.isArray(data['students[]']) ? data['students[]'] : [];
         const dateProject = new Date();
     
-        // Transaction chặn lỗi
         const transaction = await sequelize.transaction();
         try {
             // Thêm dữ liệu vào bảng project
@@ -131,19 +143,36 @@ class AdminController{
                 status: data.status,
                 majorID: data.majorId,
                 start_date: data.status === 'in_progress' ? dateProject : null
-            });
+            }, { transaction });
     
-            // Thêm các sinh viên vào các bảng, chỉ khi studentlist không rỗng
+            // Kiểm tra và thêm các sinh viên vào dự án
             for (const studentId of studentlist) {
+                // Kiểm tra xem sinh viên đã tham gia dự án với trạng thái không hợp lệ chưa
+                const existingProject = await projectstudents.findOne({
+                    where: { student_id: studentId },
+                    include: [{
+                        model: projects,
+                        as: 'project',
+                        where: {
+                            status: ['not_started', 'in_progress']
+                        }
+                    }]
+                });
+    
+                if (existingProject) {
+                    throw new Error(`Sinh viên ID ${studentId} đã tham gia một dự án khác với trạng thái not_started hoặc in_progress.`);
+                }
+    
+                // Thêm sinh viên vào dự án
                 await projectstudents.create({
                     project_id: project.id,
                     student_id: studentId
-                });
+                }, { transaction });
             }
     
-            // Thêm giảng viên hướng dẫn vào bảng
-            if (data.advisorId != "") {
-                const projectadvisor = await projectadvisors.create({
+            // Thêm giảng viên hướng dẫn nếu có
+            if (data.advisorId) {
+                await projectadvisors.create({
                     project_id: project.id,
                     advisor_id: data.advisorId
                 }, { transaction });
@@ -152,11 +181,12 @@ class AdminController{
             await transaction.commit();
             res.status(200).send({ message: 'Thêm thành công!' });
         } catch (error) {
-            await transaction.rollback(); // Hoàn tác nếu có lỗi
+            await transaction.rollback();
             console.error('Error creating project or students:', error);
-            res.status(500).send({ message: 'Lỗi khi tạo dự án' });
+            res.status(400).send({ message: error.message || 'Lỗi khi tạo dự án' });
         }
     }
+    
     
 }
 module.exports = new AdminController();
