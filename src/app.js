@@ -4,7 +4,7 @@ const { engine } = require("express-handlebars");
 // const bodyParser = require('body-parser');
 require("dotenv").config();
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5001;
 
 // Import và sử dụng middleware từ file riêng
 require("./config/middleware")(app);

@@ -118,7 +118,7 @@ class AdminController{
     async createToppic(req, res, next){
         // Lấy dữ liệu từ views
         const data= req.body;
-        const studentlist = data['students[]'];
+        const studentlist = data.students;
         const dateProject = new Date();
         // Transaction chặng lỗi
         const transaction = await sequelize.transaction();
