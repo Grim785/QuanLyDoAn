@@ -117,10 +117,11 @@ class AdminController{
     //[POST] /admin/create-toppic
     async createToppic(req, res, next){
         // Lấy dữ liệu từ views
-        const data= req.body;
-        const studentlist = data.students;
+        const data = req.body;
+        const studentlist = Array.isArray(data['students[]']) ? data['students[]'] : [];
         const dateProject = new Date();
-        // Transaction chặng lỗi
+    
+        // Transaction chặn lỗi
         const transaction = await sequelize.transaction();
         try {
             // Thêm dữ liệu vào bảng project
@@ -131,27 +132,31 @@ class AdminController{
                 majorID: data.majorId,
                 start_date: data.status === 'in_progress' ? dateProject : null
             });
-            // Thêm các sinh viên vào các bảng
-            for(const studentId of studentlist){
+    
+            // Thêm các sinh viên vào các bảng, chỉ khi studentlist không rỗng
+            for (const studentId of studentlist) {
                 await projectstudents.create({
                     project_id: project.id,
                     student_id: studentId
                 });
             }
-            //Thêm giảng viên hướng dẫn vào bảng
-            if(data.advisorId != "")
-            {
+    
+            // Thêm giảng viên hướng dẫn vào bảng
+            if (data.advisorId != "") {
                 const projectadvisor = await projectadvisors.create({
                     project_id: project.id,
                     advisor_id: data.advisorId
-                }, {transaction})
+                }, { transaction });
             }
+    
             await transaction.commit();
-            res.status(200).send({message: 'Thêm thành công!'});
+            res.status(200).send({ message: 'Thêm thành công!' });
         } catch (error) {
             await transaction.rollback(); // Hoàn tác nếu có lỗi
             console.error('Error creating project or students:', error);
+            res.status(500).send({ message: 'Lỗi khi tạo dự án' });
         }
     }
+    
 }
 module.exports = new AdminController();

@@ -4,7 +4,7 @@ const initModels = require("../models/init-models");
 // Khởi tạo tất cả các model và quan hệ
 const models = initModels(sequelize);
 // Truy cập model
-const { users, students, advisors, majors, class_, projects, projectstudents } = models;
+const { users, students, advisors, majors, class_, projects, projectstudents, projectadvisors } = models;
 
 class StudentController {
     //[GET] /student/dashboard
@@ -23,18 +23,29 @@ class StudentController {
             });
             const project = await projects.findAll({
                 include: [
-                    {model: projectstudents, as: 'projectstudents', attributes:[],
+                    {model: projectstudents, as: 'projectstudents', attributes:[], required: true,
                         include: [{
                             model: students, as: 'student',
                             attributes: ['studentID', 'lastname', 'firstname', 'date_of_birth', 'gender'],
                             where: { usersID: user_id },
                         }],
                     },
-                    {
-                        model: advisors, as: 'advisor', attributes: ['firstname', 'lastname'],
+                    {model: projectadvisors, as: 'projectadvisors', attributes:['advisor_id'],
+                        include: [{
+                            model: advisors, as: 'advisor',
+                            attributes: ['lastname', 'firstname']
+                        }],
                     },
                 ],
-                attributes: ['title', 'description', 'start_date', 'end_date', 'status', ]
+                attributes: ['title', 'description', 'start_date', 'end_date', 'status']
+            });
+            project.forEach(proj => {
+                if (proj.projectadvisors) {
+                    proj.projectadvisors.forEach(projectadvisor => {
+                        const advisor = projectadvisor.advisor;
+                        console.log('Giảng viên:', advisor.lastname, advisor.firstname);
+                    });
+                }
             });
             console.log(JSON.stringify(project, null, 2));
             // ---------------------------------------------

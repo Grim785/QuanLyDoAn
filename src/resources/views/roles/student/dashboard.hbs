@@ -76,7 +76,13 @@
                         <div class="card-body p-3 d-flex flex-wrap">
                             <div class="col-md-6">
                                 <p class="mb-1"><strong>Đề tài:</strong> {{title}}</p>
-                                <p class="mb-1"><strong>GVHD:</strong> {{advisor.lastname}} {{advisor.firstname}}</p>
+                                <p class="mb-1"><strong>GVHD:</strong> 
+                                {{#if projectadvisors.advisor}}
+                                    {{projectadvisors.advisor.lastname}} {{projectadvisors.advisor.firstname}}
+                                {{else}}
+                                    Chưa phân công giảng viên hướng dẫn!!
+                                {{/if}}
+                                </p>
                             </div>
                             <div class="col-md-6">
                                 <p class="mb-1"><strong>Tình trạng:</strong> {{#if (eq status 'in_progress')}}Đang thực hiện{{else if (eq status 'completed')}}Đã hoàn thành{{else}} Chưa bắt đầu{{/if}}</p>
@@ -113,6 +119,5 @@
         progressbar.setAttribute("aria-live", "polite");
         progressbar.style.setProperty("--progress", progress + "%")
     }
-
     enableProgressbar()
 </script>

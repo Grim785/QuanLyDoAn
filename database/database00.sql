@@ -176,11 +176,7 @@ CREATE TABLE IF NOT EXISTS `projectadvisors` (
   CONSTRAINT `projectadvisors_ibfk_2` FOREIGN KEY (`advisor_id`) REFERENCES `advisors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectadvisors: ~3 rows (approximately)
-REPLACE INTO `projectadvisors` (`project_id`, `advisor_id`, `createdAt`, `updatedAt`) VALUES
-	(1, 1, '2024-12-26 13:04:37', '2024-12-26 13:04:37'),
-	(2, 1, '2024-12-26 13:04:51', '2024-12-26 13:04:51'),
-	(3, 1, '2024-12-26 13:04:44', '2024-12-26 13:04:44');
+-- Dumping data for table database00.projectadvisors: ~0 rows (approximately)
 
 -- Dumping structure for table database00.projectfeedback
 DROP TABLE IF EXISTS `projectfeedback`;
@@ -251,7 +247,10 @@ CREATE TABLE IF NOT EXISTS `projectstudents` (
   CONSTRAINT `projectstudents_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectstudents: ~0 rows (approximately)
+-- Dumping data for table database00.projectstudents: ~2 rows (approximately)
+REPLACE INTO `projectstudents` (`project_id`, `student_id`, `createdAt`, `updatedAt`) VALUES
+	(1, 1, '2024-12-26 15:29:26', '2024-12-26 15:29:26'),
+	(1, 2, '2024-12-26 15:29:36', '2024-12-26 15:29:36');
 
 -- Dumping structure for procedure database00.ResetAutoIncrement
 DROP PROCEDURE IF EXISTS `ResetAutoIncrement`;
