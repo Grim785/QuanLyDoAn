@@ -30,34 +30,39 @@
                             <tbody class="text-nowrap scoll">
                                 {{!-- render dữ liệu ở đây --}}
                                 {{#each listUsers}}
-                                <tr class="align-middle {{#unless active}}table-secondary opacity-50{{/unless}}">
-                                    <th scope="row">{{username}}</th>
-                                    <td>
-                                        {{#if (eq role "student")}}
-                                            {{#if students.length}}
-                                                {{students.[0].lastname}} {{students.[0].firstname}} 
-                                            {{else}}
-                                                Không đăng ký họ tên
-                                            {{/if}}
-                                        {{else}}
-                                            {{#if advisors.length}}
-                                                {{advisors.[0].lastname}} {{advisors.[0].firstname}} 
-                                            {{else}}
-                                                Không đăng ký họ tên
-                                            {{/if}}
-                                        {{/if}}
-                                    </td>
-                                    <td>{{role}}</td>
-                                    <td>21/12/2024</td>
-                                    <td>21/12/2024</td>
-                                    <td class="text-end">
-                                        {{#if (eq role 'student')}}
-                                            <a href="/student/details/{{id}}" class="btn btn-primary btn-sm me-1">Chi tiết</a>
-                                        {{else if (eq role 'advisor')}}
-                                        <a href="/admin/EditAccount" class="btn btn-warning btn-sm me-1">Sửa</a>
-                                        <button type="button" class="btn btn-danger btn-sm">Xóa</button>
-                                    </td>
-                                </tr>
+                                    {{#if (eq role 'admin')}}
+                                    {{else}}
+                                        <tr class="align-middle {{#unless active}}table-secondary opacity-50{{/unless}}">
+                                            <th scope="row">{{username}}</th>
+                                            <td>
+                                                {{#if (eq role "student")}}
+                                                    {{#if students.length}}
+                                                        {{students.[0].lastname}} {{students.[0].firstname}} 
+                                                    {{else}}
+                                                        Không đăng ký họ tên
+                                                    {{/if}}
+                                                {{else}}
+                                                    {{#if advisors.length}}
+                                                        {{advisors.[0].lastname}} {{advisors.[0].firstname}} 
+                                                    {{else}}
+                                                        Không đăng ký họ tên
+                                                    {{/if}}
+                                                {{/if}}
+                                            </td>
+                                            <td>{{role}}</td>
+                                            <td>{{formatDate createdAt}}</td>
+                                            <td>{{formatDate updatedAt}}</td>
+                                            <td class="text-end">
+                                                {{#if (eq role 'student')}}
+                                                    <a href="/admin/details/student/{{id}}" class="btn btn-primary btn-sm me-1">Chi tiết</a>
+                                                {{else if (eq role 'advisor')}}
+                                                    <a href="/admin/details/advisor/{{id}}" class="btn btn-primary btn-sm me-1">Chi tiết</a>
+                                                {{/if}}
+                                                <a href="/admin/EditAccount" class="btn btn-warning btn-sm me-1">Sửa</a>
+                                                <button type="button" class="btn btn-danger btn-sm">Xóa</button>
+                                            </td>
+                                        </tr>
+                                    {{/if}}
                                 {{/each}}
                                 {{!-- kết thúc ở đây --}}
                             </tbody>

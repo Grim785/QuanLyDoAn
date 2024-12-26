@@ -20,8 +20,11 @@ router.get('/EditAccount', chkRoles('admin'), AdminController.EditAccount);
 router.get('/create-toppic', chkRoles('admin'), AdminController.loadcreateToppic);
 //[GET] /admin/search
 router.get('/search', chkRoles('admin'), AdminController.searchStudents);
+//[GET] /admin/details/student/:id
+router.get('/details/student/:id', chkRoles('admin'), AdminController.userDetail);
+//[GET] /admin/details/advisor/:id
+router.get('/details/advisor/:id', chkRoles('admin'), AdminController.userDetail);
 //[POST] /admin/create-toppic
-router.post('/create-toppic', chkRoles('admin'), AdminController.createToppic);
-
+router.post('/createToppic', chkRoles('admin'), AdminController.createToppic);
 
 module.exports = router;    

@@ -50,41 +50,45 @@
             </fieldset>
         </div>
 
-        <!-- Sinh viên tham gia -->
-        <div class="col-sm-7 formfor-student">
-            <fieldset class="reset">
-                <legend class="reset">Sinh viên tham gia</legend>
-                <div class="container gy-1">
-                    <div class="row gy-1">
-                        <div class="col-lg-3 d-flex align-items-center">
-                            <label for="tim-sinh-vien" class="text-nowrap">Tìm sinh viên:</label>
+        <div class="col-12 d-flex">
+             <!-- Sinh viên tham gia -->
+            <div class="col-sm-7 formfor-student">
+                <fieldset class="reset">
+                    <legend class="reset">Sinh viên tham gia</legend>
+                    <div class="container gy-1">
+                        <div class="row gy-1">
+                            <div class="col-lg-3 d-flex align-items-center">
+                                <label for="tim-sinh-vien" class="text-nowrap">Tìm sinh viên:</label>
+                            </div>
+                            <div class="col-lg-7">
+                                <input type="text" id="tim-sinh-vien" class="form-control" placeholder="Nhập mã sinh viên">
+                            </div>
+                            <div class="col-lg-2 d-flex justify-content-end text-center">
+                                <button type="button" id="btn-tim" class="btn btn-info text-white"><i class="fa-solid fa-magnifying-glass me-2 text-white"></i>Tìm</button>
+                            </div>
                         </div>
-                        <div class="col-lg-7">
-                            <input type="text" id="tim-sinh-vien" class="form-control" placeholder="Nhập mã sinh viên">
-                        </div>
-                        <div class="col-lg-2 d-flex justify-content-end text-center">
-                            <button type="button" id="btn-tim" class="btn btn-info text-white"><i class="fa-solid fa-magnifying-glass me-2 text-white"></i>Tìm</button>
-                        </div>
+                        <div id="card-tabs" class="mt-2"></div>
+                        <!-- Popup kết quả tìm kiếm -->
+                        <div id="popup-ket-qua" class="popup-results"></div>
                     </div>
-                    <div id="card-tabs" class="mt-2"></div>
-                    <!-- Popup kết quả tìm kiếm -->
-                    <div id="popup-ket-qua" class="popup-results"></div>
-                </div>
-            </fieldset>
+                </fieldset>
+            </div>
+
+            <!-- Giảng viên hướng dẫn -->
+            <div class="col-sm-5 d-flex formfor-advisor">
+                <fieldset class="reset flex-fill">
+                    <legend class="reset">Giảng viên hướng dẫn</legend>
+                    <select name="advisorId" id="advisorId" class="form-select">
+                        <option value="">-- Chọn giảng viên --</option>
+                        {{#each advisors}}
+                        <option value="{{id}}">{{lastname}} {{firstname}}</option>
+                        {{/each}}
+                    </select>
+                </fieldset>
+            </div>
         </div>
 
-        <!-- Giảng viên hướng dẫn -->
-        <div class="col-sm-5 d-flex formfor-advisor">
-            <fieldset class="reset flex-fill">
-                <legend class="reset">Giảng viên hướng dẫn</legend>
-                <select name="advisorId" id="advisorId" class="form-select">
-                    <option value="">-- Chọn giảng viên --</option>
-                    {{#each advisors}}
-                    <option value="{{id}}">{{lastname}} {{firstname}}</option>
-                    {{/each}}
-                </select>
-            </fieldset>
-        </div>
+        
 
         <!-- Nút tạo mới -->
         <div class="col-12 d-flex justify-content-end">

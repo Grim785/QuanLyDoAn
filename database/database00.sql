@@ -104,7 +104,8 @@ CREATE TABLE IF NOT EXISTS `advisors` (
 
 -- Dumping data for table database00.advisors: ~1 rows (approximately)
 REPLACE INTO `advisors` (`id`, `advisorID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `address`, `majorsID`, `userID`, `createdAt`, `updatedAt`) VALUES
-	(1, 'GV19772', 'Trần Thành', 'Giang', '1977-12-12', 'Nam', '', 1, 3, '2024-12-06 15:23:54', '2024-12-06 15:23:54');
+	(1, '19992222', 'Lưu Thị', 'Thu Thủy', '1991-12-27', 'Nữ', '22A/74 Quận 1, Tp. Hồ Chí Minh', 1, 3, '2024-12-27 00:24:23', '2024-12-27 00:24:23'),
+	(2, '19992707', 'Hoàng Minh', 'Tuấn', '1978-12-27', 'Nam', '17E Quận Bình Thạnh, Tp. Hồ Chí Minh', 3, 2, '2024-12-27 00:25:52', '2024-12-27 00:25:52');
 
 -- Dumping structure for table database00.class_
 DROP TABLE IF EXISTS `class_`;
@@ -123,9 +124,9 @@ CREATE TABLE IF NOT EXISTS `class_` (
 
 -- Dumping data for table database00.class_: ~3 rows (approximately)
 REPLACE INTO `class_` (`id`, `classID`, `status`, `majorsID`, `createdAt`, `updatedAt`) VALUES
-	(1, '22CPM01', 'active', 1, '2024-12-06 15:20:20', '2024-12-06 15:20:20'),
-	(2, '22QTM01', 'active', 2, '2024-12-06 15:20:41', '2024-12-06 15:20:41'),
-	(3, '22TMDT01', 'active', 3, '2024-12-06 15:20:55', '2024-12-06 15:20:55');
+	(1, '22CPM01', 'active', 1, '2024-12-27 00:11:28', '2024-12-27 00:11:28'),
+	(2, '22CTMĐT01', 'active', 3, '2024-12-27 00:12:53', '2024-12-27 00:12:53'),
+	(3, '22CQTM01', 'active', 2, '2024-12-27 00:13:09', '2024-12-27 00:13:09');
 
 -- Dumping structure for table database00.files
 DROP TABLE IF EXISTS `files`;
@@ -176,7 +177,12 @@ CREATE TABLE IF NOT EXISTS `projectadvisors` (
   CONSTRAINT `projectadvisors_ibfk_2` FOREIGN KEY (`advisor_id`) REFERENCES `advisors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectadvisors: ~0 rows (approximately)
+-- Dumping data for table database00.projectadvisors: ~4 rows (approximately)
+REPLACE INTO `projectadvisors` (`project_id`, `advisor_id`, `createdAt`, `updatedAt`) VALUES
+	(1, 1, '2024-12-27 00:43:18', '2024-12-27 00:43:18'),
+	(2, 1, '2024-12-27 00:43:33', '2024-12-27 00:43:33'),
+	(3, 2, '2024-12-27 00:43:44', '2024-12-27 00:43:44'),
+	(4, 2, '2024-12-27 00:43:51', '2024-12-27 00:43:51');
 
 -- Dumping structure for table database00.projectfeedback
 DROP TABLE IF EXISTS `projectfeedback`;
@@ -228,11 +234,26 @@ CREATE TABLE IF NOT EXISTS `projects` (
   CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`majorID`) REFERENCES `majors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projects: ~3 rows (approximately)
+-- Dumping data for table database00.projects: ~18 rows (approximately)
 REPLACE INTO `projects` (`id`, `title`, `description`, `start_date`, `end_date`, `status`, `majorID`, `createdAt`, `updatedAt`) VALUES
-	(1, 'Ứng dụng quản lý đồ án khoa công nghệ thông tin Cao đẳng Bách Khoa Sài Gòn', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tin\r\nHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tài\r\nHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', '2024-12-06', NULL, 'in_progress', 1, '2024-12-26 13:03:45', '2024-12-26 13:03:45'),
-	(2, 'Web kinh doanh giày dép OA-Shop', 'Đăng bán sản phẩm, quảng bá, giới thiệu các mẫu giày mới, thực hiện mua sắm giày dép online ', '2024-12-07', NULL, 'not_started', 1, '2024-12-26 13:03:45', '2024-12-26 13:03:45'),
-	(3, 'Hệ thống gọi món nhà hàng', 'Hệ thống gọi món nhà hàng', '2023-12-25', '2024-12-25', 'completed', 1, '2024-12-26 13:03:45', '2024-12-26 13:03:45');
+	(1, 'Hệ thống quản lý đồ án tốt nghiệp - Khoa công nghệ thông tin', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tin\\r\\nHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tài\\r\\nHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', NULL, NULL, 'not_started', 1, '2024-12-27 00:27:51', '2024-12-27 00:27:51'),
+	(2, 'Hệ thống quản lý khám bệnh', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:34:02', '2024-12-27 00:41:09'),
+	(3, 'Xây dựng ứng dụng web trên nền tảng Nodejs và MongoDB ', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:34:39', '2024-12-27 00:41:03'),
+	(4, 'Xây dựng trang web bán liên kiện máy tính', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:35:31', '2024-12-27 00:35:31'),
+	(5, 'Xây dựng phần mềm Quản lý phòng học', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:35:50', '2024-12-27 00:35:50'),
+	(6, 'Xây dựng website bán giày', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:36:12', '2024-12-27 00:36:12'),
+	(7, 'Phần Mềm Quản Lý Sinh Viên ', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:36:39', '2024-12-27 00:36:39'),
+	(8, 'Trang web bán hàng trang sức', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:36:56', '2024-12-27 00:36:56'),
+	(9, 'Thiết kế website bán thiết bị di động', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:37:15', '2024-12-27 00:37:15'),
+	(10, 'Thiết kế website bán mô hình lắp ráp', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:37:49', '2024-12-27 00:37:49'),
+	(11, 'Giải pháp Marketing thúc đẩy thương hiệu Khoa Công nghệ Thông tin trường Cao đẳng Bách khoa Sài Gòn trên nền tảng số', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:38:26', '2024-12-27 00:38:26'),
+	(12, 'Những yếu tố ảnh hưởng đến triển khai Chuyển đổi số tại trường cao đẳng Bách Khoa Sài Gòn', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:38:54', '2024-12-27 00:38:54'),
+	(13, 'Nâng cao hiệu quả Social Media marketing cho thương hiệu Gumac ', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:39:14', '2024-12-27 00:39:14'),
+	(14, 'Nghiên cứu về vai trò của trải nghiệm mua sắm trực tuyến trong việc thay đổi thói quen tiêu dùng của người tiêu dùng', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:39:55', '2024-12-27 00:39:55'),
+	(15, 'Nghiên cứu xu hướng thanh toán không tiền mặt và ảnh hưởng đến thương mại điện tử tại Việt Nam ', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:40:33', '2024-12-27 00:40:33'),
+	(16, 'Xây dựng hệ thống quản lý bán hàng sử dụng mã nguồn mở (OpenCart) ', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:41:00', '2024-12-27 00:41:00'),
+	(17, 'Xây dựng hệ thống mạng cho doanh nghiệp Thành Phát (Side - to - side)', 'Mô tả', NULL, NULL, 'not_started', 2, '2024-12-27 00:41:34', '2024-12-27 00:41:39'),
+	(18, 'Thiết kế mạng và giải pháp quản trị mạng cho công ty Gia Hoà ', 'Mô tả', NULL, NULL, 'not_started', 2, '2024-12-27 00:42:06', '2024-12-27 00:42:06');
 
 -- Dumping structure for table database00.projectstudents
 DROP TABLE IF EXISTS `projectstudents`;
@@ -249,8 +270,8 @@ CREATE TABLE IF NOT EXISTS `projectstudents` (
 
 -- Dumping data for table database00.projectstudents: ~2 rows (approximately)
 REPLACE INTO `projectstudents` (`project_id`, `student_id`, `createdAt`, `updatedAt`) VALUES
-	(1, 1, '2024-12-26 15:29:26', '2024-12-26 15:29:26'),
-	(1, 2, '2024-12-26 15:29:36', '2024-12-26 15:29:36');
+	(1, 1, '2024-12-27 00:42:55', '2024-12-27 00:42:55'),
+	(1, 4, '2024-12-27 00:43:01', '2024-12-27 00:43:01');
 
 -- Dumping structure for procedure database00.ResetAutoIncrement
 DROP PROCEDURE IF EXISTS `ResetAutoIncrement`;
@@ -309,11 +330,13 @@ CREATE TABLE IF NOT EXISTS `students` (
   CONSTRAINT `students_ibfk_2` FOREIGN KEY (`usersID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.students: ~3 rows (approximately)
+-- Dumping data for table database00.students: ~5 rows (approximately)
 REPLACE INTO `students` (`id`, `studentID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `address`, `majorsID`, `usersID`, `classID`, `createdAt`, `updatedAt`) VALUES
-	(1, '22001976', 'Trần Nguyên', 'Phát', '2004-07-27', 'Nam', 'Nguyễn Bỉnh Kiêm, phường 1, Quận Gò Vấp, TP. Hồ Chí Minh', 1, 1, 1, '2024-12-06 15:21:45', '2024-12-21 19:31:59'),
-	(2, '22001977', 'Nguyễn Văn', 'A', '2024-12-06', 'Nam', '', 1, 5, 1, '2024-12-06 15:32:45', '2024-12-06 15:32:45'),
-	(3, '22001978', 'Huỳnh Thị', 'B', '2024-12-06', 'Nữ', '', 1, 4, 1, '2024-12-06 15:33:32', '2024-12-06 15:33:32');
+	(1, '22001976', 'Trần Nguyên', 'Phát', '2004-07-27', 'Nam', '999/3A Quận 12, Tp. Hồ Chí Minh', 1, 4, 1, '2024-12-27 00:14:33', '2024-12-27 00:14:33'),
+	(2, '22001955', 'Lê Thanh', 'Ngân', '2004-12-27', 'Nữ', '111/5A Gò Vấp, Tp. Hồ Chí Minh', 2, 5, 3, '2024-12-27 00:17:52', '2024-12-27 00:17:52'),
+	(3, '22002044', 'Nguyễn Văn', 'Thanh', '2003-12-27', 'Nam', '333/4B Gò Vấp, Tp. Hồ Chí Minh', 3, 6, 2, '2024-12-27 00:19:22', '2024-12-27 00:20:50'),
+	(4, '22007865', 'Hoàng Minh', 'Nhân', '2002-12-27', 'Nam', '17/2D Bình Thạnh, Tp. Hồ Chí Minh', 1, 7, 1, '2024-12-27 00:20:45', '2024-12-27 00:20:45'),
+	(5, '22009999', 'Lê Nhật', 'Linh', '2004-10-27', 'Nữ', '55/2E Gò Vấp, Tp. Hồ Chí Minh', 2, 8, 3, '2024-12-27 00:22:32', '2024-12-27 00:22:32');
 
 -- Dumping structure for table database00.suggestedprojects
 DROP TABLE IF EXISTS `suggestedprojects`;
@@ -348,13 +371,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.users: ~5 rows (approximately)
+-- Dumping data for table database00.users: ~8 rows (approximately)
 REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `createdAt`, `updatedAt`, `active`) VALUES
-	(1, 'Kem', '$2b$12$CDzI29.pvU6R7hm5TRm2durrollNLhh/airN05Ppxb2vm3WD8q4Xm', 'student', 'kem123@gmail.com', '0374216499', '2024-12-06 15:15:40', '2024-12-06 15:15:40', 1),
-	(2, 'admin', '$2b$12$CDzI29.pvU6R7hm5TRm2durrollNLhh/airN05Ppxb2vm3WD8q4Xm', 'admin', 'admin@gmail.com', '1111111111', '2024-12-06 15:16:29', '2024-12-06 15:16:29', 1),
-	(3, 'advisor', '$2b$12$CDzI29.pvU6R7hm5TRm2durrollNLhh/airN05Ppxb2vm3WD8q4Xm', 'advisor', 'advisor@gmail.com', '2222222222', '2024-12-06 15:17:02', '2024-12-06 15:17:02', 1),
-	(4, 'Susu', '$2b$12$CDzI29.pvU6R7hm5TRm2durrollNLhh/airN05Ppxb2vm3WD8q4Xm', 'student', 'susu123@gmail.com', '0559391049', '2024-12-06 15:31:05', '2024-12-06 15:31:05', 1),
-	(5, 'SuaDua', '$2b$12$CDzI29.pvU6R7hm5TRm2durrollNLhh/airN05Ppxb2vm3WD8q4Xm', 'student', 'suadua123@gmail.com', '0374368872', '2024-12-06 15:32:00', '2024-12-06 15:32:00', 1);
+	(1, 'admin', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'admin', '123123@gmail.com', '1111111111', '2024-12-27 00:01:01', '2024-12-27 00:01:14', 1),
+	(2, '19992707', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'advisor', '123321@gmail.com', '2222222222', '2024-12-27 00:02:47', '2024-12-27 00:03:24', 1),
+	(3, '19992222', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'advisor', '123333@gmail.com', '2222222223', '2024-12-27 00:04:12', '2024-12-27 00:45:17', 1),
+	(4, '22001976', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', 'kem@gmail.com', '8743254765', '2024-12-27 00:06:08', '2024-12-27 00:45:18', 1),
+	(5, '22001955', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '05@gmail.com', '8632456781', '2024-12-27 00:06:44', '2024-12-27 00:45:19', 1),
+	(6, '22002044', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '06@gmail.com', '0486534475', '2024-12-27 00:07:17', '2024-12-27 00:45:20', 1),
+	(7, '22007865', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '07@gmail.com', '9435658323', '2024-12-27 00:07:50', '2024-12-27 00:45:21', 1),
+	(8, '22009999', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '08@gmail.com', '1268553537', '2024-12-27 00:08:20', '2024-12-27 00:45:22', 1);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

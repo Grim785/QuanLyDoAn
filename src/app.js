@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const { engine } = require("express-handlebars");
-// const bodyParser = require('body-parser');
+const moment = require('moment');
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5001;
@@ -25,6 +25,9 @@ app.engine("hbs", engine({
     },
     eq: function (a, b) {
       return a === b;
+    },
+    formatDate: function (date) {
+      return moment(date).format('DD/MM/YYYY'); // Định dạng ngày
     }
   }
 }));

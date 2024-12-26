@@ -8,7 +8,7 @@ const { users, students, advisors, majors, class_, projects, projectstudents, pr
 class AdminController{
     //[GET] /admin/dashboard
     dashboard(req, res, next){
-        res.render('roles/admin/dashboard', {
+        res.render('roles/admin/TopicDetails', {
             title: 'Dashboard admin',
             showHeaderFooter: true,
             showNav: true,
@@ -24,9 +24,9 @@ class AdminController{
                     {model: students, as: 'students', attributes: ['lastname','firstname']},
                     {model: advisors, as: 'advisors', attributes: ['lastname','firstname']}
                 ],
-                attributes: ['username', 'role', 'active']
+                attributes: ['id','username', 'role', 'active', 'createdAt', 'updatedAt']
             });
-            console.log(JSON.stringify(listUsers, null, 2));  // Để xem dữ liệu chi tiết hơn trong listUsers
+            // console.log(JSON.stringify(listUsers, null, 2)); 
             res.render('roles/admin/AccountManagement', {
                 title: 'Danh sách tài khoản',
                 listUsers: listUsers,
@@ -71,10 +71,6 @@ class AdminController{
         }
 
     }
-
-
-
-
     async searchStudents(req, res, next){
         try {
             // Lấy query từ fontend -------------------
@@ -91,8 +87,28 @@ class AdminController{
                 },
                 attributes: ['id', 'studentID', 'lastname', 'firstname']
             });
-            console.log('đã tới')
             res.json(results);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async userDetail(req, res, next){
+        try {
+            const userId = req.params.id;
+            const user = await users.findOne({
+                where: { id: userId}
+            });
+            if (!user) {
+                return res.status(404).render('error', { message: 'Tài khoản không tồn tại' });
+            }
+
+            if(user.role === 'student'){
+                const student = await students.findOne({where: {usersID:userId}})
+                res.render('roles/admin/detailStudent', { title: `Chi tiết sinh viên: ${user.username}`, student })
+            }else if(user.role === 'advisor'){
+                const advisor = await advisors.findOne({where: {userID:userId}})
+                res.render('roles/admin/detailAdvisor', { title: `Chi tiết giảng viên: ${user.username}`, advisor })
+            }
         } catch (error) {
             console.log(error);
         }
