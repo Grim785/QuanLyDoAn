@@ -3,6 +3,7 @@ var _advisors = require("./advisors");
 var _class_ = require("./class_");
 var _files = require("./files");
 var _majors = require("./majors");
+var _projectadvisors = require("./projectadvisors");
 var _projectfeedback = require("./projectfeedback");
 var _projectfiles = require("./projectfiles");
 var _projects = require("./projects");
@@ -16,6 +17,7 @@ function initModels(sequelize) {
   var class_ = _class_(sequelize, DataTypes);
   var files = _files(sequelize, DataTypes);
   var majors = _majors(sequelize, DataTypes);
+  var projectadvisors = _projectadvisors(sequelize, DataTypes);
   var projectfeedback = _projectfeedback(sequelize, DataTypes);
   var projectfiles = _projectfiles(sequelize, DataTypes);
   var projects = _projects(sequelize, DataTypes);
@@ -24,12 +26,14 @@ function initModels(sequelize) {
   var suggestedprojects = _suggestedprojects(sequelize, DataTypes);
   var users = _users(sequelize, DataTypes);
 
-  files.belongsToMany(projects, { as: 'project_id_projects', through: projectfiles, foreignKey: "file_id", otherKey: "project_id" });
+  advisors.belongsToMany(projects, { as: 'project_id_projects', through: projectadvisors, foreignKey: "advisor_id", otherKey: "project_id" });
+  files.belongsToMany(projects, { as: 'project_id_projects_projectfiles', through: projectfiles, foreignKey: "file_id", otherKey: "project_id" });
+  projects.belongsToMany(advisors, { as: 'advisor_id_advisors', through: projectadvisors, foreignKey: "project_id", otherKey: "advisor_id" });
   projects.belongsToMany(files, { as: 'file_id_files', through: projectfiles, foreignKey: "project_id", otherKey: "file_id" });
   projects.belongsToMany(students, { as: 'student_id_students', through: projectstudents, foreignKey: "project_id", otherKey: "student_id" });
   students.belongsToMany(projects, { as: 'project_id_projects_projectstudents', through: projectstudents, foreignKey: "student_id", otherKey: "project_id" });
-  projects.belongsTo(advisors, { as: "advisor", foreignKey: "advisorID"});
-  advisors.hasMany(projects, { as: "projects", foreignKey: "advisorID"});
+  projectadvisors.belongsTo(advisors, { as: "advisor", foreignKey: "advisor_id"});
+  advisors.hasMany(projectadvisors, { as: "projectadvisors", foreignKey: "advisor_id"});
   students.belongsTo(class_, { as: "class", foreignKey: "classID"});
   class_.hasMany(students, { as: "students", foreignKey: "classID"});
   projectfiles.belongsTo(files, { as: "file", foreignKey: "file_id"});
@@ -42,6 +46,8 @@ function initModels(sequelize) {
   majors.hasMany(projects, { as: "projects", foreignKey: "majorID"});
   students.belongsTo(majors, { as: "major", foreignKey: "majorsID"});
   majors.hasMany(students, { as: "students", foreignKey: "majorsID"});
+  projectadvisors.belongsTo(projects, { as: "project", foreignKey: "project_id"});
+  projects.hasMany(projectadvisors, { as: "projectadvisors", foreignKey: "project_id"});
   projectfeedback.belongsTo(projects, { as: "project", foreignKey: "project_id"});
   projects.hasMany(projectfeedback, { as: "projectfeedbacks", foreignKey: "project_id"});
   projectfiles.belongsTo(projects, { as: "project", foreignKey: "project_id"});
@@ -64,6 +70,7 @@ function initModels(sequelize) {
     class_,
     files,
     majors,
+    projectadvisors,
     projectfeedback,
     projectfiles,
     projects,

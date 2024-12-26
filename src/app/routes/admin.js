@@ -17,11 +17,11 @@ router.get('/RegisterTopicList', chkRoles('admin'), AdminController.RegisterTopi
 //[GET] /admin/EditAccount
 router.get('/EditAccount', chkRoles('admin'), AdminController.EditAccount);
 //[GET] /admin/EditAccount
-router.get('/create-toppic', chkRoles('admin'), AdminController.createToppic);
+router.get('/create-toppic', chkRoles('admin'), AdminController.loadcreateToppic);
 //[GET] /admin/search
 router.get('/search', chkRoles('admin'), AdminController.searchStudents);
-//[POST]
-// router.post('/login', controllers.site.chklogin);
+//[POST] /admin/create-toppic
+router.post('/create-toppic', chkRoles('admin'), AdminController.createToppic);
 
 
 module.exports = router;    

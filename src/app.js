@@ -1,12 +1,16 @@
 const express = require("express");
 const path = require("path");
 const { engine } = require("express-handlebars");
+// const bodyParser = require('body-parser');
 require("dotenv").config();
 const app = express();
-const port = 3000;
+const port = 5000;
 
 // Import và sử dụng middleware từ file riêng
 require("./config/middleware")(app);
+
+// Cấu hình body-parser để xử lý form post
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 // Cấu hình Handlebars
 app.engine("hbs", engine({

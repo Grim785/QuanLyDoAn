@@ -28,14 +28,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       defaultValue: "not_started"
     },
-    advisorID: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'advisors',
-        key: 'id'
-      }
-    },
     majorID: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -55,13 +47,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
-        ]
-      },
-      {
-        name: "advisorID",
-        using: "BTREE",
-        fields: [
-          { name: "advisorID" },
         ]
       },
       {

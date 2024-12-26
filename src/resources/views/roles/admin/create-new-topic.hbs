@@ -1,4 +1,4 @@
-<form method="post" action="/admin/create-new-toppic" class="container my-2 scroll create-toppic" style="height: 70vh;">
+<form method="post" action="/admin/create-toppic" class="container my-2 scroll create-toppic" style="height: 70vh;">
     <div class="row gy-2">
         <h3>Tạo mới đề tài</h3>
         <div class="col-12">
@@ -9,9 +9,9 @@
                         {{!-- --}}
                         <div class="col-lg-4 col-12 ">
                             <p class="mb-1">Tên đề tài</p>
-                            <input type="text" class="form-control mb-1" name="title" id="" placeholder="Nhập tên đề tài">
+                            <input type="text" class="form-control mb-1" name="title" id="" placeholder="Nhập tên đề tài" required>
                             <p class="mb-1">Chuyên ngành liên quan</p>
-                            <select name="" id="" class="form-select mb-1">
+                            <select name="majorId" id="" class="form-select mb-1" required>
                                 <option value="">-- Chọn chuyên ngành --</option>
                                 {{#each major}}
                                 <option value="{{id}}">{{name}}</option>
@@ -21,7 +21,7 @@
                         {{!-- --}}
                         <div class="col-lg-5 col-12 d-flex flex-column">
                             <p class="mb-1">Mô tả</p>
-                            <textarea class="form-control flex-fill mb-1" name="" id=""></textarea>
+                            <textarea class="form-control flex-fill mb-1" name="description" id=""></textarea>
                         </div>
                         {{!-- --}}
                         <div class="col-lg-3 col-12 d-flex flex-column">
@@ -34,7 +34,7 @@
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="status" id="flexRadioDefault2" value="started">
+                                    <input class="form-check-input" type="radio" name="status" id="flexRadioDefault2" value="in_progress">
                                     <label class="form-check-label" for="flexRadioDefault2">
                                         Bắt đầu
                                     </label>
@@ -76,7 +76,7 @@
         <div class="col-sm-5 d-flex formfor-advisor">
             <fieldset class="reset flex-fill">
                 <legend class="reset">Giảng viên hướng dẫn</legend>
-                <select name="" id="" class="form-select">
+                <select name="advisorId" id="" class="form-select">
                     <option value="">-- Chọn giảng viên --</option>
                     {{#each advisors}}
                     <option value="{{id}}">{{lastname}} {{firstname}}</option>
@@ -86,7 +86,7 @@
         </div>
         {{!--  --}}
         <div class="col-12 d-flex justify-content-end">
-            <button type="submit" class="btn btn-success">Tạo mới</button>
+            <button type="submit" class="btn btn-success createtoppic">Tạo mới</button>
         </div>
     </div>
 </form>
@@ -234,5 +234,4 @@
             }
         });
     });
-    
 </script>

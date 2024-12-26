@@ -16,10 +16,12 @@
 
 
 -- Dumping database structure for database00
+DROP DATABASE IF EXISTS `database00`;
 CREATE DATABASE IF NOT EXISTS `database00` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `database00`;
 
 -- Dumping structure for procedure database00.AddTimestamps
+DROP PROCEDURE IF EXISTS `AddTimestamps`;
 DELIMITER //
 CREATE PROCEDURE `AddTimestamps`()
 BEGIN
@@ -79,6 +81,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for table database00.advisors
+DROP TABLE IF EXISTS `advisors`;
 CREATE TABLE IF NOT EXISTS `advisors` (
   `id` int NOT NULL AUTO_INCREMENT,
   `advisorID` varchar(10) NOT NULL,
@@ -104,6 +107,7 @@ REPLACE INTO `advisors` (`id`, `advisorID`, `lastname`, `firstname`, `date_of_bi
 	(1, 'GV19772', 'Trần Thành', 'Giang', '1977-12-12', 'Nam', '', 1, 3, '2024-12-06 15:23:54', '2024-12-06 15:23:54');
 
 -- Dumping structure for table database00.class_
+DROP TABLE IF EXISTS `class_`;
 CREATE TABLE IF NOT EXISTS `class_` (
   `id` int NOT NULL AUTO_INCREMENT,
   `classID` varchar(20) NOT NULL,
@@ -124,6 +128,7 @@ REPLACE INTO `class_` (`id`, `classID`, `status`, `majorsID`, `createdAt`, `upda
 	(3, '22TMDT01', 'active', 3, '2024-12-06 15:20:55', '2024-12-06 15:20:55');
 
 -- Dumping structure for table database00.files
+DROP TABLE IF EXISTS `files`;
 CREATE TABLE IF NOT EXISTS `files` (
   `id` int NOT NULL AUTO_INCREMENT,
   `file_name` varchar(255) NOT NULL,
@@ -143,6 +148,7 @@ CREATE TABLE IF NOT EXISTS `files` (
 -- Dumping data for table database00.files: ~0 rows (approximately)
 
 -- Dumping structure for table database00.majors
+DROP TABLE IF EXISTS `majors`;
 CREATE TABLE IF NOT EXISTS `majors` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
@@ -157,13 +163,34 @@ REPLACE INTO `majors` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
 	(2, 'Quản trị mạng', '2024-12-06 15:13:58', '2024-12-06 15:13:58'),
 	(3, 'Thương mại điện tử', '2024-12-06 15:14:18', '2024-12-06 15:14:18');
 
+-- Dumping structure for table database00.projectadvisors
+DROP TABLE IF EXISTS `projectadvisors`;
+CREATE TABLE IF NOT EXISTS `projectadvisors` (
+  `project_id` int NOT NULL,
+  `advisor_id` int NOT NULL,
+  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`project_id`,`advisor_id`) USING BTREE,
+  KEY `advisor_id` (`advisor_id`) USING BTREE,
+  CONSTRAINT `projectadvisors_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `projectadvisors_ibfk_2` FOREIGN KEY (`advisor_id`) REFERENCES `advisors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Dumping data for table database00.projectadvisors: ~3 rows (approximately)
+REPLACE INTO `projectadvisors` (`project_id`, `advisor_id`, `createdAt`, `updatedAt`) VALUES
+	(1, 1, '2024-12-26 13:04:37', '2024-12-26 13:04:37'),
+	(2, 1, '2024-12-26 13:04:51', '2024-12-26 13:04:51'),
+	(3, 1, '2024-12-26 13:04:44', '2024-12-26 13:04:44');
+
 -- Dumping structure for table database00.projectfeedback
+DROP TABLE IF EXISTS `projectfeedback`;
 CREATE TABLE IF NOT EXISTS `projectfeedback` (
   `id` int NOT NULL AUTO_INCREMENT,
   `project_id` int NOT NULL,
   `user_id` int NOT NULL,
   `message` text NOT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `project_id` (`project_id`),
   KEY `user_id` (`user_id`),
@@ -174,6 +201,7 @@ CREATE TABLE IF NOT EXISTS `projectfeedback` (
 -- Dumping data for table database00.projectfeedback: ~0 rows (approximately)
 
 -- Dumping structure for table database00.projectfiles
+DROP TABLE IF EXISTS `projectfiles`;
 CREATE TABLE IF NOT EXISTS `projectfiles` (
   `project_id` int NOT NULL,
   `file_id` int NOT NULL,
@@ -188,6 +216,7 @@ CREATE TABLE IF NOT EXISTS `projectfiles` (
 -- Dumping data for table database00.projectfiles: ~0 rows (approximately)
 
 -- Dumping structure for table database00.projects
+DROP TABLE IF EXISTS `projects`;
 CREATE TABLE IF NOT EXISTS `projects` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -195,24 +224,22 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `status` enum('not_started','in_progress','completed') DEFAULT 'not_started',
-  `advisorID` int NOT NULL,
   `majorID` int NOT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `advisorID` (`advisorID`),
   KEY `majorID` (`majorID`),
-  CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`advisorID`) REFERENCES `advisors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`majorID`) REFERENCES `majors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table database00.projects: ~3 rows (approximately)
-REPLACE INTO `projects` (`id`, `title`, `description`, `start_date`, `end_date`, `status`, `advisorID`, `majorID`, `createdAt`, `updatedAt`) VALUES
-	(1, 'Ứng dụng quản lý đồ án khoa công nghệ thông tin Cao đẳng Bách Khoa Sài Gòn', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tin\r\nHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tài\r\nHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', '2024-12-06', NULL, 'in_progress', 1, 1, '2024-12-06 15:28:12', '2024-12-25 19:57:46'),
-	(2, 'Web kinh doanh giày dép OA-Shop', 'Đăng bán sản phẩm, quảng bá, giới thiệu các mẫu giày mới, thực hiện mua sắm giày dép online ', '2024-12-07', NULL, 'not_started', 1, 1, '2024-12-07 15:23:34', '2024-12-07 15:23:34'),
-	(3, 'Hệ thống gọi món nhà hàng', 'Hệ thống gọi món nhà hàng', '2023-12-25', '2024-12-25', 'completed', 1, 1, '2024-12-25 20:14:36', '2024-12-25 20:14:36');
+REPLACE INTO `projects` (`id`, `title`, `description`, `start_date`, `end_date`, `status`, `majorID`, `createdAt`, `updatedAt`) VALUES
+	(1, 'Ứng dụng quản lý đồ án khoa công nghệ thông tin Cao đẳng Bách Khoa Sài Gòn', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tin\r\nHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tài\r\nHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', '2024-12-06', NULL, 'in_progress', 1, '2024-12-26 13:03:45', '2024-12-26 13:03:45'),
+	(2, 'Web kinh doanh giày dép OA-Shop', 'Đăng bán sản phẩm, quảng bá, giới thiệu các mẫu giày mới, thực hiện mua sắm giày dép online ', '2024-12-07', NULL, 'not_started', 1, '2024-12-26 13:03:45', '2024-12-26 13:03:45'),
+	(3, 'Hệ thống gọi món nhà hàng', 'Hệ thống gọi món nhà hàng', '2023-12-25', '2024-12-25', 'completed', 1, '2024-12-26 13:03:45', '2024-12-26 13:03:45');
 
 -- Dumping structure for table database00.projectstudents
+DROP TABLE IF EXISTS `projectstudents`;
 CREATE TABLE IF NOT EXISTS `projectstudents` (
   `project_id` int NOT NULL,
   `student_id` int NOT NULL,
@@ -224,15 +251,10 @@ CREATE TABLE IF NOT EXISTS `projectstudents` (
   CONSTRAINT `projectstudents_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectstudents: ~5 rows (approximately)
-REPLACE INTO `projectstudents` (`project_id`, `student_id`, `createdAt`, `updatedAt`) VALUES
-	(1, 1, '2024-12-06 15:30:07', '2024-12-06 15:30:07'),
-	(1, 2, '2024-12-06 15:33:45', '2024-12-06 15:33:45'),
-	(1, 3, '2024-12-06 15:33:51', '2024-12-06 15:33:51'),
-	(2, 1, '2024-12-25 19:33:26', '2024-12-25 19:33:26'),
-	(3, 1, '2024-12-25 20:14:50', '2024-12-25 20:14:50');
+-- Dumping data for table database00.projectstudents: ~0 rows (approximately)
 
 -- Dumping structure for procedure database00.ResetAutoIncrement
+DROP PROCEDURE IF EXISTS `ResetAutoIncrement`;
 DELIMITER //
 CREATE PROCEDURE `ResetAutoIncrement`(databaseName VARCHAR(255))
 BEGIN
@@ -264,6 +286,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for table database00.students
+DROP TABLE IF EXISTS `students`;
 CREATE TABLE IF NOT EXISTS `students` (
   `id` int NOT NULL AUTO_INCREMENT,
   `studentID` varchar(10) NOT NULL,
@@ -294,6 +317,7 @@ REPLACE INTO `students` (`id`, `studentID`, `lastname`, `firstname`, `date_of_bi
 	(3, '22001978', 'Huỳnh Thị', 'B', '2024-12-06', 'Nữ', '', 1, 4, 1, '2024-12-06 15:33:32', '2024-12-06 15:33:32');
 
 -- Dumping structure for table database00.suggestedprojects
+DROP TABLE IF EXISTS `suggestedprojects`;
 CREATE TABLE IF NOT EXISTS `suggestedprojects` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -309,6 +333,7 @@ REPLACE INTO `suggestedprojects` (`id`, `title`, `createdAt`, `updatedAt`) VALUE
 	(3, 'Đánh giá hiệu quả của các chiến lược tiếp thị số trong kinh doanh thương mại điện tử ', '2024-12-23 21:04:33', '2024-12-23 21:04:33');
 
 -- Dumping structure for table database00.users
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
