@@ -21,12 +21,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     gmail: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
       unique: "gmail"
     },
     phone: {
       type: DataTypes.STRING(15),
-      allowNull: false,
+      allowNull: true,
       unique: "phone"
     },
     active: {

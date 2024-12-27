@@ -237,6 +237,25 @@ input[type=file] {
   text-overflow: ellipsis;
 }
 
+.student-dashboard .card {
+  position: relative;
+  /* Đảm bảo thẻ <a> được đặt tương đối với .card */
+}
+
+.student-dashboard .card-footer-details {
+  position: absolute;
+  bottom: 5px;
+  /* Khoảng cách từ đáy của card */
+  right: 5px;
+  /* Khoảng cách từ cạnh phải của card */
+}
+
+.student-dashboard .card-footer-details a {
+  font-size: 0.7rem;
+  text-decoration: underline;
+  color: #007bff;
+}
+
 .login-c .img-logo-1,
 .login-c .img-logo-2 {
   width: 10rem;

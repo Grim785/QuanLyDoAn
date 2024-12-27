@@ -1,0 +1,78 @@
+{{#if projectDetails}}
+<div class="container my-2 scroll" style="height: 70vh;">
+    <div class="row gy-2">
+        <div class="col-12">
+            {{!-- title --}}
+            <h1 class="fs-1">{{projectDetails.title}}</h1>
+        </div>
+        <div class="col-12">
+            {{!-- start-date - end-date --}}
+            {{#if (eq projectDetails.status 'completed')}}
+            <p class="text-gray fw-lighter"><strong>{{formatDate start_date}}</strong> đến <strong>{{formatDate
+                    end_date}}</strong></p>
+            {{else}}
+            <p class="text-gray fw-lighter">{{formatDate start_date}}</p>
+            {{/if}}
+            {{!-- ngành học và lớp --}}
+            <div class="d-flex">
+                <p>Chuyên ngành: {{projectDetails.major.name}}</p>
+            </div>
+            <div class="d-flex align-items-center">
+
+                {{#if (eq projectDetails.status 'completed')}}
+                <div class="border border-light bg-warning rounded-circle" style="height: 1rem;width:1rem;"></div>
+                <p class="mx-2 text-warning">Trạng thái: Hoàn thành</p>
+                {{else if (eq projectDetails.status 'in_progress')}}
+                <div class="border border-light bg-success rounded-circle" style="height: 1rem;width:1rem;"></div>
+                <p class="mx-2 text-success">Trạng thái: Đang thực hiện</p>
+                {{else}}
+                <div class="border border-light bg-secondary rounded-circle" style="height: 1rem;width:1rem;"></div>
+                <p class="mx-2 text-secondary">Trạng thái: Chưa bắt đầu</p>
+                {{/if}}
+            </div>
+        </div>
+        <div class="col-lg-7 col-12">
+            {{!-- mô tả --}}
+            <p class="fs-4 fw-bold">Mô tả đề tài</p>
+            <textarea class="border rounded p-1 overflow-auto w-100"
+                style="height:10rem;">{{projectDetails.description}}</textarea>
+        </div>
+        <div class="col-lg-5 col-12">
+            <p class="fs-4 fw-bold">Thành viên tham gia:</p>
+            {{!-- giảng viên phụ trách --}}
+            {{#each projectDetails.projectadvisors}}
+                <p>{{this.advisor.lastname}} {{this.advisor.firstname}} - Giảng viên</p>
+            {{/each}}
+            {{!-- sinh viên --}}
+            {{#each projectDetails.projectstudents}}
+                <p>{{this.student.studentID}} - {{this.student.lastname}} {{this.student.firstname}} - Sinh viên lớp: {{this.student.class.classID}}</p>
+            {{/each}}
+        </div>
+        <div class="col-12">
+            <p class="">Tiến độ dự án</p>
+            <div class="container py-3">
+                <div class="row-cols-sm-2 row-cols-lg-3 row-cols-1  row g-5">
+                    {{!-- thẻ tiến độ --}}
+                    <div class="col" style="min-height: 250px;">
+                        <div class="bg-light h-100 border rounded">
+
+                        </div>
+                    </div>
+                    <div class="col" style="min-height: 250px;">
+                        <div class="bg-light h-100 border rounded">
+
+                        </div>
+                    </div>
+                    <div class="col" style="min-height: 250px;">
+                        <div class="bg-light h-100 border rounded">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{else}}
+<h1>Lỗi thông tin</h1>
+{{/if}}

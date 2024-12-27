@@ -23,30 +23,33 @@ class StudentController {
             });
             const project = await projects.findAll({
                 include: [
-                    {model: projectstudents, as: 'projectstudents', attributes:[], required: true,
+                    {
+                        model: projectstudents, as: 'projectstudents', attributes: [], required: true,
                         include: [{
                             model: students, as: 'student',
                             attributes: ['studentID', 'lastname', 'firstname', 'date_of_birth', 'gender'],
                             where: { usersID: user_id },
                         }],
                     },
-                    {model: projectadvisors, as: 'projectadvisors', attributes:['advisor_id'],
+                    {
+                        model: projectadvisors, as: 'projectadvisors', attributes: ['advisor_id'],
                         include: [{
                             model: advisors, as: 'advisor',
                             attributes: ['lastname', 'firstname']
                         }],
                     },
                 ],
-                attributes: ['title', 'description', 'start_date', 'end_date', 'status']
+                attributes: ['id', 'title', 'description', 'start_date', 'end_date', 'status']
             });
-            project.forEach(proj => {
-                if (proj.projectadvisors) {
-                    proj.projectadvisors.forEach(projectadvisor => {
-                        const advisor = projectadvisor.advisor;
-                        console.log('Giảng viên:', advisor.lastname, advisor.firstname);
-                    });
-                }
-            });
+            console.log(project);
+            // project.forEach(proj => {
+            //     if (proj.projectadvisors) {
+            //         proj.projectadvisors.forEach(projectadvisor => {
+            //             const advisor = projectadvisor.advisor;
+            //             console.log('Giảng viên:', advisor.lastname, advisor.firstname);
+            //         });
+            //     }
+            // });
             console.log(JSON.stringify(project, null, 2));
             // ---------------------------------------------
             if (!student) {
@@ -56,10 +59,7 @@ class StudentController {
                 });
             }
             const student_data = student.toJSON();
-            // Định dạng ngày sinh ----------------------
-            const dob = new Date(student_data.date_of_birth);
-            student_data.date_of_birth = `${dob.getDate().toString().padStart(2, '0')}-${(dob.getMonth() + 1).toString().padStart(2, '0')}-${dob.getFullYear()}`;
-            // -----------------------------------------
+            // const project_data = project.toJSON();
             res.render('roles/student/dashboard', {
                 title: 'Trang chủ',
                 data: student_data,
@@ -128,10 +128,6 @@ class StudentController {
                 });
             }
             const student_data = student.toJSON();
-            // Định dạng ngày sinh ----------------------
-            const dob = new Date(student_data.date_of_birth);
-            student_data.date_of_birth = `${dob.getDate().toString().padStart(2, '0')}-${(dob.getMonth() + 1).toString().padStart(2, '0')}-${dob.getFullYear()}`;
-            // -----------------------------------------
             res.render('roles/student/AccountInfo', {
                 title: 'Thông tin tài khoản',
                 data: student_data,
@@ -154,6 +150,81 @@ class StudentController {
             showNav: true,
             student: true,
         });
+    }
+    //[GET] /student/project
+    async projectDetails(req, res, next) {
+        const topicId = req.params.id;
+        try {
+            const projectDetails = await projects.findOne({
+                where: { id: topicId },
+                include: [
+                    //Nối đến bảng chuyên ngành lấy thông tin chuyên ngành của đề tài
+                    {
+                        model: majors,
+                        as: 'major',
+                        attributes: ['name'],
+                    },
+                    //Lấy thông tin giảng viên tham gia
+                    {
+                        model: projectadvisors,
+                        as: 'projectadvisors',
+                        attributes: ['advisor_id'],
+                        //Nối đến bảng giảng viên lấy thông tin
+                        include: [
+                            {
+                                model: advisors,
+                                as: 'advisor',
+                                attributes: ['lastname', 'firstname']
+                            }
+                        ]
+                    },
+                    //Lấy thông tin sinh viên tham gia
+                    {
+                        model: projectstudents,
+                        as: 'projectstudents',
+                        attributes: ['student_id'],
+                        include: [
+                            {
+                                model: students,
+                                as: 'student',
+                                attributes: ['studentID', 'lastname', 'firstname', 'classID'],
+                                include: [
+                                    {
+                                        model: users,
+                                        as: 'user',
+                                        attributes: ['role']
+                                    },
+                                    {
+                                        model: class_,
+                                        as: 'class',
+                                        attributes: ['classID']
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                attributes: ['title', 'description', 'start_date', 'end_date', 'status'],
+            });
+            // In dữ liệu dễ đọc với JSON.stringify
+            console.log(JSON.stringify(projectDetails, null, 2));
+            res.render('roles/student/TopicDetails', {
+                title: 'AccountInfo',
+                projectDetails: projectDetails,
+                //Truyền dữ liệu hiển thị thành phần------
+                showHeaderFooter: true,
+                showNav: true,
+                student: true,
+                //----------------------------------------
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).render('error', {
+                title: 'Error',
+                message: 'An error occurred while fetching the topic'
+            });
+        }
+
     }
     //[POST]
 

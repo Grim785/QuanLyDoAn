@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt'); //Import mã hóa mật khẩu
 const { where, Op } = require("sequelize");
 const sequelize = require("../../config/db");
 const initModels = require("../models/init-models");
@@ -104,14 +105,84 @@ class AdminController{
 
             if(user.role === 'student'){
                 const student = await students.findOne({where: {usersID:userId}})
-                res.render('roles/admin/detailStudent', { title: `Chi tiết sinh viên: ${user.username}`, student })
+                res.render('roles/admin/detailStudent', { 
+                    title: `Chi tiết sinh viên: ${user.username}`,
+                    student 
+                });
             }else if(user.role === 'advisor'){
                 const advisor = await advisors.findOne({where: {userID:userId}})
-                res.render('roles/admin/detailAdvisor', { title: `Chi tiết giảng viên: ${user.username}`, advisor })
+                res.render('roles/admin/detailAdvisor', { 
+                    title: `Chi tiết giảng viên: ${user.username}`, 
+                    advisor 
+                });
             }
         } catch (error) {
             console.log(error);
         }
+    }
+    async updateAccount(req, res, next) {
+        const userId = req.params.id;
+        const updatedData = req.body;
+    
+        try {
+            // Kiểm tra nếu username đã thay đổi
+            if (updatedData.username) {
+                // Kiểm tra xem username đã tồn tại chưa (ngoại trừ người dùng hiện tại)
+                const existingUser = await users.findOne({
+                    where: {
+                        username: updatedData.username,
+                        id: { [Op.ne]: userId }, // Kiểm tra ngoại trừ user hiện tại
+                    }
+                });
+    
+                if (existingUser) {
+                    return res.status(400).json({ success: false, message: 'Username đã tồn tại' });
+                }
+            }
+    
+            // Nếu không có lỗi về username, tiến hành cập nhật thông tin người dùng
+            await users.update(updatedData, { where: { id: userId } });
+            res.json({ success: true });
+        } catch (error) {
+            console.log(error);
+            res.json({ success: false });
+        }
+    }
+    
+    async addAccount(req, res, next){
+        const { username, password, role } = req.body;
+        try {
+            if (!username || !password || !role) {
+                return res.status(400).json({ success: false, message: 'Thiếu thông tin cần thiết!' });
+            }
+            const existingUser = await users.findOne({ where: { username } });
+            if (existingUser) {
+                return res.status(400).json({ success: false, message: 'Tên tài khoản đã tồn tại!' });
+            }
+            const hashedPassword = await bcrypt.hash(password, 10);
+            await users.create({
+                username: username,
+                password: hashedPassword,
+                role: role,
+                active: true,
+              });
+              res.json({ success: true });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
+        }
+    }
+    async deleteAccount(req, res, next){
+        const { id } = req.params;
+        try {
+            const user = await users.findByPk(id);
+            if (!user) {
+              return res.status(404).json({ success: false, message: 'Tài khoản không tồn tại!' });
+            }
+            await user.destroy();
+            res.json({ success: true });
+          } catch (error) {
+            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
+          }
     }
 
     TopicList(req, res, next){

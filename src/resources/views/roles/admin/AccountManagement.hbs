@@ -3,18 +3,19 @@
         <div class="h-100 w-100">
             <div class="border rounded-3 h-100 d-flex flex-column">
                 <!-- Header -->
-                <div class="text-light bg-orange border rounded-top p-2 d-flex align-items-center justify-content-between" style="height: 60px;">
+                <div class="text-primary bg-orange border rounded-top p-2 d-flex align-items-center justify-content-between"
+                    style="height: 60px;">
                     <div class="fw-bold">Danh sách tài khoản</div>
                     <form action="" class="d-flex">
-                        <input type="text" class="form-control form-control-sm me-2" placeholder="Tìm kiếm" aria-label="Tìm kiếm">
+                        <input type="text" class="form-control form-control-sm me-2" placeholder="Tìm kiếm"
+                            aria-label="Tìm kiếm">
                         <button class="btn btn-sm btn-light border" type="submit" aria-label="Tìm kiếm">
                             <i class="fa-solid fa-magnifying-glass fa-lg text-dark"></i>
                         </button>
                     </form>
                 </div>
-
                 <!-- Table content -->
-                <div class="scroll flex-grow-1 overflow-auto">
+                <div class="flex-grow-1 overflow-auto">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead class="table-light">
@@ -27,54 +28,233 @@
                                     <th scope="col" class="text-end"></th>
                                 </tr>
                             </thead>
-                            <tbody class="text-nowrap scoll">
-                                {{!-- render dữ liệu ở đây --}}
+                            <tbody class="text-nowrap">
                                 {{#each listUsers}}
-                                    {{#if (eq role 'admin')}}
-                                    {{else}}
-                                        <tr class="align-middle {{#unless active}}table-secondary opacity-50{{/unless}}">
-                                            <th scope="row">{{username}}</th>
-                                            <td>
-                                                {{#if (eq role "student")}}
-                                                    {{#if students.length}}
-                                                        {{students.[0].lastname}} {{students.[0].firstname}} 
-                                                    {{else}}
-                                                        Không đăng ký họ tên
-                                                    {{/if}}
-                                                {{else}}
-                                                    {{#if advisors.length}}
-                                                        {{advisors.[0].lastname}} {{advisors.[0].firstname}} 
-                                                    {{else}}
-                                                        Không đăng ký họ tên
-                                                    {{/if}}
-                                                {{/if}}
-                                            </td>
-                                            <td>{{role}}</td>
-                                            <td>{{formatDate createdAt}}</td>
-                                            <td>{{formatDate updatedAt}}</td>
-                                            <td class="text-end">
-                                                {{#if (eq role 'student')}}
-                                                    <a href="/admin/details/student/{{id}}" class="btn btn-primary btn-sm me-1">Chi tiết</a>
-                                                {{else if (eq role 'advisor')}}
-                                                    <a href="/admin/details/advisor/{{id}}" class="btn btn-primary btn-sm me-1">Chi tiết</a>
-                                                {{/if}}
-                                                <a href="/admin/EditAccount" class="btn btn-warning btn-sm me-1">Sửa</a>
-                                                <button type="button" class="btn btn-danger btn-sm">Xóa</button>
-                                            </td>
-                                        </tr>
-                                    {{/if}}
+                                <tr id="row-{{id}}" class="align-middle">
+                                    <th scope="row">
+                                        <span class="text-view">{{username}}</span>
+                                        <input type="text" class="form-control form-control-sm text-edit d-none"
+                                            value="{{username}}" />
+                                    </th>
+                                    <td>
+                                        <span class="">
+                                            {{#if (eq role "student")}}
+                                            {{#if students.length}}
+                                            {{students.[0].lastname}} {{students.[0].firstname}}
+                                            {{else}}
+                                            Không đăng ký họ tên
+                                            {{/if}}
+                                            {{else}}
+                                            {{#if advisors.length}}
+                                            {{advisors.[0].lastname}} {{advisors.[0].firstname}}
+                                            {{else}}
+                                            Không đăng ký họ tên
+                                            {{/if}}
+                                            {{/if}}
+                                        </span>
+                                        {{!-- <input type="text" class="form-control form-control-sm text-edit d-none"
+                                            value="{{students.[0].lastname}} {{students.[0].firstname}}" /> --}}
+                                    </td>
+                                    <td>{{role}}</td>
+                                    <td>{{formatDate createdAt}}</td>
+                                    <td>{{formatDate updatedAt}}</td>
+                                    <td class="text-end">
+                                        {{#if (eq role 'admin')}}
+                                        <!-- Không hiển thị nút nào nếu role là admin -->
+                                        {{else}}
+                                        {{#if (eq role 'student')}}
+                                        <a href="/admin/details/student/{{id}}" class="btn btn-primary btn-sm me-1">Chi
+                                            tiết</a>
+                                        {{else if (eq role 'advisor')}}
+                                        <a href="/admin/details/advisor/{{id}}" class="btn btn-primary btn-sm me-1">Chi
+                                            tiết</a>
+                                        {{/if}}
+                                        <button type="button" class="btn btn-warning btn-sm me-1 btn-edit"
+                                            data-id="{{id}}">Sửa</button>
+                                        <button type="button" class="btn btn-danger btn-sm btn-delete"
+                                            data-id="{{id}}" onclick="deleteAccount({{id}})">Xóa</button>
+                                        <button type="button" class="btn btn-success btn-sm me-1 btn-save d-none"
+                                            data-id="{{id}}">Lưu</button>
+                                        <button type="button" class="btn btn-secondary btn-sm btn-cancel d-none"
+                                            data-id="{{id}}">Hủy</button>
+                                        {{/if}}
+                                    </td>
+                                </tr>
                                 {{/each}}
-                                {{!-- kết thúc ở đây --}}
                             </tbody>
                         </table>
                     </div>
                 </div>
-
                 <!-- Footer -->
-                <div class="border rounded-bottom p-2 d-flex justify-content-end align-items-center" style="height: 50px;">
-                    <button type="button" class="btn btn-success btn-sm">Thêm tài khoản</button>
+                <div class="border rounded-bottom p-2 d-flex justify-content-end align-items-center"
+                    style="height: 50px;">
+                    <div class="add-account-section d-flex align-items-center gap-2" style="flex-grow: 1;">
+                        <!-- Khu vực này sẽ được hiển thị khi nhấn "Thêm tài khoản" -->
+                    </div>
+                    <button id="add-account-btn" type="button" class="btn btn-success btn-sm">Thêm tài khoản</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            const btnEdit = row.querySelector('.btn-edit');
+            const btnDelete = row.querySelector('.btn-delete');
+            const btnSave = row.querySelector('.btn-save');
+            const btnCancel = row.querySelector('.btn-cancel');
+            const textViews = row.querySelectorAll('.text-view');
+            const textEdits = row.querySelectorAll('.text-edit');
+
+            // Nếu btnEdit hoặc btnDelete không tồn tại (trong trường hợp role là admin), bỏ qua
+            if (!btnEdit || !btnDelete || !btnSave || !btnCancel) {
+                return; // Bỏ qua nếu không có nút
+            }
+
+            // Chuyển sang trạng thái chỉnh sửa
+            btnEdit.addEventListener('click', () => {
+                textViews.forEach(el => el.classList.add('d-none'));
+                textEdits.forEach(el => el.classList.remove('d-none'));
+                btnEdit.classList.add('d-none');
+                btnDelete.classList.add('d-none');
+                btnSave.classList.remove('d-none');
+                btnCancel.classList.remove('d-none');
+            });
+
+            btnSave.addEventListener('click', () => {
+                // Hiển thị hộp thoại xác nhận trước khi tiếp tục
+                const confirmSave = confirm('Bạn có chắc chắn muốn thay đổi thông tin tài khoản này?');
+
+                // Nếu người dùng không xác nhận, dừng hành động
+                if (!confirmSave) {
+                    return; // Dừng lại nếu người dùng không đồng ý
+                }
+
+                const id = btnSave.getAttribute('data-id');
+                const updatedData = {};
+                textEdits.forEach((input, index) => {
+                    updatedData[`username`] = input.value; // Lấy giá trị username mới
+                });
+
+                fetch(`/admin/updateAccount/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Cập nhật UI nếu thành công
+                        textViews.forEach((el, index) => {
+                            el.textContent = updatedData[`username`];
+                            el.classList.remove('d-none');
+                        });
+                        textEdits.forEach(el => el.classList.add('d-none'));
+                        btnEdit.classList.remove('d-none');
+                        btnDelete.classList.remove('d-none');
+                        btnSave.classList.add('d-none');
+                        btnCancel.classList.add('d-none');
+                    } else {
+                        // Hiển thị thông báo lỗi nếu username đã tồn tại
+                        alert(data.message || 'Cập nhật thất bại!');
+                    }
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                    alert('Có lỗi xảy ra!');
+                });
+            });
+
+
+            // Hủy chỉnh sửa, phục hồi trạng thái ban đầu
+            btnCancel.addEventListener('click', () => {
+                textViews.forEach(el => el.classList.remove('d-none'));
+                textEdits.forEach(el => el.classList.add('d-none'));
+                btnEdit.classList.remove('d-none');
+                btnDelete.classList.remove('d-none');
+                btnSave.classList.add('d-none');
+                btnCancel.classList.add('d-none');
+            });
+        });
+        const addAccountBtn = document.getElementById('add-account-btn');
+        const addAccountSection = document.querySelector('.add-account-section');
+        let isAdding = false;
+
+        addAccountBtn.addEventListener('click', () => {
+            if (!isAdding) {
+                // Chuyển sang trạng thái "thêm tài khoản"
+                isAdding = true;
+                addAccountBtn.textContent = 'Lưu';
+                addAccountSection.innerHTML = `
+        <input type="text" class="form-control form-control-sm" placeholder="Tên tài khoản" id="new-username" required>
+        <input type="text" class="form-control form-control-sm" placeholder="Mật khẩu" id="new-password" value="1111" required>
+        <select class="form-select form-select-sm" id="new-role" required>
+          <option value="">Chọn quyền</option>
+          <option value="student">Student</option>
+          <option value="advisor">Advisor</option>
+        </select>
+        <button id="cancel-add-btn" class="btn btn-danger btn-sm">Hủy</button>
+      `;
+            } else {
+                // Xử lý lưu tài khoản
+                const username = document.getElementById('new-username').value;
+                const password = document.getElementById('new-password').value;
+                const role = document.getElementById('new-role').value;
+
+                if (!username || !password || !role) {
+                    alert('Vui lòng nhập đầy đủ thông tin!');
+                    return;
+                }
+
+                if (!confirm('Bạn có chắc muốn thêm tài khoản này?')) return;
+
+                fetch('/admin/addAccount', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, role }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            alert('Thêm tài khoản thành công!');
+                            location.reload(); // Tải lại trang để cập nhật danh sách
+                        } else {
+                            alert(`Lỗi: ${data.message}`);
+                        }
+                    })
+                    .catch((error) => console.error('Lỗi:', error));
+            }
+        });
+
+        addAccountSection.addEventListener('click', (event) => {
+            if (event.target.id === 'cancel-add-btn') {
+                if (confirm('Bạn có chắc muốn hủy thao tác này?')) {
+                    isAdding = false;
+                    addAccountBtn.textContent = 'Thêm tài khoản';
+                    addAccountSection.innerHTML = '';
+                }
+            }
+        });
+
+        window.deleteAccount = (id) => {
+            if (confirm('Bạn có chắc muốn xóa tài khoản này?')) {
+                fetch(`/admin/deleteAccount/${id}`, { method: 'DELETE' })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            alert('Xóa tài khoản thành công!');
+                            document.getElementById(`row-${id}`).remove();
+                        } else {
+                            alert(`Lỗi: ${data.message}`);
+                        }
+                    })
+                    .catch((error) => console.error('Lỗi:', error));
+            }
+        };
+    });
+</script>

@@ -19,6 +19,10 @@ router.get('/accountinfo', chkRoles('student'), StudentController.accountinfo);
 //[GET] /student/project
 router.get('/project', chkRoles('student'), StudentController.project);
 
+//[GET] /student/details/Toppic/:id
+router.get('/details/Toppic/:id', chkRoles('student'), StudentController.projectDetails);
+
+
 
 
 module.exports = router;    

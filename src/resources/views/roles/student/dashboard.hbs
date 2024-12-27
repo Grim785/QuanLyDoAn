@@ -18,7 +18,7 @@
                         <p>MSSV: {{data.studentID}}</p>
                         <p>Họ và Tên: {{data.lastname}} {{data.firstname}}</p>
                         <p>Giới tính: {{data.gender}}</p>
-                        <p>Ngày sinh: {{data.date_of_birth}}</p>
+                        <p>Ngày sinh: {{formatDate data.date_of_birth}}</p>
                         <p>Chuyên Ngành: {{data.major.name}}</p>
                         <p>Lớp: {{data.class.classID}}</p>
                         {{else}}
@@ -72,13 +72,13 @@
                 <b>Thông tin đồ án</b>
                 <div class="jumbotron scroll student-listtopic">
                     {{#each project_data}}
-                    <div class="card mt-3 me-3 border-1 shadow-sm rounded {{#if (eq status 'in_progress')}}bg-info{{else if (eq status 'completed')}}bg-success{{/if}}">
+                    <div class="card mt-3 me-3 border-1 shadow-sm rounded {{#if (eq status 'in_progress')}}bg-success text-light{{else if (eq status 'completed')}}bg-warning{{/if}}">
                         <div class="card-body p-3 d-flex flex-wrap">
                             <div class="col-md-6">
                                 <p class="mb-1"><strong>Đề tài:</strong> {{title}}</p>
                                 <p class="mb-1"><strong>GVHD:</strong> 
-                                {{#if projectadvisors.advisor}}
-                                    {{projectadvisors.advisor.lastname}} {{projectadvisors.advisor.firstname}}
+                                {{#if projectadvisors.length}}
+                                    {{projectadvisors.[0].advisor.lastname}} {{projectadvisors.[0].advisor.firstname}}
                                 {{else}}
                                     Chưa phân công giảng viên hướng dẫn!!
                                 {{/if}}
@@ -87,15 +87,19 @@
                             <div class="col-md-6">
                                 <p class="mb-1"><strong>Tình trạng:</strong> {{#if (eq status 'in_progress')}}Đang thực hiện{{else if (eq status 'completed')}}Đã hoàn thành{{else}} Chưa bắt đầu{{/if}}</p>
                                 {{#if (eq status 'completed')}}
-                                    <p class="mb-1"><strong>Từ:</strong> {{start_date}} <strong>Đến:</strong> {{end_date}}</p>
+                                    <p class="mb-1"><strong>Từ:</strong> {{formatDate start_date}} <strong>Đến:</strong> {{formatDate end_date}}</p>
                                 {{else}}
-                                    <p class="mb-1"><strong>Ngày bắt đầu:</strong> {{start_date}}</p>
+                                    <p class="mb-1"><strong>Ngày bắt đầu:</strong> {{formatDate start_date}}</p>
                                 {{/if}}
                             </div>
                         </div>
+                        <!-- Thẻ <a> ở góc dưới bên phải -->
+                        <div class="card-footer-details">
+                            <a href="/student/details/Toppic/{{id}}" class="">Xem chi tiết>></a>
+                        </div>
                     </div>
                     {{/each}}
-                                            {{!-- <div class="mt-3">
+                        {{!-- <div class="mt-3">
                             Bạn chưa có đề tài nào!
                         </div> --}}
                 </div>

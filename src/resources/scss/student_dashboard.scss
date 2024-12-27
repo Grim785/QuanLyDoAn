@@ -1,11 +1,31 @@
-.student-dashboard .student-listtopic{
+.student-dashboard .student-listtopic {
     height: 15rem;
     align-items: center;
 }
 
-.student-dashboard .student-listtopic .card .card-body p{
-    width: 15rem; 
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
+.student-dashboard .student-listtopic .card .card-body p {
+    width: 15rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.student-dashboard .card {
+    position: relative;
+    /* Đảm bảo thẻ <a> được đặt tương đối với .card */
+}
+
+.student-dashboard .card-footer-details {
+    position: absolute;
+    bottom: 5px;
+    /* Khoảng cách từ đáy của card */
+    right: 5px;
+    /* Khoảng cách từ cạnh phải của card */
+}
+
+.student-dashboard .card-footer-details a {
+    font-size: 0.7rem;
+    text-decoration: underline;
+    color: #007bff;
 }

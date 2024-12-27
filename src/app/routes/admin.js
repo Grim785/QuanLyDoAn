@@ -26,5 +26,11 @@ router.get('/details/student/:id', chkRoles('admin'), AdminController.userDetail
 router.get('/details/advisor/:id', chkRoles('admin'), AdminController.userDetail);
 //[POST] /admin/create-toppic
 router.post('/createToppic', chkRoles('admin'), AdminController.createToppic);
+//[POST] /admin/updateAccount/:id
+router.post('/updateAccount/:id', chkRoles('admin'), AdminController.updateAccount);
+//[POST] /admin/addAccount
+router.post('/addAccount', chkRoles('admin'), AdminController.addAccount);
+//[DELETE] /admin/deleteAccount/:id
+router.delete('/deleteAccount/:id', chkRoles('admin'), AdminController.deleteAccount);
 
 module.exports = router;    

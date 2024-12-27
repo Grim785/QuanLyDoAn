@@ -27,7 +27,7 @@ app.engine("hbs", engine({
       return a === b;
     },
     formatDate: function (date) {
-      return moment(date).format('DD/MM/YYYY'); // Định dạng ngày
+      return moment(date).format('DD-MM-YYYY'); // Định dạng ngày
     }
   }
 }));
