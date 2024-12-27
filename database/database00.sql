@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `advisors` (
   CONSTRAINT `advisors_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.advisors: ~1 rows (approximately)
+-- Dumping data for table database00.advisors: ~2 rows (approximately)
 REPLACE INTO `advisors` (`id`, `advisorID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `address`, `majorsID`, `userID`, `createdAt`, `updatedAt`) VALUES
 	(1, '19992222', 'Lưu Thị', 'Thu Thủy', '1991-12-27', 'Nữ', '22A/74 Quận 1, Tp. Hồ Chí Minh', 1, 3, '2024-12-27 00:24:23', '2024-12-27 00:24:23'),
 	(2, '19992707', 'Hoàng Minh', 'Tuấn', '1978-12-27', 'Nam', '17E Quận Bình Thạnh, Tp. Hồ Chí Minh', 3, 2, '2024-12-27 00:25:52', '2024-12-27 00:25:52');
@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
 
 -- Dumping data for table database00.projects: ~18 rows (approximately)
 REPLACE INTO `projects` (`id`, `title`, `description`, `start_date`, `end_date`, `status`, `majorID`, `createdAt`, `updatedAt`) VALUES
-	(1, 'Hệ thống quản lý đồ án tốt nghiệp - Khoa công nghệ thông tin', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tin\\r\\nHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tài\\r\\nHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', NULL, NULL, 'not_started', 1, '2024-12-27 00:27:51', '2024-12-27 00:27:51'),
+	(1, 'Hệ thống quản lý đồ án tốt nghiệp - Khoa công nghệ thông tin', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tin\r\nHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tài\r\nHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', '2024-12-27', '2024-12-27', 'in_progress', 1, '2024-12-27 00:27:51', '2024-12-27 16:20:09'),
 	(2, 'Hệ thống quản lý khám bệnh', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:34:02', '2024-12-27 00:41:09'),
 	(3, 'Xây dựng ứng dụng web trên nền tảng Nodejs và MongoDB ', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:34:39', '2024-12-27 00:41:03'),
 	(4, 'Xây dựng trang web bán liên kiện máy tính', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:35:31', '2024-12-27 00:35:31'),
@@ -361,8 +361,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` enum('student','advisor','admin') NOT NULL,
-  `gmail` varchar(100) NOT NULL,
-  `phone` varchar(15) NOT NULL,
+  `gmail` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `phone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `active` tinyint(1) DEFAULT '1',
@@ -371,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.users: ~8 rows (approximately)
+-- Dumping data for table database00.users: ~10 rows (approximately)
 REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `createdAt`, `updatedAt`, `active`) VALUES
 	(1, 'admin', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'admin', '123123@gmail.com', '1111111111', '2024-12-27 00:01:01', '2024-12-27 00:01:14', 1),
 	(2, '19992707', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'advisor', '123321@gmail.com', '2222222222', '2024-12-27 00:02:47', '2024-12-27 00:03:24', 1),
@@ -380,7 +380,10 @@ REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `c
 	(5, '22001955', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '05@gmail.com', '8632456781', '2024-12-27 00:06:44', '2024-12-27 00:45:19', 1),
 	(6, '22002044', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '06@gmail.com', '0486534475', '2024-12-27 00:07:17', '2024-12-27 00:45:20', 1),
 	(7, '22007865', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '07@gmail.com', '9435658323', '2024-12-27 00:07:50', '2024-12-27 00:45:21', 1),
-	(8, '22009999', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '08@gmail.com', '1268553537', '2024-12-27 00:08:20', '2024-12-27 00:45:22', 1);
+	(8, '22009999', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '08@gmail.com', '1268553537', '2024-12-27 00:08:20', '2024-12-27 00:45:22', 1),
+	(10, '22009900', '$2b$10$Z6k5IGPvJ4c1x3qKUcN5neFRdFfxrqxy//dI9DMh1XvG.zvgiNe2O', 'student', NULL, NULL, '2024-12-27 05:49:53', '2024-12-27 06:10:56', 1),
+	(11, '22009993', '$2b$10$RZj7thCEoOK/quYFNqE8SO4NViH/CPB1zj92TTJas64/E80dlVvJ6', 'student', NULL, NULL, '2024-12-27 05:58:52', '2024-12-27 06:09:05', 1),
+	(12, '123123', '$2b$10$jlR/TtSvVvUMOosSxzYGdu6vBGj7pKLDkjdzwX4vT8RhSe7UgKDW6', 'student', NULL, NULL, '2024-12-27 09:13:17', '2024-12-27 09:13:17', 1);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
