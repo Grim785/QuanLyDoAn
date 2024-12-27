@@ -1,86 +1,121 @@
-<div class="container my-2 w-100" style="height: 70vh;">
-  <div class="row p-2 bg-light w-100" style="height:35%">
-    <div class="">Danh sách đề tài</div>
-    <div class="col-12">
-      <div class="container h-100">
-        <div class="row flex-nowrap scroll-x h-100 justify-content-around align-items-center">
-          <div class="bg-primary border rounded text-light d-grid align-items-center p-3" style="width:200px;">
-            <i class="fa-solid fa-magnifying-glass fa-lg" style="height:10px;width:10px;"></i>
-            <p>153 đề tài</p>
-            <p>Quản trị mạng</p>
-          </div>
-          <div class="bg-primary border rounded text-light d-grid align-items-center p-3" style="width:200px;">
-            <i class="fa-solid fa-magnifying-glass fa-lg" style="height:10px;width:10px;"></i>
-            <p>153 đề tài</p>
-            <p>Thương mại điện tử</p>
-          </div>
-          <div class="bg-primary border rounded text-light d-grid align-items-center p-3 topic_active" style="width:200px;">
-            <i class="fa-solid fa-magnifying-glass fa-lg" style="height:10px;width:10px;"></i>
-            <p>153 đề tài</p>
-            <p>Ứng dụng phần mềm</p>
-          </div>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row w-100" style="height:65%;">
-    <div class="col-12" style="height: 50px;"><div class="position-sticky top-0 p-2 d-flex justify-content-end"><input class="border rounded-pill mx-2 px-2 py-1 text-start" type="text" name="" id="" placeholder="tìm kiếm đề tài"><p class="text-end"><i class="fa-solid fa-magnifying-glass fa-lg"></i></p></div></div>
-    <div class="col scroll" style="height: calc(100% - 50px);">
-      <table class="table ">
-        <thead>
-          <tr class="position-sticky top-0 p-2 bg-light text-nowrap">
-            <th scope="col">#</th>
-            <th scope="col">Tên đề tài</th>
-            <th scope="col">Tên sinh viên</th>
-            <th scope="col">Ngày đăng kí</th>
-            <th scope="col">GV hướng dẫn</th>
-            <th scope="col">Tình Trạng</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Quản lí đồ án tốt nghiệp</td>
-            <td>Nguyễn Văn An</td>
-            <td>30/9/2024</td>
-            <td>TS.Nguyễn Đức Cương</td>
-            <td>Hoàn thành</td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Quản lí đồ án tốt nghiệp</td>
-            <td>Nguyễn Văn An</td>
-            <td>30/9/2024</td>
-            <td>TS.Nguyễn Đức Cương</td>
-            <td>Hoàn thành</td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Quản lí đồ án tốt nghiệp</td>
-            <td>Nguyễn Văn An</td>
-            <td>30/9/2024</td>
-            <td>TS.Nguyễn Đức Cương</td>
-            <td>Hoàn thành</td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Quản lí đồ án tốt nghiệp</td>
-            <td>Nguyễn Văn An</td>
-            <td>30/9/2024</td>
-            <td>TS.Nguyễn Đức Cương</td>
-            <td>Hoàn thành</td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Quản lí đồ án tốt nghiệp</td>
-            <td>Nguyễn Văn An</td>
-            <td>30/9/2024</td>
-            <td>TS.Nguyễn Đức Cương</td>
-            <td>Hoàn thành</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div class="container my-2 table-container">
+  {{!-- <div class="table-responsive"> --}}
+    <table class="table table-hover table-striped align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th class="">ID</th>
+          <th class="">Title</th>
+          <th class="">Description</th>
+          <th class="">Start Date</th>
+          <th class="">End Date</th>
+          <th class="">Status</th>
+          <th class="">Participants</th>
+          <th class="">Actions</th>
+                    <th class="">Status</th>
+          <th class="">Participants</th>
+          <th class="">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dòng mẫu hiển thị dữ liệu -->
+        {{#each list}}
+        <tr>
+          <td>{{id}}</td>
+          <td><input type="text" class="form-control form-control-xs cell-input" value="{{this.title}}" /></td>
+          <td><textarea class="form-control form-control-xs cell-input" rows="1">{{description}}</textarea></td>
+          <td><input type="date" class="form-control form-control-xs cell-input" value="{{start_date}}" /></td>
+          <td><input type="date" class="form-control form-control-xs cell-input" value="{{end_date}}" /></td>
+          <td>
+            <select class="form-select form-select-xs cell-input">
+              <option value="not_started" {{#ifCond status 'not_started'}}selected{{/ifCond}}>Not Started</option>
+              <option value="in_progress" {{#ifCond status 'in_progress'}}selected{{/ifCond}}>In Progress</option>
+              <option value="completed" {{#ifCond status 'completed'}}selected{{/ifCond}}>Completed</option>
+            </select>
+          </td>
+          <td>
+            <div class="participants-list">
+              <span>Student A</span>, <span>Student B</span>
+              <button class="btn btn-link p-0" title="Edit Participants"><i class="bi bi-pencil-square"></i></button>
+            </div>
+          </td>
+          <td>
+            <button class="btn btn-link p-0" title="Save"><i class="bi bi-check-circle text-success"></i></button>
+            <button class="btn btn-link p-0" title="Delete"><i class="bi bi-x-circle text-danger"></i></button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{!-- </div> --}}
 </div>
+
+<style>
+  .table-container {
+    height: 70vh;
+    width: 165vh;
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+
+  .table th, .table td {
+    text-align: center;
+    padding: 0 5px 0 5px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  .form-control-xs, .form-select-xs {
+    font-size: 0.7rem;
+    line-height: 1;
+    border: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  .cell-input {
+    margin: 0;
+    padding: 0.3rem;
+    box-sizing: border-box;
+    background-color: transparent;
+    width: 200px;
+  }
+
+  .cell-input:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 1px #007bff;
+  }
+
+  .btn-link {
+    text-decoration: none;
+  }
+
+  .col-width-5 {
+    width: 50px;
+  }
+  .col-width-10 {
+    width: 100px;
+  }
+  .col-width-15 {
+    width: 150px;
+  }
+  .col-width-20 {
+    width: 200px;
+  }
+
+  .col-width-25 {
+    width: 250px;
+  }
+  .participants-list {
+    text-align: left;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .participants-list button {
+    font-size: 0.8rem;
+    line-height: 1;
+    padding: 0;
+  }
+</style>

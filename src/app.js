@@ -28,6 +28,12 @@ app.engine("hbs", engine({
     },
     formatDate: function (date) {
       return moment(date).format('DD-MM-YYYY'); // Định dạng ngày
+    },
+    ifCond: function (value1, value2, options) {
+      if (value1 === value2) {
+        return options.fn(this); // Nếu hai giá trị bằng nhau, trả về phần tử trong `options.fn`
+      }
+      return options.inverse(this); // Nếu không, trả về phần tử trong `options.inverse`
     }
   }
 }));

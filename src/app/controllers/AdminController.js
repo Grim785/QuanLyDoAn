@@ -5,10 +5,10 @@ const initModels = require("../models/init-models");
 // Khởi tạo tất cả các model và quan hệ
 const models = initModels(sequelize);
 // Truy cập model
-const { users, students, advisors, majors, class_, projects, projectstudents, projectadvisors} = models;
-class AdminController{
+const { users, students, advisors, majors, class_, projects, projectstudents, projectadvisors } = models;
+class AdminController {
     //[GET] /admin/dashboard
-    dashboard(req, res, next){
+    dashboard(req, res, next) {
         res.render('roles/admin/TopicDetails', {
             title: 'Dashboard admin',
             showHeaderFooter: true,
@@ -18,14 +18,14 @@ class AdminController{
         });
     }
     //[GET] /admin/AccountManagement
-    async AccountManagement(req, res, next){
+    async AccountManagement(req, res, next) {
         try {
             const listUsers = await users.findAll({
                 include: [
-                    {model: students, as: 'students', attributes: ['lastname','firstname']},
-                    {model: advisors, as: 'advisors', attributes: ['lastname','firstname']}
+                    { model: students, as: 'students', attributes: ['lastname', 'firstname'] },
+                    { model: advisors, as: 'advisors', attributes: ['lastname', 'firstname'] }
                 ],
-                attributes: ['id','username', 'role', 'active', 'createdAt', 'updatedAt']
+                attributes: ['id', 'username', 'role', 'active', 'createdAt', 'updatedAt']
             });
             // console.log(JSON.stringify(listUsers, null, 2)); 
             res.render('roles/admin/AccountManagement', {
@@ -42,7 +42,7 @@ class AdminController{
         }
     }
 
-    AdvisorList(req, res, next){
+    AdvisorList(req, res, next) {
         res.render('roles/admin/AdvisorList', {
             title: 'Dashboard admin',
             showHeaderFooter: true,
@@ -52,7 +52,7 @@ class AdminController{
         });
     }
 
-    async loadcreateToppic(req, res, next){
+    async loadcreateToppic(req, res, next) {
         try {
             const major = await majors.findAll();
             const advisor = await advisors.findAll();
@@ -72,7 +72,7 @@ class AdminController{
         }
 
     }
-    async searchStudents(req, res, next){
+    async searchStudents(req, res, next) {
         try {
             // Lấy query từ fontend -------------------
             const query = req.query.query;
@@ -93,27 +93,27 @@ class AdminController{
             console.log(error);
         }
     }
-    async userDetail(req, res, next){
+    async userDetail(req, res, next) {
         try {
             const userId = req.params.id;
             const user = await users.findOne({
-                where: { id: userId}
+                where: { id: userId }
             });
             if (!user) {
                 return res.status(404).render('error', { message: 'Tài khoản không tồn tại' });
             }
 
-            if(user.role === 'student'){
-                const student = await students.findOne({where: {usersID:userId}})
-                res.render('roles/admin/detailStudent', { 
+            if (user.role === 'student') {
+                const student = await students.findOne({ where: { usersID: userId } })
+                res.render('roles/admin/detailStudent', {
                     title: `Chi tiết sinh viên: ${user.username}`,
-                    student 
+                    student
                 });
-            }else if(user.role === 'advisor'){
-                const advisor = await advisors.findOne({where: {userID:userId}})
-                res.render('roles/admin/detailAdvisor', { 
-                    title: `Chi tiết giảng viên: ${user.username}`, 
-                    advisor 
+            } else if (user.role === 'advisor') {
+                const advisor = await advisors.findOne({ where: { userID: userId } })
+                res.render('roles/admin/detailAdvisor', {
+                    title: `Chi tiết giảng viên: ${user.username}`,
+                    advisor
                 });
             }
         } catch (error) {
@@ -123,7 +123,7 @@ class AdminController{
     async updateAccount(req, res, next) {
         const userId = req.params.id;
         const updatedData = req.body;
-    
+
         try {
             // Kiểm tra nếu username đã thay đổi
             if (updatedData.username) {
@@ -134,12 +134,12 @@ class AdminController{
                         id: { [Op.ne]: userId }, // Kiểm tra ngoại trừ user hiện tại
                     }
                 });
-    
+
                 if (existingUser) {
                     return res.status(400).json({ success: false, message: 'Username đã tồn tại' });
                 }
             }
-    
+
             // Nếu không có lỗi về username, tiến hành cập nhật thông tin người dùng
             await users.update(updatedData, { where: { id: userId } });
             res.json({ success: true });
@@ -148,8 +148,8 @@ class AdminController{
             res.json({ success: false });
         }
     }
-    
-    async addAccount(req, res, next){
+
+    async addAccount(req, res, next) {
         const { username, password, role } = req.body;
         try {
             if (!username || !password || !role) {
@@ -165,37 +165,45 @@ class AdminController{
                 password: hashedPassword,
                 role: role,
                 active: true,
-              });
-              res.json({ success: true });
+            });
+            res.json({ success: true });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
         }
     }
-    async deleteAccount(req, res, next){
+    async deleteAccount(req, res, next) {
         const { id } = req.params;
         try {
             const user = await users.findByPk(id);
             if (!user) {
-              return res.status(404).json({ success: false, message: 'Tài khoản không tồn tại!' });
+                return res.status(404).json({ success: false, message: 'Tài khoản không tồn tại!' });
             }
             await user.destroy();
             res.json({ success: true });
-          } catch (error) {
+        } catch (error) {
             res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
-          }
+        }
     }
 
-    TopicList(req, res, next){
-        res.render('roles/admin/TopicList', {
-            title: 'Dashboard admin',
-            showHeaderFooter: true,
-            showNav: true,
-            admin: true,
-            topiclistactive: true,
-        });
+    async TopicList(req, res, next) {
+        try {
+            const list = await projects.findAll();
+            console.log(list);
+            res.render('roles/admin/TopicList', {
+                title: 'Dashboard admin',
+                list:list,
+                //Truyền dữ liệu hiển thị thành phần------
+                showHeaderFooter: true,
+                showNav: true,
+                admin: true,
+                //----------------------------------------
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    RegisterTopicList(req,res,next){
+    RegisterTopicList(req, res, next) {
         res.render('roles/admin/RegisterTopicList', {
             title: 'Dashboard admin',
             showHeaderFooter: true,
@@ -219,18 +227,18 @@ class AdminController{
     async createToppic(req, res, next) {
         const data = req.body;
         console.log('Data received:', data);
-    
+
         const studentlist = Array.isArray(data.students) ? data.students : [];
         console.log(studentlist);
         const dateProject = new Date();
-    
+
         const transaction = await sequelize.transaction();
         try {
             // Kiểm tra dữ liệu đầu vào
             if (!data.title || !data.description || !data.status || !data.majorId) {
                 throw new Error('Thiếu thông tin bắt buộc');
             }
-    
+
             // Thêm dữ liệu vào bảng project
             const project = await projects.create({
                 title: data.title,
@@ -239,7 +247,7 @@ class AdminController{
                 majorID: data.majorId,
                 start_date: data.status === 'in_progress' ? dateProject : null
             }, { transaction });
-    
+
             try {
                 for (const studentId of studentlist) {
                     const existingProject = await projectstudents.findOne({
@@ -262,16 +270,16 @@ class AdminController{
                             },
                         ],
                     });
-            
+
                     console.log(existingProject);
-            
+
                     if (existingProject) {
                         // Nếu sinh viên đã tham gia dự án khác với trạng thái not_started hoặc in_progress
                         const { studentID, lastname, firstname } = existingProject.student;
                         res.status(400).send({ message: `Sinh viên ${studentID} - ${lastname} ${firstname} đã tham gia một dự án khác. Vui lòng kiểm tra lại!` });
                         return; // Dừng quá trình nếu có lỗi
                     }
-            
+
                     // Nếu không có lỗi, tiếp tục thêm sinh viên vào dự án
                     await projectstudents.create({
                         project_id: project.id,
@@ -279,12 +287,12 @@ class AdminController{
                     }, { transaction });
                 }
             } catch (error) {
-                console.error('Lỗi khi xử lý sinh viên:', error.message); 
+                console.error('Lỗi khi xử lý sinh viên:', error.message);
                 // Trong trường hợp có lỗi, rollback giao dịch
                 await transaction.rollback();
                 res.status(500).send({ message: 'Lỗi hệ thống. Vui lòng thử lại!' });
             }
-            
+
             // Thêm giảng viên hướng dẫn nếu có
             if (data.advisorId) {
                 await projectadvisors.create({
@@ -292,7 +300,7 @@ class AdminController{
                     advisor_id: data.advisorId
                 }, { transaction });
             }
-    
+
             await transaction.commit();
             res.status(200).send({ message: 'Tạo đề tài thành công, vui lòng kiểm tra lại tại trang danh sách' });
         } catch (error) {
@@ -301,8 +309,8 @@ class AdminController{
             res.status(400).send({ message: error.message || 'Lỗi khi tạo dự án' });
         }
     }
-    
-    
-    
+
+
+
 }
 module.exports = new AdminController();
