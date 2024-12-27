@@ -218,11 +218,19 @@ class AdminController{
     //[POST] /admin/create-toppic
     async createToppic(req, res, next) {
         const data = req.body;
-        const studentlist = Array.isArray(data['students[]']) ? data['students[]'] : [];
+        console.log('Data received:', data);
+    
+        const studentlist = Array.isArray(data.students) ? data.students : [];
+        console.log(studentlist);
         const dateProject = new Date();
     
         const transaction = await sequelize.transaction();
         try {
+            // Kiểm tra dữ liệu đầu vào
+            if (!data.title || !data.description || !data.status || !data.majorId) {
+                throw new Error('Thiếu thông tin bắt buộc');
+            }
+    
             // Thêm dữ liệu vào bảng project
             const project = await projects.create({
                 title: data.title,
@@ -232,31 +240,51 @@ class AdminController{
                 start_date: data.status === 'in_progress' ? dateProject : null
             }, { transaction });
     
-            // Kiểm tra và thêm các sinh viên vào dự án
-            for (const studentId of studentlist) {
-                // Kiểm tra xem sinh viên đã tham gia dự án với trạng thái không hợp lệ chưa
-                const existingProject = await projectstudents.findOne({
-                    where: { student_id: studentId },
-                    include: [{
-                        model: projects,
-                        as: 'project',
-                        where: {
-                            status: ['not_started', 'in_progress']
-                        }
-                    }]
-                });
-    
-                if (existingProject) {
-                    throw new Error(`Sinh viên ID ${studentId} đã tham gia một dự án khác với trạng thái not_started hoặc in_progress.`);
+            try {
+                for (const studentId of studentlist) {
+                    const existingProject = await projectstudents.findOne({
+                        where: { student_id: studentId },
+                        include: [
+                            {
+                                model: projects,
+                                as: 'project',
+                                where: {
+                                    status: ['not_started', 'in_progress'],
+                                },
+                            },
+                            {
+                                model: students,
+                                as: 'student',
+                                where: {
+                                    id: studentId,  // So khớp với student_id
+                                },
+                                attributes: ['studentID', 'lastname', 'firstname'], // Lấy những trường cần thiết
+                            },
+                        ],
+                    });
+            
+                    console.log(existingProject);
+            
+                    if (existingProject) {
+                        // Nếu sinh viên đã tham gia dự án khác với trạng thái not_started hoặc in_progress
+                        const { studentID, lastname, firstname } = existingProject.student;
+                        res.status(400).send({ message: `Sinh viên ${studentID} - ${lastname} ${firstname} đã tham gia một dự án khác. Vui lòng kiểm tra lại!` });
+                        return; // Dừng quá trình nếu có lỗi
+                    }
+            
+                    // Nếu không có lỗi, tiếp tục thêm sinh viên vào dự án
+                    await projectstudents.create({
+                        project_id: project.id,
+                        student_id: studentId,
+                    }, { transaction });
                 }
-    
-                // Thêm sinh viên vào dự án
-                await projectstudents.create({
-                    project_id: project.id,
-                    student_id: studentId
-                }, { transaction });
+            } catch (error) {
+                console.error('Lỗi khi xử lý sinh viên:', error.message); 
+                // Trong trường hợp có lỗi, rollback giao dịch
+                await transaction.rollback();
+                res.status(500).send({ message: 'Lỗi hệ thống. Vui lòng thử lại!' });
             }
-    
+            
             // Thêm giảng viên hướng dẫn nếu có
             if (data.advisorId) {
                 await projectadvisors.create({
@@ -266,13 +294,14 @@ class AdminController{
             }
     
             await transaction.commit();
-            res.status(200).send({ message: 'Thêm thành công!' });
+            res.status(200).send({ message: 'Tạo đề tài thành công, vui lòng kiểm tra lại tại trang danh sách' });
         } catch (error) {
             await transaction.rollback();
             console.error('Error creating project or students:', error);
             res.status(400).send({ message: error.message || 'Lỗi khi tạo dự án' });
         }
     }
+    
     
     
 }

@@ -20,14 +20,14 @@
           <div data-mdb-input-init class="form-outline mb-4">
             <label class="form-label" for="form3Example3">Tài khoản</label>
             <input type="text" id="username" name="username" class="form-control form-control-lg"
-              placeholder="Nhập tài khoản của bạn" required value="22001976" />
+              placeholder="Nhập tài khoản của bạn" required value="" />
           </div>
 
           <!-- Password input -->
           <div data-mdb-input-init class="form-outline mb-3">
             <label class="form-label" for="form3Example4">Mật khẩu</label>
             <input type="password" id="password" name="password" class="form-control form-control-lg"
-              placeholder="Nhập mật khẩu tài khoản" required value="123"/>
+              placeholder="Nhập mật khẩu tài khoản" required value=""/>
 
           </div>
 
@@ -95,7 +95,7 @@
                   window.location.href = '/advisor/dashboard'; // Đường dẫn cho advisor
                   break;
                 case 'admin':
-                  window.location.href = '/admin/dashboard'; // Đường dẫn cho admin
+                  window.location.href = '/admin/AccountManagement'; // Đường dẫn cho admin
                   break;
                 default:
                   $('#error-message').text('Vai trò người dùng không hợp lệ.'); // Thông báo lỗi vai trò không hợp lệ

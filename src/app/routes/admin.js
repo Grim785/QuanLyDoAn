@@ -25,7 +25,7 @@ router.get('/details/student/:id', chkRoles('admin'), AdminController.userDetail
 //[GET] /admin/details/advisor/:id
 router.get('/details/advisor/:id', chkRoles('admin'), AdminController.userDetail);
 //[POST] /admin/create-toppic
-router.post('/createToppic', chkRoles('admin'), AdminController.createToppic);
+router.post('/create-toppic', chkRoles('admin'), AdminController.createToppic);
 //[POST] /admin/updateAccount/:id
 router.post('/updateAccount/:id', chkRoles('admin'), AdminController.updateAccount);
 //[POST] /admin/addAccount

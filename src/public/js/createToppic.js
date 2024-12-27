@@ -1,69 +1,76 @@
-
 document.addEventListener('DOMContentLoaded', () => {
-    const input = document.getElementById('tim-sinh-vien');
-    const popup = document.getElementById('popup-ket-qua');
-    const cardTabs = document.getElementById('card-tabs');
-    const responseMessage = document.getElementById('responseMessage');
-    let cardCount = 0;
-    const MAX_STUDENTS = 4;
+    // Lấy các phần tử cần sử dụng
+    const input = document.getElementById('tim-sinh-vien'); // Ô nhập tìm sinh viên
+    const popup = document.getElementById('popup-ket-qua'); // Popup hiển thị kết quả tìm kiếm
+    const cardTabs = document.getElementById('card-tabs'); // Khu vực chứa danh sách sinh viên đã chọn
+    const responseMessage = document.getElementById('responseMessage'); // Phản hồi khi gửi form
+    let cardCount = 0; // Đếm số lượng sinh viên được thêm
+    const MAX_STUDENTS = 4; // Số sinh viên tối đa
 
-    // Hàm tìm kiếm sinh viên
-    const searchStudents = () => {
-        const query = input.value.trim();
+    // Tìm kiếm sinh viên dựa trên giá trị nhập
+    function searchStudents() {
+        const query = input.value.trim(); // Lấy giá trị tìm kiếm
         if (!query) {
-            popup.style.display = 'none';
+            popup.style.display = 'none'; // Ẩn popup nếu không có nội dung
             return;
         }
 
+        // Gửi yêu cầu tìm kiếm đến server
         fetch(`/admin/search?query=${query}`)
             .then(response => response.json())
             .then(data => {
+                // Hiển thị kết quả tìm kiếm
                 if (data.length > 0) {
                     popup.innerHTML = `
-                            <span class="close-popup">&times;</span>
-                            ${data.map(student => `
-                                <div class="result-item" data-studentid="${student.studentID}" data-id="${student.id}" data-name="${student.lastname} ${student.firstname}">
-                                    ${student.studentID} - ${student.lastname} ${student.firstname}
-                                </div>`).join('')}
-                        `;
+                        <span class="close-popup">&times;</span>
+                        ${data.map(student => `
+                            <div class="result-item" data-studentid="${student.studentID}" data-id="${student.id}" data-name="${student.lastname} ${student.firstname}">
+                                ${student.studentID} - ${student.lastname} ${student.firstname}
+                            </div>
+                        `).join('')}
+                    `;
                 } else {
                     popup.innerHTML = `
-                            <span class="close-popup">&times;</span>
-                            <div class="result-item">Không tìm thấy kết quả. Vui lòng kiểm tra lại giá trị tìm kiếm!</div>`;
-                            // Ngừng sự kiện click trên các kết quả không có
-                            const resultItem = popup.querySelector('.result-item');
-                            resultItem.style.pointerEvents = 'none';
+                        <span class="close-popup">&times;</span>
+                        <div class="result-item">Không tìm thấy kết quả. Vui lòng kiểm tra lại giá trị tìm kiếm!</div>
+                    `;
                 }
                 popup.style.display = 'block';
             })
             .catch(error => {
-                console.error('Error:', error);
-                popup.innerHTML = `<span class="close-popup">&times;</span><div class="result-item">Lỗi khi tìm kiếm!</div>`;
+                console.error('Lỗi:', error);
+                popup.innerHTML = `
+                    <span class="close-popup">&times;</span>
+                    <div class="result-item">Lỗi khi tìm kiếm!</div>
+                `;
                 popup.style.display = 'block';
             });
-    };
+    }
 
-    // Hàm thêm card-tab
-    const addCardTab = (student) => {
+    // Thêm sinh viên vào danh sách
+    function addCardTab(student) {
         if (cardCount >= MAX_STUDENTS) {
             alert('Đã đạt giới hạn 4 sinh viên. Không thể thêm sinh viên.');
             return;
         }
 
+        // Kiểm tra nếu sinh viên đã tồn tại
         if (document.getElementById(`card-${student.id}`)) {
             alert('Sinh viên này đã được thêm. Vui lòng chọn lại!');
             return;
         }
 
+        // Tạo thẻ sinh viên
         const card = document.createElement('div');
         card.className = 'card-tab';
         card.id = `card-${student.id}`;
         card.innerHTML = `
-                <p>Sinh viên: ${student.studentId} - ${student.name}</p>
-                <input type="hidden" name="students[]" value="${student.id}">
-                <button class="remove-btn">&times;</button>
-            `;
+            <p>Sinh viên: ${student.studentId} - ${student.name}</p>
+            <input type="hidden" name="students[]" value="${student.id}">
+            <button class="remove-btn">&times;</button>
+        `;
 
+        // Thêm sự kiện xóa thẻ
         card.querySelector('.remove-btn').addEventListener('click', () => {
             card.remove();
             cardCount--;
@@ -71,41 +78,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cardTabs.appendChild(card);
         cardCount++;
-    };
+    }
 
-    // Gửi form tạo dự án
-    const submitForm = async (event) => {
-        event.preventDefault();
+    // Xử lý gửi form
+    async function submitForm(event) {
+        event.preventDefault(); // Ngăn form reload trang
         const form = event.target;
-        const formData = new FormData(form);
-
+        const formData = new FormData(form); // Lấy dữ liệu form
+        // console.log([...formData.entries()]); // Kiểm tra dữ liệu
+        // Chuyển FormData thành URLSearchParams
+        const params = new URLSearchParams();
+        formData.forEach((value, key) => {
+            params.append(key, value);
+        });
+        console.log(params);
         try {
-            const response = await fetch('/admin/createToppic', {
+            const response = await fetch('/admin/create-toppic', {
                 method: 'POST',
-                body: formData,
+                body: params,
             });
 
             const result = await response.json();
-
             responseMessage.textContent = result.message;
             responseMessage.style.color = response.ok ? 'green' : 'red';
         } catch (error) {
+            console.error('Lỗi:', error);
             responseMessage.textContent = 'Lỗi hệ thống. Vui lòng thử lại!';
             responseMessage.style.color = 'red';
         }
-    };
+    }
 
-    // Xử lý khi người dùng chọn kết quả tìm kiếm
+    // Xử lý khi người dùng chọn sinh viên từ popup
     popup.addEventListener('click', (e) => {
         if (e.target.classList.contains('result-item')) {
-            const id = e.target.dataset.id;
-            const name = e.target.dataset.name;
-            const studentId = e.target.dataset.studentid;
-
-            if (confirm(`Bạn có muốn chọn sinh viên ${name} (MSSV: ${studentId})?`)) {
-                addCardTab({ id, name, studentId });
+            const student = {
+                id: e.target.dataset.id,
+                name: e.target.dataset.name,
+                studentId: e.target.dataset.studentid,
+            };
+            if (confirm(`Bạn có muốn chọn sinh viên ${student.name} (MSSV: ${student.studentId})?`)) {
+                addCardTab(student);
             }
-
             popup.style.display = 'none';
         }
 
@@ -114,18 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Đóng popup khi click bên ngoài
+    // Ẩn popup khi click ra ngoài
     document.addEventListener('click', (e) => {
         if (!popup.contains(e.target) && e.target !== input) {
             popup.style.display = 'none';
         }
     });
-
-    // Lắng nghe sự kiện tìm kiếm
-    document.getElementById('btn-tim').addEventListener('click', searchStudents);
-
-    // Lắng nghe sự kiện gửi form
-    document.getElementById('create-toppic').addEventListener('submit', submitForm);
 
     // Hiển thị ngày khi chọn trạng thái
     const dateDisplayContainer = document.getElementById('current-date');
@@ -143,4 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('flexRadioDefault1').addEventListener('change', () => {
         dateDisplayContainer.style.display = 'none';
     });
+
+    // Gắn sự kiện cho các nút và form
+    document.getElementById('btn-tim').addEventListener('click', searchStudents);
+    document.getElementById('create-toppic-detais').addEventListener('submit', submitForm);
 });
