@@ -48,24 +48,45 @@
                 <p>{{this.student.studentID}} - {{this.student.lastname}} {{this.student.firstname}} - Sinh viên lớp: {{this.student.class.classID}}</p>
             {{/each}}
         </div>
+        {{! tiến độ --}}
         <div class="col-12">
             <p class="">Tiến độ dự án</p>
-            <div class="container py-3">
-                <div class="row-cols-sm-2 row-cols-lg-3 row-cols-1  row g-5">
+        </div>
+        <div class="col-6">
+            <div class="container py-3 container_process overflow-auto">
+                <div class="row g-5">
                     {{!-- thẻ tiến độ --}}
-                    <div class="col" style="min-height: 250px;">
+                    <div class="col-12" style="min-height: 250px;">
                         <div class="bg-light h-100 border rounded">
 
                         </div>
                     </div>
-                    <div class="col" style="min-height: 250px;">
+                    <div class="col-12" style="min-height: 250px;">
                         <div class="bg-light h-100 border rounded">
 
                         </div>
                     </div>
-                    <div class="col" style="min-height: 250px;">
+                    <div class="col-12" style="min-height: 250px;">
                         <div class="bg-light h-100 border rounded">
 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="container h-100">
+                <div class="row h-100">
+                    {{!-- chèn file --}}
+                    <div class="col-lg-6 col-12">
+                        <div class="border rounded h-100">
+                            <p>Upload file</p>
+                        </div>
+                    </div>
+                    {{!-- bình luận nhận xét --}}
+                    <div class="col-lg-6 col-12">
+                        <div class="border rounded h-100">
+                            <p>Bình luận</p>
                         </div>
                     </div>
                 </div>
@@ -76,3 +97,9 @@
 {{else}}
 <h1>Lỗi thông tin</h1>
 {{/if}}
+
+<style>
+    .container_process{
+        height: 400px;
+    }
+</style>
