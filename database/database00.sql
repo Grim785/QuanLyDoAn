@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `class_` (
   CONSTRAINT `class__ibfk_1` FOREIGN KEY (`majorsID`) REFERENCES `majors` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.class_: ~2 rows (approximately)
+-- Dumping data for table database00.class_: ~3 rows (approximately)
 REPLACE INTO `class_` (`id`, `classID`, `status`, `majorsID`, `createdAt`, `updatedAt`) VALUES
 	(1, '22CPM01', 'active', 1, '2024-12-27 00:11:28', '2024-12-27 00:11:28'),
 	(2, '22CTMĐT01', 'active', 3, '2024-12-27 00:12:53', '2024-12-27 00:12:53'),
@@ -146,7 +146,9 @@ CREATE TABLE IF NOT EXISTS `files` (
   CONSTRAINT `files_ibfk_1` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.files: ~0 rows (approximately)
+-- Dumping data for table database00.files: ~1 rows (approximately)
+REPLACE INTO `files` (`id`, `file_name`, `file_path`, `uploaded_by`, `uploaded_at`, `file_size`, `file_type`, `is_avatar`, `createdAt`, `updatedAt`) VALUES
+	(2, '1735395785415-QuanLyDoAn-master.rar', 'https://bucket-qlda78622.s3.us-east-2.amazonaws.com/1735395785415-QuanLyDoAn-master.rar', 4, '2024-12-28 13:25:05', 45395695, 'application/x-compressed', 0, '2024-12-28 13:25:05', '2024-12-28 14:23:31');
 
 -- Dumping structure for table database00.majors
 DROP TABLE IF EXISTS `majors`;
@@ -177,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `projectadvisors` (
   CONSTRAINT `projectadvisors_ibfk_2` FOREIGN KEY (`advisor_id`) REFERENCES `advisors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectadvisors: ~12 rows (approximately)
+-- Dumping data for table database00.projectadvisors: ~8 rows (approximately)
 REPLACE INTO `projectadvisors` (`project_id`, `advisor_id`, `createdAt`, `updatedAt`) VALUES
 	(1, 2, '2024-12-28 09:28:50', '2024-12-28 09:28:50'),
 	(2, 1, '2024-12-27 00:43:33', '2024-12-27 00:43:33'),
@@ -219,53 +221,9 @@ CREATE TABLE IF NOT EXISTS `projectfiles` (
   CONSTRAINT `projectfiles_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectfiles: ~0 rows (approximately)
-
--- Dumping structure for table database00.projectregister
-DROP TABLE IF EXISTS `projectregister`;
-CREATE TABLE IF NOT EXISTS `projectregister` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `majorID` int NOT NULL,
-  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `majorID` (`majorID`),
-  CONSTRAINT `projectRegister_ibfk_1` FOREIGN KEY (`majorID`) REFERENCES `majors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table database00.projectregister: ~0 rows (approximately)
-
--- Dumping structure for table database00.projectregisteradvisors
-DROP TABLE IF EXISTS `projectregisteradvisors`;
-CREATE TABLE IF NOT EXISTS `projectregisteradvisors` (
-  `project_register_id` int NOT NULL,
-  `advisor_id` int NOT NULL,
-  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`project_register_id`,`advisor_id`),
-  KEY `advisor_id` (`advisor_id`),
-  CONSTRAINT `projectRegisterAdvisors_ibfk_1` FOREIGN KEY (`project_register_id`) REFERENCES `projectregister` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `projectRegisterAdvisors_ibfk_2` FOREIGN KEY (`advisor_id`) REFERENCES `advisors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table database00.projectregisteradvisors: ~0 rows (approximately)
-
--- Dumping structure for table database00.projectregisterstudents
-DROP TABLE IF EXISTS `projectregisterstudents`;
-CREATE TABLE IF NOT EXISTS `projectregisterstudents` (
-  `project_register_id` int NOT NULL,
-  `student_id` int NOT NULL,
-  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`project_register_id`,`student_id`),
-  KEY `student_id` (`student_id`),
-  CONSTRAINT `projectRegisterStudents_ibfk_1` FOREIGN KEY (`project_register_id`) REFERENCES `projectregister` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `projectRegisterStudents_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table database00.projectregisterstudents: ~0 rows (approximately)
+-- Dumping data for table database00.projectfiles: ~1 rows (approximately)
+REPLACE INTO `projectfiles` (`project_id`, `file_id`, `createdAt`, `updatedAt`) VALUES
+	(1, 2, '2024-12-28 21:19:12', '2024-12-28 21:19:12');
 
 -- Dumping structure for table database00.projects
 DROP TABLE IF EXISTS `projects`;
@@ -426,7 +384,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.users: ~9 rows (approximately)
+-- Dumping data for table database00.users: ~11 rows (approximately)
 REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `createdAt`, `updatedAt`, `active`) VALUES
 	(1, 'admin', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'admin', '123123@gmail.com', '1111111111', '2024-12-27 00:01:01', '2024-12-27 00:01:14', 1),
 	(2, '19992707', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'advisor', '123321@gmail.com', '2222222222', '2024-12-27 00:02:47', '2024-12-27 00:03:24', 1),
