@@ -58,10 +58,10 @@
           {{/each}}
           {{/if}}
           <td>
-            <button class="btn btn-link p-0" data-id="{{id}}" title="Save"><i class="fa-solid fa-pen-to-square"
-                style="color: #63E6BE;"></i></i></button>
-            <button class="btn btn-link p-0" data-id="{{id}}" title="Delete"><i class="fa-regular fa-circle-xmark"
-                style="color: #f50000;"></i></i></button>
+            <button class="btn btn-link p-0 save-button" data-id="{{id}}" title="Save"><i
+                class="fa-regular fa-floppy-disk" style="color: #63E6BE;"></i></button>
+            <button class="btn btn-link p-0 delete-button" data-id="{{id}}" title="Delete"><i
+                class="fa-regular fa-circle-xmark" style="color: #f50000;"></i></i></button>
           </td>
         </tr>
         {{/each}}
@@ -147,6 +147,36 @@
   </style>
   <script>
     document.addEventListener('click', async (event) => {
+      // Xử lý nút xóa
+      if (event.target.closest('.delete-button')) {
+        const button = event.target.closest('.delete-button');
+        const id = button.dataset.id;
+
+        // Xác nhận trước khi xóa
+        const confirmDelete = confirm('Bạn có chắc chắn muốn xóa dự án này?');
+        if (!confirmDelete) return;
+
+        try {
+          // Gửi yêu cầu DELETE tới server
+          const response = await fetch(`/admin/deleteProject/${id}`, {
+            method: 'DELETE',
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+            alert(result.message);
+            // Xóa dòng tương ứng trong bảng nếu cần
+            const row = button.closest('tr');
+            if (row) row.remove();
+          } else {
+            alert('Lỗi: ' + result.message);
+          }
+        } catch (error) {
+          console.error('Error deleting project:', error);
+          alert('Đã xảy ra lỗi khi xóa dự án.');
+        }
+      }
+      // Xử lý nút lưu
       if (event.target.closest('.save-button')) {
         const button = event.target.closest('.save-button');
         const id = button.dataset.id;
@@ -155,18 +185,25 @@
         const row = button.closest('tr');
         const title = row.querySelector('[name="title"]').value;
         const description = row.querySelector('[name="description"]').value;
-        const start_date = row.querySelector('[name="start_date"]').value;
-        const end_date = row.querySelector('[name="end_date"]').value;
+        let start_date = row.querySelector('[name="start_date"]').value;
+        let end_date = row.querySelector('[name="end_date"]').value;
         const status = row.querySelector('[name="status"]').value;
         const advisor = row.querySelector('[name="advisor"]').value;
+
+        // Kiểm tra và thay đổi start_date và end_date nếu trống
+        if (start_date === "") start_date = null;
+        if (end_date === "") end_date = null;
+
+        console.log({ title, description, start_date, end_date, status, advisor });
 
         const students = Array.from(row.querySelectorAll('[name^="student_"]')).map(
           (input) => input.value
         );
+        console.log('Students:', students);
 
         // Gửi yêu cầu AJAX
         try {
-          const response = await fetch(`/admin/topics/${id}`, {
+          const response = await fetch(`/admin/updateToppic/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -185,4 +222,5 @@
         }
       }
     });
+
   </script>

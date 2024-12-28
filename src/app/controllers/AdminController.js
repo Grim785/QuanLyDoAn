@@ -341,38 +341,121 @@ class AdminController {
         }
     }
 
-    
+
     async updateTopic(req, res, next) {
         const { id } = req.params;
         const { title, description, start_date, end_date, status, advisor, students: studentList } = req.body;
+    
+        const transaction = await sequelize.transaction(); // Bắt đầu giao dịch
+    
         try {
+            let validStartDate = null;
+            let validEndDate = null;
+    
+            if (status !== 'not_started') {
+                validStartDate = start_date && !isNaN(Date.parse(start_date)) ? new Date(start_date) : null;
+                validEndDate = end_date && !isNaN(Date.parse(end_date)) ? new Date(end_date) : null;
+            }
+    
             await projects.update(
-                { title, description, start_date, end_date, status },
-                { where: { id } }
-            )
-            // Cập nhật giảng viên hướng dẫn
+                {
+                    title,
+                    description,
+                    start_date: validStartDate,
+                    end_date: validEndDate,
+                    status,
+                },
+                { where: { id }, transaction }
+            );
+    
             const [advisorID] = advisor.split(' - ');
-            const advisorRecord = await advisors.findOne({ where: { advisorID } });
-            console.log(advisorRecord);
-            // if(advisorRecord){
-            //     await projectadvisors.update(
-            //         { advisor_id: advisorRecord.id },
-            //         { where: { project_id: id } }
-            //     );
-            // }
-            // Cập nhật danh sách sinh viên
-            await projectstudents.destroy({ where: { project_id: id } });
-            const newStudents = studentList.map((studentData) => {
-                const [studentID] = studentData.split(' - ');
-                return {
-                  project_id: id,
-                  student_id: studentID,
-                };
+            const advisorRecord = await advisors.findOne({ where: { advisorID }, transaction });
+    
+            if (advisorRecord) {
+                await projectadvisors.update(
+                    { advisor_id: advisorRecord.id },
+                    { where: { project_id: id }, transaction }
+                );
+            }
+    
+            await projectstudents.destroy({
+                where: { project_id: id },
+                transaction,
             });
-            console.log(newStudents);
+    
+            // Xử lý thêm sinh viên
+            const studentsToAdd = [];
+            for (const student of studentList.filter(s => s && s !== '')) {
+                const studentID = student.split(' - ')[0];
+                const studentRecord = await students.findOne({ where: { studentID }, transaction });
+    
+                if (studentRecord) {
+                    const existingProject = await projectstudents.findOne({
+                        where: { student_id: studentRecord.id },
+                        include: [{
+                            model: projects,
+                            as: 'project',
+                            where: {
+                                status: ['not_started', 'in_progress'],
+                            },
+                        }],
+                        transaction,
+                    });
+    
+                    if (existingProject) {
+                        const studentInfo = await students.findOne({
+                            where: { id: existingProject.student_id },
+                            transaction,
+                        });
+    
+                        // Gửi phản hồi lỗi và hủy giao dịch
+                        await transaction.rollback();
+                        return res.status(400).send({
+                            message: `Sinh viên ${studentInfo.studentID} - ${studentInfo.lastname} ${studentInfo.firstname} đã tham gia một dự án khác. Vui lòng kiểm tra lại!`
+                        });
+                    }
+    
+                    studentsToAdd.push({
+                        project_id: id,
+                        student_id: studentRecord.id,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    });
+                }
+            }
+    
+            if (studentsToAdd.length > 0) {
+                await projectstudents.bulkCreate(studentsToAdd, { transaction });
+            }
+    
+            await transaction.commit(); // Xác nhận giao dịch
+            res.status(200).json({ message: 'Cập nhật thành công!' });
         } catch (error) {
-
+            if (!transaction.finished) {
+                await transaction.rollback(); // Hủy giao dịch nếu chưa rollback
+            }
+            console.error('Error updating project:', error);
+            if (!res.headersSent) { // Kiểm tra xem phản hồi đã được gửi hay chưa
+                res.status(500).json({ message: error.message || 'Lỗi khi cập nhật đề tài.', error });
+            }
         }
     }
+    async deleteProject(req, res, next) {
+        const { id } = req.params;
+        try {
+            const project = await projects.findByPk(id);
+            if (!project) {
+                return res.status(404).json({ success: false, message: 'Dự án không tồn tại!' });
+            }
+            await project.destroy();
+            res.json({ success: true, message: 'Xóa dự án thành công!' });
+        } catch (error) {
+            console.error('Error deleting project:', error);
+            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi khi xóa dự án!' });
+        }
+    }
+    
+    
+
 }
 module.exports = new AdminController();

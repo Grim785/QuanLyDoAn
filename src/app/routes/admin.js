@@ -31,8 +31,9 @@ router.post('/updateAccount/:id', chkRoles('admin'), AdminController.updateAccou
 //[POST] /admin/addAccount
 router.post('/addAccount', chkRoles('admin'), AdminController.addAccount);
 //[POST] /admin/updateToppic/:id
-router.post('/updateToppic/:id', chkRoles('admin'), AdminController.updateTopic);
+router.put('/updateToppic/:id', chkRoles('admin'), AdminController.updateTopic);
 //[DELETE] /admin/deleteAccount/:id
 router.delete('/deleteAccount/:id', chkRoles('admin'), AdminController.deleteAccount);
-
+//[DELETE] /admin/deleteAccount/:id
+router.delete('/deleteProject/:id', chkRoles('admin'), AdminController.deleteProject);
 module.exports = router;    
