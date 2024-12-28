@@ -37,8 +37,13 @@
               <option value="completed" {{#ifCond status 'completed' }}selected{{/ifCond}}>Hoàn thành</option>
             </select>
           </td>
-          <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="advisor"
+          <td>
+            {{#if projectadvisors.[0].advisor}}
+            <input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="advisor"
               value="{{this.projectadvisors.[0].advisor.advisorID}} - {{this.projectadvisors.[0].advisor.lastname}} {{this.projectadvisors.[0].advisor.firstname}}" />
+            {{else}}
+            <input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="advisor" value="" />
+            {{/if}}
           </td>
 
           {{#each projectstudents}}

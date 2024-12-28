@@ -345,18 +345,18 @@ class AdminController {
     async updateTopic(req, res, next) {
         const { id } = req.params;
         const { title, description, start_date, end_date, status, advisor, students: studentList } = req.body;
-    
+
         const transaction = await sequelize.transaction(); // Bắt đầu giao dịch
-    
+
         try {
             let validStartDate = null;
             let validEndDate = null;
-    
+
             if (status !== 'not_started') {
                 validStartDate = start_date && !isNaN(Date.parse(start_date)) ? new Date(start_date) : null;
                 validEndDate = end_date && !isNaN(Date.parse(end_date)) ? new Date(end_date) : null;
             }
-    
+
             await projects.update(
                 {
                     title,
@@ -367,28 +367,40 @@ class AdminController {
                 },
                 { where: { id }, transaction }
             );
-    
-            const [advisorID] = advisor.split(' - ');
-            const advisorRecord = await advisors.findOne({ where: { advisorID }, transaction });
-    
-            if (advisorRecord) {
-                await projectadvisors.update(
-                    { advisor_id: advisorRecord.id },
-                    { where: { project_id: id }, transaction }
-                );
+
+            // Xóa giảng viên cũ
+            await projectadvisors.destroy({ where: { project_id: id }, transaction });
+
+            // Thêm giảng viên mới nếu có
+            if (advisor && advisor.trim() !== '') {
+                const advisorID = advisor.split(' - ')[0];
+                const advisorRecord = await advisors.findOne({ where: { advisorID }, transaction });
+
+                if (advisorRecord) {
+                    await projectadvisors.create(
+                        {
+                            project_id: id,
+                            advisor_id: advisorRecord.id,
+                        },
+                        { transaction }
+                    );
+                } else {
+                    throw new Error('Giảng viên không tồn tại. Vui lòng kiểm tra lại!');
+                }
             }
-    
+
+
             await projectstudents.destroy({
                 where: { project_id: id },
                 transaction,
             });
-    
+
             // Xử lý thêm sinh viên
             const studentsToAdd = [];
             for (const student of studentList.filter(s => s && s !== '')) {
                 const studentID = student.split(' - ')[0];
                 const studentRecord = await students.findOne({ where: { studentID }, transaction });
-    
+
                 if (studentRecord) {
                     const existingProject = await projectstudents.findOne({
                         where: { student_id: studentRecord.id },
@@ -401,20 +413,20 @@ class AdminController {
                         }],
                         transaction,
                     });
-    
+
                     if (existingProject) {
                         const studentInfo = await students.findOne({
                             where: { id: existingProject.student_id },
                             transaction,
                         });
-    
+
                         // Gửi phản hồi lỗi và hủy giao dịch
                         await transaction.rollback();
                         return res.status(400).send({
                             message: `Sinh viên ${studentInfo.studentID} - ${studentInfo.lastname} ${studentInfo.firstname} đã tham gia một dự án khác. Vui lòng kiểm tra lại!`
                         });
                     }
-    
+
                     studentsToAdd.push({
                         project_id: id,
                         student_id: studentRecord.id,
@@ -423,11 +435,11 @@ class AdminController {
                     });
                 }
             }
-    
+
             if (studentsToAdd.length > 0) {
                 await projectstudents.bulkCreate(studentsToAdd, { transaction });
             }
-    
+
             await transaction.commit(); // Xác nhận giao dịch
             res.status(200).json({ message: 'Cập nhật thành công!' });
         } catch (error) {
@@ -454,8 +466,8 @@ class AdminController {
             res.status(500).json({ success: false, message: 'Đã xảy ra lỗi khi xóa dự án!' });
         }
     }
-    
-    
+
+
 
 }
 module.exports = new AdminController();
