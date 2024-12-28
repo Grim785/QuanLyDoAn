@@ -46,7 +46,7 @@
             <p>Tiến độ dự án</p>
         </div>
         <div class="col-6">
-            <div class="container py-3 container_process overflow-auto">
+            <div class="container container_process overflow-auto">
                 <div class="row g-5">
                     <div class="col-12 process-card">
                         <div class="bg-light h-100 border rounded"></div>
@@ -65,11 +65,11 @@
                 <div class="row h-100">
                     <div class="col-lg-6 col-12 upload-file">
                         <div class="upload-container border rounded h-100 p-3">
-                            <h6 class="text-center">Tải file của bạn tại đây</h6>
+                            <h6 class="text-center">File sản phẩm của đề tài tại đây</h6>
                             <form id="uploadForm" enctype="multipart/form-data" class="form-upload">
                                 <div class="mb-3">
-                                    <label for="fileInput" class="form-label">Chọn file để tải lên:</label>
-                                    <input type="file" name="file" id="fileInput" class="form-control" required>
+                                    <label for="fileInput" class="form-label">Chọn file để tải lên (.zip,.rar,.7z):</label>
+                                    <input type="file" name="file" id="fileInput" class="form-control" required accept=".zip,.rar,.7z">
                                 </div>
                                 <button type="submit" class="btn btn-success w-100 mt-2">
                                     <i class="fa-solid fa-upload me-2"></i> Tải lên
@@ -86,6 +86,7 @@
                                     <span id="fileName" class="file-name text-truncate"
                                         title="{{#if projectFile}}{{projectFile.file_name}}{{/if}}">
                                         {{#if projectFile}}
+                                        <p>Tệp đã tải lên</p>
                                         {{projectFile.file_name}}
                                         {{else}}
                                         Chưa có file nào được tải lên.
@@ -108,8 +109,8 @@
 
 
                     <div class="col-lg-6 col-12 comments-section">
-                        <div class="border rounded h-100">
-                            <p>Bình luận</p>
+                        <div class="border rounded h-100 p-3">
+                            <h6 class="text-center">Trao đổi</h6>
                         </div>
                     </div>
                 </div>
@@ -127,6 +128,7 @@
 
     .container_process {
         height: 400px;
+        scrollbar-width: thin;
     }
 
     .status-icon {
