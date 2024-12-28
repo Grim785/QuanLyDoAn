@@ -187,11 +187,40 @@ class AdminController {
 
     async TopicList(req, res, next) {
         try {
-            const list = await projects.findAll();
-            console.log(list);
+            const list = await projects.findAll({
+                include: [
+                    {
+                        model: projectadvisors,
+                        as: 'projectadvisors',
+                        attributes: ['project_id'],
+                        include: [
+                            {
+                                model: advisors,
+                                as: 'advisor',
+                                attributes: ['advisorID', 'lastname', 'firstname']
+                            }
+                        ]
+                    },
+                    {
+                        model: projectstudents,
+                        as: 'projectstudents',
+                        attributes: ['project_id'],
+                        include: [
+                            {
+                                model: students,
+                                as: 'student',
+                                attributes: ['studentID', 'lastname', 'firstname']
+                            }
+                        ]
+                    },
+                ]
+            });
+            // // Chuyển đổi từng đối tượng trong mảng sang JSON
+            // const list_data = list.map(item => item.toJSON());
+            // console.log(JSON.stringify(list_data, null, 2));
             res.render('roles/admin/TopicList', {
                 title: 'Dashboard admin',
-                list:list,
+                list: list,
                 //Truyền dữ liệu hiển thị thành phần------
                 showHeaderFooter: true,
                 showNav: true,
@@ -202,6 +231,8 @@ class AdminController {
             console.log(error);
         }
     }
+
+
 
     RegisterTopicList(req, res, next) {
         res.render('roles/admin/RegisterTopicList', {
@@ -310,7 +341,38 @@ class AdminController {
         }
     }
 
+    
+    async updateTopic(req, res, next) {
+        const { id } = req.params;
+        const { title, description, start_date, end_date, status, advisor, students: studentList } = req.body;
+        try {
+            await projects.update(
+                { title, description, start_date, end_date, status },
+                { where: { id } }
+            )
+            // Cập nhật giảng viên hướng dẫn
+            const [advisorID] = advisor.split(' - ');
+            const advisorRecord = await advisors.findOne({ where: { advisorID } });
+            console.log(advisorRecord);
+            // if(advisorRecord){
+            //     await projectadvisors.update(
+            //         { advisor_id: advisorRecord.id },
+            //         { where: { project_id: id } }
+            //     );
+            // }
+            // Cập nhật danh sách sinh viên
+            await projectstudents.destroy({ where: { project_id: id } });
+            const newStudents = studentList.map((studentData) => {
+                const [studentID] = studentData.split(' - ');
+                return {
+                  project_id: id,
+                  student_id: studentID,
+                };
+            });
+            console.log(newStudents);
+        } catch (error) {
 
-
+        }
+    }
 }
 module.exports = new AdminController();

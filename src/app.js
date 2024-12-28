@@ -34,6 +34,19 @@ app.engine("hbs", engine({
         return options.fn(this); // Nếu hai giá trị bằng nhau, trả về phần tử trong `options.fn`
       }
       return options.inverse(this); // Nếu không, trả về phần tử trong `options.inverse`
+    },
+    // Các helper bổ sung
+    lt: function (a, b) {
+      return a < b; // So sánh nhỏ hơn
+    },
+    subtract: function (a, b) {
+      return a - b; // Trừ hai số
+    },
+    repeat: function (n) {
+      return Array.from({ length: n }); // Tạo mảng có độ dài n
+    },
+    add: function (a, b) {
+      return a + b; // Cộng hai số
     }
   }
 }));
