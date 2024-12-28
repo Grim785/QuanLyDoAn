@@ -1,1 +1,69 @@
-<h1>Student Details</h1>
+<div class="container my-2 scroll" style="height:70vh;">
+    <div class="row gy-3 p-2">
+        <div class="col-12">
+            <p class="fs-3 fw-bold">Thông tin tài khoản</p>
+        </div>
+        <div class="col-3 border-end">
+            <div class="d-flex justify-content-center" style="height:10rem;">
+                <img src="/img/image-removebg-preview_3.png" alt="" class="border rounded-circle h-100" >
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="container">
+                <div class="row gy-1">
+                    {{!-- MSSV hoặc Mã giảng viên --}}
+                    <div class="col-3">
+                        <p>Mã số</p>
+                        <input type="text" class="form-control" disabled>
+                    </div>
+                    {{!-- Họ tên --}}
+                    <div class="col-6">
+                        <p>Họ tên</p>
+                        <input type="text" class="form-control" disabled>
+                    </div>
+                    {{!-- Quyền --}}
+                    <div class="col-3">
+                        <p>Quyền</p>
+                        <input type="text" name="" id="" class="form-control" disabled>
+                    </div>
+                    {{!-- phone --}}
+                    <div class="col-5">
+                        <p>Số điện thoại</p>
+                        <input type="number" name="" id="" class="form-control" disabled="true">
+                    </div>
+                    {{!-- gmail --}}
+                    <div class="col-5">
+                        <p>Gmail</p>
+                        <input type="email" name="" id="" class="form-control" disabled>
+                    </div>
+                    {{!-- Giới tính --}}
+                    <div class="col-2">
+                        <p>Giới tính</p>
+                        <input type="text" name="" id="" class="form-control" disabled>
+                    </div>
+
+                    {{!-- address --}}
+                    <div class="col-12">
+                        <p>Địa chỉ</p>
+                        <input type="text" name="" id="" class="form-control" disabled>
+                    </div>
+                    {{!-- date of birth --}}
+                    <div class="col-4">
+                        <p>Ngày sinh</p>
+                        <input type="date" name="" id="" class="form-control" disabled>
+                    </div>
+                    {{!-- chuyên ngành --}}
+                    <div class="col-4">
+                        <p>chuyên ngành</p>
+                        <input type="text" name="" id="" class="form-control" disabled>
+                    </div>
+                    {{!-- nếu là sinh viên thì render lớp --}}
+                    <div class="col-4">
+                        <p>Lớp</p>
+                        <input type="text" name="" id="" class="form-control" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
