@@ -4,16 +4,17 @@
       <thead class="table-primary">
         <tr>
           <th class="">ID</th>
-          <th class="">Title</th>
-          <th class="">Description</th>
-          <th class="">Start Date</th>
-          <th class="">End Date</th>
-          <th class="">Status</th>
-          <th class="">Participants</th>
-          <th class="">Actions</th>
-                    <th class="">Status</th>
-          <th class="">Participants</th>
-          <th class="">Actions</th>
+          <th class="">Tên đề tài</th>
+          <th class="">Mô tả</th>
+          <th class="">Ngày bắt đầu</th>
+          <th class="">Ngày kết thúc</th>
+          <th class="">Trạng thái</th>
+          <th class="">Giảng viên hướng dẫn</th>
+          <th class="">Sinh viên 1</th>
+          <th class="">Sinh viên 2</th>
+          <th class="">Sinh viên 3</th>
+          <th class="">Sinh viên 4</th>
+          <th class="">Thao tác</th>
         </tr>
       </thead>
       <tbody>
@@ -21,101 +22,167 @@
         {{#each list}}
         <tr>
           <td>{{id}}</td>
-          <td><input type="text" class="form-control form-control-xs cell-input" value="{{this.title}}" /></td>
-          <td><textarea class="form-control form-control-xs cell-input" rows="1">{{description}}</textarea></td>
-          <td><input type="date" class="form-control form-control-xs cell-input" value="{{start_date}}" /></td>
-          <td><input type="date" class="form-control form-control-xs cell-input" value="{{end_date}}" /></td>
+          <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="title"
+              value="{{this.title}}" /></td>
+          <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="description"
+              value="{{description}}" /></td>
+          <td><input type="date" class="form-control form-control-xs cell-input" data-id="{{id}}" name="start_date"
+              value="{{start_date}}" /></td>
+          <td><input type="date" class="form-control form-control-xs cell-input" data-id="{{id}}" name="end_date"
+              value="{{end_date}}" /></td>
           <td>
-            <select class="form-select form-select-xs cell-input">
-              <option value="not_started" {{#ifCond status 'not_started'}}selected{{/ifCond}}>Not Started</option>
-              <option value="in_progress" {{#ifCond status 'in_progress'}}selected{{/ifCond}}>In Progress</option>
-              <option value="completed" {{#ifCond status 'completed'}}selected{{/ifCond}}>Completed</option>
+            <select class="form-select form-select-xs cell-input" data-id="{{id}}" name="status">
+              <option value="not_started" {{#ifCond status 'not_started' }}selected{{/ifCond}}>Chưa bắt đầu</option>
+              <option value="in_progress" {{#ifCond status 'in_progress' }}selected{{/ifCond}}>Đang thực hiện</option>
+              <option value="completed" {{#ifCond status 'completed' }}selected{{/ifCond}}>Hoàn thành</option>
             </select>
           </td>
-          <td>
-            <div class="participants-list">
-              <span>Student A</span>, <span>Student B</span>
-              <button class="btn btn-link p-0" title="Edit Participants"><i class="bi bi-pencil-square"></i></button>
-            </div>
+          <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="advisor"
+              value="{{this.projectadvisors.[0].advisor.advisorID}} - {{this.projectadvisors.[0].advisor.lastname}} {{this.projectadvisors.[0].advisor.firstname}}" />
           </td>
+
+          {{#each projectstudents}}
           <td>
-            <button class="btn btn-link p-0" title="Save"><i class="bi bi-check-circle text-success"></i></button>
-            <button class="btn btn-link p-0" title="Delete"><i class="bi bi-x-circle text-danger"></i></button>
+            <input type="text" class="form-control form-control-xs cell-input" data-id="{{../id}}"
+              name="student_{{@index}}"
+              value="{{this.student.studentID}} - {{this.student.lastname}} {{this.student.firstname}}" />
+          </td>
+          {{/each}}
+          {{!-- Thêm các ô trống nếu số lượng sinh viên ít hơn 4 --}}
+          {{#if (lt projectstudents.length 4)}}
+          {{#each (repeat (subtract 4 projectstudents.length))}}
+          <td>
+            <input type="text" class="form-control form-control-xs cell-input" data-id="{{../id}}"
+              name="student_{{add ../projectstudents.length @index}}" value="" />
+          </td>
+          {{/each}}
+          {{/if}}
+          <td>
+            <button class="btn btn-link p-0" data-id="{{id}}" title="Save"><i class="fa-solid fa-pen-to-square"
+                style="color: #63E6BE;"></i></i></button>
+            <button class="btn btn-link p-0" data-id="{{id}}" title="Delete"><i class="fa-regular fa-circle-xmark"
+                style="color: #f50000;"></i></i></button>
           </td>
         </tr>
         {{/each}}
       </tbody>
     </table>
-  {{!-- </div> --}}
-</div>
+  </div>
+  <style>
+    .table-container {
+      height: 70vh;
+      width: 165vh;
+      overflow-y: auto;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
 
-<style>
-  .table-container {
-    height: 70vh;
-    width: 165vh;
-    overflow-y: auto;
-    overflow-x: auto;
-  }
+    .table th,
+    .table td {
+      text-align: center;
+      padding: 0 5px 0 5px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+    }
 
-  .table th, .table td {
-    text-align: center;
-    padding: 0 5px 0 5px;
-    font-size: 0.7rem;
-    white-space: nowrap;
-  }
+    .form-control-xs,
+    .form-select-xs {
+      font-size: 0.7rem;
+      line-height: 1;
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
 
-  .form-control-xs, .form-select-xs {
-    font-size: 0.7rem;
-    line-height: 1;
-    border: none;
-    width: 100%;
-    height: 100%;
-  }
+    .cell-input {
+      margin: 0;
+      padding: 0.3rem;
+      box-sizing: border-box;
+      background-color: transparent;
+      width: 200px;
+    }
 
-  .cell-input {
-    margin: 0;
-    padding: 0.3rem;
-    box-sizing: border-box;
-    background-color: transparent;
-    width: 200px;
-  }
+    .cell-input:focus {
+      outline: none;
+      box-shadow: inset 0 0 0 1px #007bff;
+    }
 
-  .cell-input:focus {
-    outline: none;
-    box-shadow: inset 0 0 0 1px #007bff;
-  }
+    .btn-link {
+      text-decoration: none;
+    }
 
-  .btn-link {
-    text-decoration: none;
-  }
+    .col-width-5 {
+      width: 50px;
+    }
 
-  .col-width-5 {
-    width: 50px;
-  }
-  .col-width-10 {
-    width: 100px;
-  }
-  .col-width-15 {
-    width: 150px;
-  }
-  .col-width-20 {
-    width: 200px;
-  }
+    .col-width-10 {
+      width: 100px;
+    }
 
-  .col-width-25 {
-    width: 250px;
-  }
-  .participants-list {
-    text-align: left;
-    font-size: 0.7rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
+    .col-width-15 {
+      width: 150px;
+    }
 
-  .participants-list button {
-    font-size: 0.8rem;
-    line-height: 1;
-    padding: 0;
-  }
-</style>
+    .col-width-20 {
+      width: 200px;
+    }
+
+    .col-width-25 {
+      width: 250px;
+    }
+
+    .participants-list {
+      text-align: left;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .participants-list button {
+      font-size: 0.8rem;
+      line-height: 1;
+      padding: 0;
+    }
+  </style>
+  <script>
+    document.addEventListener('click', async (event) => {
+      if (event.target.closest('.save-button')) {
+        const button = event.target.closest('.save-button');
+        const id = button.dataset.id;
+
+        // Thu thập dữ liệu
+        const row = button.closest('tr');
+        const title = row.querySelector('[name="title"]').value;
+        const description = row.querySelector('[name="description"]').value;
+        const start_date = row.querySelector('[name="start_date"]').value;
+        const end_date = row.querySelector('[name="end_date"]').value;
+        const status = row.querySelector('[name="status"]').value;
+        const advisor = row.querySelector('[name="advisor"]').value;
+
+        const students = Array.from(row.querySelectorAll('[name^="student_"]')).map(
+          (input) => input.value
+        );
+
+        // Gửi yêu cầu AJAX
+        try {
+          const response = await fetch(`/admin/topics/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ title, description, start_date, end_date, status, advisor, students }),
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+            alert(result.message);
+          } else {
+            alert('Lỗi: ' + result.message);
+          }
+        } catch (error) {
+          console.error('Error updating topic:', error);
+        }
+      }
+    });
+  </script>

@@ -30,6 +30,8 @@ router.post('/create-toppic', chkRoles('admin'), AdminController.createToppic);
 router.post('/updateAccount/:id', chkRoles('admin'), AdminController.updateAccount);
 //[POST] /admin/addAccount
 router.post('/addAccount', chkRoles('admin'), AdminController.addAccount);
+//[POST] /admin/updateToppic/:id
+router.post('/updateToppic/:id', chkRoles('admin'), AdminController.updateTopic);
 //[DELETE] /admin/deleteAccount/:id
 router.delete('/deleteAccount/:id', chkRoles('admin'), AdminController.deleteAccount);
 
