@@ -1,1 +1,68 @@
-<h1>Dashboard Giảng Viên</h1>
+<div class="container my-2" style="height: 70vh;">
+    <div class="row p-2 h-100">
+        <div class="h-100 w-100">
+            <div class="border rounded-3 h-100 d-flex flex-column">
+                <!-- Header -->
+                <div class="text-primary bg-orange border rounded-top p-2 d-flex align-items-center justify-content-between"
+                    style="height: 60px;">
+                    <div class="fw-bold">Duyệt đề tài</div>
+                    <form action="" class="d-flex">
+                        <input type="text" class="form-control form-control-sm me-2" placeholder="Tìm kiếm"
+                            aria-label="Tìm kiếm">
+                        <button class="btn btn-sm btn-light border" type="submit" aria-label="Tìm kiếm">
+                            <i class="fa-solid fa-magnifying-glass fa-lg text-dark"></i>
+                        </button>
+                    </form>
+                </div>
+                <!-- Table content -->
+                <div class="flex-grow-1 overflow-auto">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr class="text-nowrap">
+                                    <th scope="col"><input type="checkbox" name="" id=""></th>
+                                    <th scope="col">Tên đề tài</th>
+                                    <th scope="col">Mô tả</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Chuyên ngành</th>
+                                    <th scope="col">Ngày đăng kí</th>
+                                    <th scope="col">Sinh viên đăng kí</th>
+                                    <th scope="col">Lớp</th>
+                                    <th scope="col" class="text-end"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-nowrap">
+                                <tr class="align-middle">
+                                    <th scope="row">
+                                        <input type="checkbox">
+                                    </th>
+                                    <td>
+                                        đề tài
+                                    </td>
+                                    <td>đề tài</td>
+                                    <td>đề tài</td>
+                                    <td>đề tài</td>
+                                    <td>đề tài</td>
+                                    <td>đề tài</td>
+                                    <td>đề tài</td>
+                                    <td class="text-end">
+                                        <input type="button" value="Duyệt" class="btn btn-success">
+                                        <input type="button" value="Hủy" class="btn btn-danger">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="border rounded-bottom p-2 d-flex justify-content-end align-items-center"
+                    style="height: 50px;">
+                    <div class="add-account-section d-flex align-items-center gap-2" style="flex-grow: 1;">
+                        
+                    </div>
+                    <button id="add-account-btn" type="button" class="btn btn-success btn-sm mx-1">Duyệt đã chọn</button>
+                    <button id="add-account-btn" type="button" class="btn btn-danger btn-sm mx-1">Hủy đã chọn</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
