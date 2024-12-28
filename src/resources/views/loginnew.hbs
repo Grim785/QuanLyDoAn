@@ -20,7 +20,7 @@
           <div data-mdb-input-init class="form-outline mb-4">
             <label class="form-label" for="form3Example3">Tài khoản</label>
             <input type="text" id="username" name="username" class="form-control form-control-lg"
-              placeholder="Nhập tài khoản của bạn" required value="admin" />
+              placeholder="Nhập tài khoản của bạn" required value="22001976" />
           </div>
 
           <!-- Password input -->
@@ -89,7 +89,7 @@
               // Chuyển hướng theo vai trò người dùng
               switch (data.role) {
                 case 'student':
-                  window.location.href = '/student/dashboard'; // Đường dẫn đến trang dashboard sinh viên
+                  window.location.href = '/student/details/Toppic/1'; // Đường dẫn đến trang dashboard sinh viên
                   break;
                 case 'advisor':
                   window.location.href = '/advisor/dashboard'; // Đường dẫn cho advisor

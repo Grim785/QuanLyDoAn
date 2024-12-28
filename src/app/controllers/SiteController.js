@@ -1,20 +1,18 @@
-const bcrypt = require('bcrypt'); //Import mã hóa mật khẩu
+const bcrypt = require('bcrypt');
 const path = require('path');
 const fs = require('fs');
-const s3 = require('../../config/aws'); // Import cấu hình AWS từ file config
+const s3 = require('../../config/aws'); // Import AWS config
 require('dotenv').config();
 
 const sequelize = require("../../config/db");
 const initModels = require("../models/init-models");
+
 // Khởi tạo tất cả các model và quan hệ
 const models = initModels(sequelize);
-// Truy cập model
-const {users, students, files, majors, class_ } = models;
-
-
+const { users, files } = models; // Chỉ lấy những model cần thiết
 
 class SiteController {
-    // [GET] /
+    // [GET] /login
     login(req, res, next) {
         res.render('loginnew', {
             title: 'Đăng nhập hệ thống',
@@ -22,14 +20,14 @@ class SiteController {
             showNav: false,
         });
     }
+
     // [GET] /errlogin
     errlogin(req, res, next) {
         res.render('errlogin', {
-            // showHeaderFooter: false,
-            // showNav: false,
             title: 'Err Login',
         });
     }
+
     // [GET] /err403
     err403(req, res, next) {
         res.render('err403', {
@@ -40,139 +38,134 @@ class SiteController {
             student: true,
         });
     }
+
     // [GET] /logout
     async logout(req, res, next) {
         try {
-            // Xóa thông tin người dùng khỏi session
             req.session.destroy(err => {
-                if (err) {
-                    return next(err); // Xử lý lỗi nếu xảy ra
-                }
-    
-                // Xóa cookie (nếu có)
-                res.clearCookie('userId');
-                
-                // Phản hồi hoặc chuyển hướng sau khi đăng xuất
-                res.redirect('/');
+                if (err) return next(err); // Xử lý lỗi nếu xảy ra
+                res.clearCookie('userId'); // Xóa cookie
+                res.redirect('/'); // Chuyển hướng sau khi đăng xuất
             });
         } catch (error) {
-            next(error); // Xử lý lỗi nếu xảy ra trong quá trình đăng xuất
+            next(error); // Xử lý lỗi nếu có
         }
     }
+
+    //[GET] /loadFile
+    async loadFileproject(req, res, next){
+        try {
+            const { project_id } = req.params;
+            console.log(project_id);
     
+            const projectFile = await projectfiles.findOne({
+                where: { project_id },
+                include: [{ model: files }],
+            });
+    
+            if (projectFile) {
+                res.status(200).json({ file: projectFile.file });
+            } else {
+                res.status(404).json({ message: 'No file found for this project' });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Failed to load file', error: error.message });
+        }
+    }
 
     // [POST] /chklogin
     async chklogin(req, res, next) {
         const { username, password, rememberMe } = req.body;
-        // Xử lý đăng nhập
         try {
-            // Tìm người dùng dựa trên username
             const user = await users.findOne({ where: { username } });
-            // console.log(user);
             if (!user) {
-                // Nếu không tìm thấy người dùng
-                return res.status(200).send({ message: 'Tên đăng nhập hoặc mật khẩu không đúng, vui lòng kiểm tra lại!' });
+                return res.status(400).send({ message: 'Tên đăng nhập hoặc mật khẩu không đúng, vui lòng kiểm tra lại!' });
             }
 
-            // So sánh mật khẩu người dùng nhập với mật khẩu đã mã hóa trong DB
             const isPasswordValid = await bcrypt.compare(password, user.password);
-            // console.log(isPasswordValid);
             if (!isPasswordValid) {
-                // Nếu mật khẩu không khớp
-                return res.status(200).send({ message: 'Tên đăng nhập hoặc mật khẩu không đúng, vui lòng kiểm tra lại!' });
+                return res.status(400).send({ message: 'Tên đăng nhập hoặc mật khẩu không đúng, vui lòng kiểm tra lại!' });
             }
 
-            // Nếu đăng nhập thành công
             req.session.user = user; // Lưu thông tin người dùng vào session
-
-            // Nếu người dùng chọn ghi nhớ đăng nhập
             if (rememberMe) {
-                res.cookie('userId', user.id, { maxAge: 7 * 24 * 60 * 60 * 1000 }); // Cookie tồn tại trong 7 ngày
+                res.cookie('userId', user.id, { maxAge: 7 * 24 * 60 * 60 * 1000 }); // Cookie 7 ngày
             }
             res.status(200).send({ message: 'User login successfully', role: user.role });
         } catch (error) {
             next(error);
         }
     }
-    //[POST] /upload
+
+    // [POST] /upload
     async uploadFile(req, res) {
-        // try {
-        //     const file = req.file;
-        //     const fileSize = file.size;
-        //     console.log(fileSize);
+        try {
+            const file = req.file;
+            if (!file) {
+                return res.status(400).json({ message: 'No file uploaded' });
+            }
 
-        //     // Nếu không có file, trả lỗi
-        //     if (!file) {
-        //         return res.status(400).json({ message: 'No file uploaded' });
-        //     }
+            const fileName = `${Date.now()}-${file.originalname}`;
+            const fileContent = fs.readFileSync(file.path);
+            const fileSize = file.size;
 
-        //     const fileName = Date.now() + '-' + file.originalname; // Đổi tên file để tránh trùng lặp
-        //     const filePath = path.join(__dirname, '..', 'public', 'uploads', fileName);
+            const params = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: fileName,
+                Body: fileContent,
+                ContentType: file.mimetype,
+            };
 
-        //     // Đọc nội dung file
-        //     const fileContent = fs.readFileSync(file.path);
-        //     console.log(fileName + "ffffff");
+            // Upload file lên S3
+            const uploadResult = await s3.upload(params).promise();
 
-        //     const params = {
-        //         Bucket: process.env.AWS_BUCKET_NAME,
-        //         Key: fileName,  // Tên file chứa thời gian để lưu giữ lịch sử
-        //         Body: fileContent,
-        //         ContentType: file.mimetype,
-        //         // ACL: 'public-read',
-        //     };
+            const existingFile = await files.findOne({
+                where: { uploaded_by: req.session.user.id, is_avatar: req.body.is_avatar || 0 },
+            });
 
-        //     // Upload file lên S3
-        //     const uploadResult = await s3.upload(params).promise();
+            if (existingFile) {
+                // Xóa file cũ trên S3
+                await s3.deleteObject({
+                    Bucket: process.env.AWS_BUCKET_NAME,
+                    Key: existingFile.file_name,
+                }).promise();
 
-        //     // Kiểm tra xem người dùng có đã có file trước đó không
-        //     const existingFile = await File.findOne({ where: { uploaded_by: req.session.user.id, is_avatar: req.body.is_avatar || 0 } });
-        //     console.log(existingFile + "Kiểm tra tồn tại");
+                // Cập nhật bản ghi
+                await files.update(
+                    {
+                        file_name: fileName,
+                        file_path: uploadResult.Location,
+                        file_size: fileSize,
+                        file_type: file.mimetype,
+                        is_avatar: req.body.is_avatar || 0,
+                    },
+                    { where: { id: existingFile.id } }
+                );
+            } else {
+                // Tạo bản ghi mới
+                await files.create({
+                    file_name: fileName,
+                    file_path: uploadResult.Location,
+                    uploaded_by: req.session.user.id,
+                    file_size: fileSize,
+                    file_type: file.mimetype,
+                    is_avatar: req.body.is_avatar || 0,
+                });
+            }
 
-        //     if (existingFile) {
-        //         // Nếu đã có file cũ, xóa file trên S3
-        //         const deleteParams = {
-        //             Bucket: process.env.AWS_BUCKET_NAME,
-        //             Key: existingFile.file_name,  // Tên file cũ đã lưu trong cơ sở dữ liệu
-        //         };
-        //         console.log(deleteParams + "Xóa file trùng");
+            // Xóa file tạm
+            fs.unlink(file.path, (err) => {
+                if (err) console.error('Error deleting temp file:', err);
+            });
 
-        //         // Xóa file cũ trên S3
-        //         await s3.deleteObject(deleteParams).promise();
-        //         console.log('File deleted from S3:', existingFile.file_name);
-
-        //         // Cập nhật bản ghi cũ trong cơ sở dữ liệu
-        //         await File.update({
-        //             file_name: fileName,
-        //             file_path: uploadResult.Location,
-        //             file_size: fileSize,
-        //             file_type: file.mimetype,
-        //             is_avatar: req.body.is_avatar || 0,
-        //         }, { where: { id: existingFile.id } });
-        //         console.log('File record updated');
-        //     } else {
-        //         // Nếu không có file cũ, tạo mới một bản ghi
-        //         const isAvatar = req.body.is_avatar || 0;
-        //         const newFile = await File.create({
-        //             file_name: fileName,  // Lưu tên file mới với timestamp
-        //             file_path: uploadResult.Location,  // Đường dẫn file trên S3
-        //             uploaded_by: req.session.user.id,  // ID người dùng tải lên
-        //             file_size: fileSize,  // Kích thước file
-        //             file_type: file.mimetype,  // Loại MIME của file
-        //             is_avatar: isAvatar,  // Chỉ xác định là avatar nếu có
-        //         });
-
-        //         console.log('New file record created');
-        //     }
-
-        //     // Xóa file tạm sau khi upload
-        //     fs.unlinkSync(file.path);
-
-        //     // Trả về thông tin của file mới vừa upload
-        //     res.json({ message: 'File uploaded successfully', file: uploadResult });
-        // } catch (error) {
-        //     console.error(error);
-        //     res.status(500).json({ message: 'File upload failed' });
-        // }
-    }    
+            // Trả về phản hồi thành công
+            res.status(200).send('File uploaded successfully');
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('File upload failed');
+        }
+    }
 }
+
 module.exports = new SiteController();

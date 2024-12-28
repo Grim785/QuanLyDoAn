@@ -4,7 +4,7 @@ const initModels = require("../models/init-models");
 // Khởi tạo tất cả các model và quan hệ
 const models = initModels(sequelize);
 // Truy cập model
-const { users, students, advisors, majors, class_, projects, projectstudents, projectadvisors } = models;
+const { users, students, advisors, majors, class_, projects, projectstudents, projectadvisors, projectfiles, files } = models;
 
 class StudentController {
     //[GET] /student/dashboard
@@ -151,25 +151,23 @@ class StudentController {
             student: true,
         });
     }
-    //[GET] /student/project
     async projectDetails(req, res, next) {
         const topicId = req.params.id;
         try {
             const projectDetails = await projects.findOne({
                 where: { id: topicId },
                 include: [
-                    //Nối đến bảng chuyên ngành lấy thông tin chuyên ngành của đề tài
+                    // Nối đến bảng chuyên ngành lấy thông tin chuyên ngành của đề tài
                     {
                         model: majors,
                         as: 'major',
                         attributes: ['name'],
                     },
-                    //Lấy thông tin giảng viên tham gia
+                    // Lấy thông tin giảng viên tham gia
                     {
                         model: projectadvisors,
                         as: 'projectadvisors',
                         attributes: ['advisor_id'],
-                        //Nối đến bảng giảng viên lấy thông tin
                         include: [
                             {
                                 model: advisors,
@@ -178,7 +176,7 @@ class StudentController {
                             }
                         ]
                     },
-                    //Lấy thông tin sinh viên tham gia
+                    // Lấy thông tin sinh viên tham gia
                     {
                         model: projectstudents,
                         as: 'projectstudents',
@@ -202,20 +200,38 @@ class StudentController {
                                 ]
                             }
                         ]
+                    },
+                    // Lấy thông tin file liên kết với dự án
+                    {
+                        model: projectfiles,
+                        as: 'projectfiles',
+                        include: [
+                            {
+                                model: files,
+                                as: 'file',
+                                attributes: ['file_name', 'file_path']
+                            }
+                        ]
                     }
                 ],
                 attributes: ['title', 'description', 'start_date', 'end_date', 'status'],
             });
-            // In dữ liệu dễ đọc với JSON.stringify
+    
+            // In dữ liệu dễ đọc với JSON.stringify để debug
             console.log(JSON.stringify(projectDetails, null, 2));
+    
+            // Lấy thông tin file (nếu có)
+            const projectFile = projectDetails.projectfiles.length > 0 ? projectDetails.projectfiles[0].file : null;
+    
+            // Render dữ liệu ra view
             res.render('roles/student/TopicDetails', {
                 title: 'AccountInfo',
                 projectDetails: projectDetails,
-                //Truyền dữ liệu hiển thị thành phần------
+                projectFile: projectFile, // Truyền thông tin file
+                // Truyền dữ liệu hiển thị thành phần
                 showHeaderFooter: true,
                 showNav: true,
                 student: true,
-                //----------------------------------------
             });
         } catch (error) {
             console.log(error);
@@ -224,7 +240,6 @@ class StudentController {
                 message: 'An error occurred while fetching the topic'
             });
         }
-
     }
     //[POST]
 
