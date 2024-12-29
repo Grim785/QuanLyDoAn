@@ -34,7 +34,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     majorsID: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: 1,
       references: {
         model: 'majors',
         key: 'id'

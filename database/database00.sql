@@ -90,22 +90,19 @@ CREATE TABLE IF NOT EXISTS `advisors` (
   `date_of_birth` date NOT NULL,
   `gender` enum('Nam','Nữ','Khác') NOT NULL,
   `address` varchar(255) NOT NULL,
-  `majorsID` int NOT NULL,
   `userID` int NOT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `advisorID` (`advisorID`),
-  KEY `majorsID` (`majorsID`),
   KEY `userID` (`userID`),
-  CONSTRAINT `advisors_ibfk_1` FOREIGN KEY (`majorsID`) REFERENCES `majors` (`id`),
   CONSTRAINT `advisors_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table database00.advisors: ~2 rows (approximately)
-REPLACE INTO `advisors` (`id`, `advisorID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `address`, `majorsID`, `userID`, `createdAt`, `updatedAt`) VALUES
-	(1, '19992222', 'Lưu Thị', 'Thu Thủy', '1991-12-27', 'Nữ', '22A/74 Quận 1, Tp. Hồ Chí Minh', 1, 3, '2024-12-27 00:24:23', '2024-12-27 00:24:23'),
-	(2, '19992707', 'Hoàng Minh', 'Tuấn', '1978-12-27', 'Nam', '17E Quận Bình Thạnh, Tp. Hồ Chí Minh', 3, 2, '2024-12-27 00:25:52', '2024-12-27 00:25:52');
+REPLACE INTO `advisors` (`id`, `advisorID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `address`, `userID`, `createdAt`, `updatedAt`) VALUES
+	(1, '19992222', 'Lưu Thị', 'Thu Thủy', '1991-12-27', 'Nữ', '22A/74 Quận 1, Tp. Hồ Chí Minh', 3, '2024-12-27 00:24:23', '2024-12-29 01:25:52'),
+	(2, '19992707', 'Hoàng Minh', 'Tuấn', '1978-12-27', 'Nam', '17E Quận Bình Thạnh, Tp. Hồ Chí Minh', 2, '2024-12-27 00:25:52', '2024-12-27 00:25:52');
 
 -- Dumping structure for table database00.class_
 DROP TABLE IF EXISTS `class_`;
@@ -122,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `class_` (
   CONSTRAINT `class__ibfk_1` FOREIGN KEY (`majorsID`) REFERENCES `majors` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.class_: ~3 rows (approximately)
+-- Dumping data for table database00.class_: ~2 rows (approximately)
 REPLACE INTO `class_` (`id`, `classID`, `status`, `majorsID`, `createdAt`, `updatedAt`) VALUES
 	(1, '22CPM01', 'active', 1, '2024-12-27 00:11:28', '2024-12-27 00:11:28'),
 	(2, '22CTMĐT01', 'active', 3, '2024-12-27 00:12:53', '2024-12-27 00:12:53'),
@@ -146,9 +143,9 @@ CREATE TABLE IF NOT EXISTS `files` (
   CONSTRAINT `files_ibfk_1` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.files: ~1 rows (approximately)
+-- Dumping data for table database00.files: ~0 rows (approximately)
 REPLACE INTO `files` (`id`, `file_name`, `file_path`, `uploaded_by`, `uploaded_at`, `file_size`, `file_type`, `is_avatar`, `createdAt`, `updatedAt`) VALUES
-	(2, '1735395785415-QuanLyDoAn-master.rar', 'https://bucket-qlda78622.s3.us-east-2.amazonaws.com/1735395785415-QuanLyDoAn-master.rar', 4, '2024-12-28 13:25:05', 45395695, 'application/x-compressed', 0, '2024-12-28 13:25:05', '2024-12-28 14:23:31');
+	(2, '1735397729087-QuanLyDoAn-master.rar', 'https://bucket-qlda78622.s3.us-east-2.amazonaws.com/1735397729087-QuanLyDoAn-master.rar', 4, '2024-12-28 13:25:05', 45395695, 'application/x-compressed', 0, '2024-12-28 13:25:05', '2024-12-28 14:55:56');
 
 -- Dumping structure for table database00.majors
 DROP TABLE IF EXISTS `majors`;
@@ -221,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `projectfiles` (
   CONSTRAINT `projectfiles_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectfiles: ~1 rows (approximately)
+-- Dumping data for table database00.projectfiles: ~0 rows (approximately)
 REPLACE INTO `projectfiles` (`project_id`, `file_id`, `createdAt`, `updatedAt`) VALUES
 	(1, 2, '2024-12-28 21:19:12', '2024-12-28 21:19:12');
 
@@ -384,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.users: ~11 rows (approximately)
+-- Dumping data for table database00.users: ~9 rows (approximately)
 REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `createdAt`, `updatedAt`, `active`) VALUES
 	(1, 'admin', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'admin', '123123@gmail.com', '1111111111', '2024-12-27 00:01:01', '2024-12-27 00:01:14', 1),
 	(2, '19992707', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'advisor', '123321@gmail.com', '2222222222', '2024-12-27 00:02:47', '2024-12-27 00:03:24', 1),
@@ -394,7 +391,7 @@ REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `c
 	(6, '22002044', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '06@gmail.com', '0486534475', '2024-12-27 00:07:17', '2024-12-27 00:45:20', 1),
 	(7, '22007865', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '07@gmail.com', '9435658323', '2024-12-27 00:07:50', '2024-12-27 00:45:21', 1),
 	(8, '22009999', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '08@gmail.com', '1268553537', '2024-12-27 00:08:20', '2024-12-27 00:45:22', 1),
-	(10, '22009900', '$2b$10$Z6k5IGPvJ4c1x3qKUcN5neFRdFfxrqxy//dI9DMh1XvG.zvgiNe2O', 'student', NULL, NULL, '2024-12-27 05:49:53', '2024-12-27 06:10:56', 1),
+	(10, '22009900', '$2b$10$Z6k5IGPvJ4c1x3qKUcN5neFRdFfxrqxy//dI9DMh1XvG.zvgiNe2O', 'advisor', NULL, NULL, '2024-12-27 05:49:53', '2024-12-29 04:25:34', 1),
 	(11, '22009993', '$2b$10$RZj7thCEoOK/quYFNqE8SO4NViH/CPB1zj92TTJas64/E80dlVvJ6', 'student', NULL, NULL, '2024-12-27 05:58:52', '2024-12-27 06:09:05', 1),
 	(12, '123123', '$2b$10$jlR/TtSvVvUMOosSxzYGdu6vBGj7pKLDkjdzwX4vT8RhSe7UgKDW6', 'student', NULL, NULL, '2024-12-27 09:13:17', '2024-12-27 09:13:17', 1);
 

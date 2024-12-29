@@ -32,14 +32,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: false
     },
-    majorsID: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'majors',
-        key: 'id'
-      }
-    },
     userID: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -67,13 +59,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "advisorID" },
-        ]
-      },
-      {
-        name: "majorsID",
-        using: "BTREE",
-        fields: [
-          { name: "majorsID" },
         ]
       },
       {

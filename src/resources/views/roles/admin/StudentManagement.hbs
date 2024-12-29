@@ -1,0 +1,256 @@
+<div class="container my-2 table-container">
+    <table class="table table-hover table-striped align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th class="">ID</th>
+                <th class="">Mã sinh viên</th>
+                <th class="">Họ và tên đệm</th>
+                <th class="">Tên</th>
+                <th class="">Ngày sinh</th>
+                <th class="">Giới tính</th>
+                <th class="">Địa chỉ</th>
+                <th class="">Lớp</th>
+                <th class="">Tài khoản liên kết</th>
+                <th class="">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dòng mẫu hiển thị dữ liệu -->
+            {{#each list}}
+            <tr>
+                <td>{{id}}</td>
+                <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="studentID"
+                        value="{{studentID}}" required /></td>
+                <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="lastname"
+                        value="{{lastname}}" required /></td>
+                <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="firstname"
+                        value="{{firstname}}" required /></td>
+                <td><input type="date" class="form-control form-control-xs cell-input" data-id="{{id}}"
+                        name="date_of_birth" value="{{date_of_birth}}" required /></td>
+                <td>
+                    <select class="form-select form-select-xs cell-input" data-id="{{id}}" name="gender">
+                        <option value="Nam" {{#ifCond gender 'Nam' }}selected{{/ifCond}}>Nam</option>
+                        <option value="Nữ" {{#ifCond gender 'Nữ' }}selected{{/ifCond}}>Nữ</option>
+                    </select>
+                </td>
+                <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="address"
+                        value="{{address}}" required /></td>
+                <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="classID"
+                        value="{{class.classID}}" required /></td>
+                <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="username"
+                        value="{{user.username}}" required /></td>
+                <td>
+                    <button class="btn btn-link p-0 save-button" data-id="{{id}}" title="Save"><i
+                            class="fa-regular fa-floppy-disk" style="color: #63E6BE;"></i></button>
+                    <button class="btn btn-link p-0 delete-button" data-id="{{id}}" title="Delete"><i
+                            class="fa-regular fa-circle-xmark" style="color: #f50000;"></i></button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+<div class="m-2 d-flex justify-content-end">
+    <button id="add-row-button" class="btn btn-primary">Thêm dòng mới</button>
+</div>
+<style>
+    .table-container {
+        height: 70vh;
+        width: 165vh;
+        overflow-y: auto;
+        overflow-x: auto;
+        scrollbar-width: thin;
+    }
+
+    .table th,
+    .table td {
+        text-align: center;
+        padding: 0 5px;
+        font-size: 0.7rem;
+        white-space: nowrap;
+    }
+
+    .form-control-xs,
+    .form-select-xs {
+        font-size: 0.7rem;
+        line-height: 1;
+        border: none;
+        width: 100%;
+        height: 100%;
+    }
+
+    .cell-input {
+        margin: 0;
+        padding: 0.3rem;
+        box-sizing: border-box;
+        background-color: transparent;
+        width: 200px;
+    }
+
+    .cell-input:focus {
+        outline: none;
+        box-shadow: inset 0 0 0 1px #007bff;
+    }
+
+    .btn-link {
+        text-decoration: none;
+    }
+
+    .participants-list {
+        text-align: left;
+        font-size: 0.7rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .participants-list button {
+        font-size: 0.8rem;
+        line-height: 1;
+        padding: 0;
+    }
+</style>
+<script>
+    document.addEventListener('click', async (event) => {
+        // Xử lý nút xóa
+        if (event.target.closest('.delete-button')) {
+            const button = event.target.closest('.delete-button');
+            const id = button.dataset.id;
+
+            const confirmDelete = confirm('Bạn có chắc chắn muốn xóa bản ghi này?');
+            if (!confirmDelete) return;
+
+            try {
+                const response = await fetch(`/admin/deleteRecordStudent/${id}`, {
+                    method: 'DELETE',
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.message);
+                    const row = button.closest('tr');
+                    if (row) row.remove();
+                } else {
+                    alert('Lỗi: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error deleting record:', error);
+                alert('Đã xảy ra lỗi khi xóa bản ghi.');
+            }
+        }
+
+        // Xử lý nút lưu
+        if (event.target.closest('.save-button')) {
+            const button = event.target.closest('.save-button');
+            const id = button.dataset.id;
+
+            const row = button.closest('tr');
+            const studentID = row.querySelector('[name="studentID"]').value.trim();
+            const lastname = row.querySelector('[name="lastname"]').value.trim();
+            const firstname = row.querySelector('[name="firstname"]').value.trim();
+            const date_of_birth = row.querySelector('[name="date_of_birth"]').value.trim();
+            const gender = row.querySelector('[name="gender"]').value.trim();
+            const address = row.querySelector('[name="address"]').value.trim();
+            const classID = row.querySelector('[name="classID"]').value.trim();
+            const username = row.querySelector('[name="username"]').value.trim();
+
+            if (!studentID || !lastname || !firstname || !date_of_birth || !gender || !address || !username || !classID) {
+                alert('Vui lòng điền đầy đủ thông tin.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/admin/updateRecordStudent/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ studentID, lastname, firstname, date_of_birth, gender, address, classID, username }),
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.message);
+                } else {
+                    alert('Lỗi: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error updating record:', error);
+                alert('Đã xảy ra lỗi khi cập nhật bản ghi.');
+            }
+        }
+
+        // Thêm dòng mới
+        if (event.target.id === 'add-row-button') {
+            const tableBody = document.querySelector('tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+      <td>New</td>
+      <td><input type="text" class="form-control form-control-xs cell-input" name="studentID" required/></td>
+      <td><input type="text" class="form-control form-control-xs cell-input" name="lastname" required/></td>
+      <td><input type="text" class="form-control form-control-xs cell-input" name="firstname" required/></td>
+      <td><input type="date" class="form-control form-control-xs cell-input" name="date_of_birth" required/></td>
+      <td>
+        <select class="form-select form-select-xs cell-input" name="gender">
+          <option value="Nam">Nam</option>
+          <option value="Nữ">Nữ</option>
+        </select>
+      </td>
+      <td><input type="text" class="form-control form-control-xs cell-input" name="address" required/></td>
+      <td><input type="text" class="form-control form-control-xs cell-input" name="classID" required/></td>
+      <td><input type="text" class="form-control form-control-xs cell-input" name="username" required/></td>
+      <td>
+        <button class="btn btn-link p-0 save-button-new" title="Save"><i class="fa-regular fa-floppy-disk" style="color: #63E6BE;"></i></button>
+        <button class="btn btn-link p-0 cancel-button" title="Cancel"><i class="fa-regular fa-circle-xmark" style="color: #f50000;"></i></button>
+      </td>
+    `;
+            tableBody.appendChild(newRow);
+        }
+
+        // Hủy thêm mới
+        if (event.target.closest('.cancel-button')) {
+            const row = event.target.closest('tr');
+            if (row) row.remove();
+        }
+
+        // Lưu dòng mới
+        if (event.target.closest('.save-button-new')) {
+            const row = event.target.closest('tr');
+            const studentID = row.querySelector('[name="studentID"]').value.trim();
+            const lastname = row.querySelector('[name="lastname"]').value.trim();
+            const firstname = row.querySelector('[name="firstname"]').value.trim();
+            const date_of_birth = row.querySelector('[name="date_of_birth"]').value.trim();
+            const gender = row.querySelector('[name="gender"]').value.trim();
+            const address = row.querySelector('[name="address"]').value.trim();
+            const classID = row.querySelector('[name="classID"]').value.trim();
+            const username = row.querySelector('[name="username"]').value.trim();
+
+            if (!studentID || !lastname || !firstname || !date_of_birth || !gender || !address || !username) {
+                alert('Vui lòng điền đầy đủ thông tin.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/admin/addRecordStudent`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ studentID, lastname, firstname, date_of_birth, gender, address, classID, username }),
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Thêm mới thành công!');
+                    location.reload();
+                } else {
+                    alert('Lỗi: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error adding record:', error);
+                alert('Đã xảy ra lỗi khi thêm bản ghi mới.');
+            }
+        }
+    });
+
+</script>

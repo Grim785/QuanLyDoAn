@@ -38,8 +38,6 @@ function initModels(sequelize) {
   class_.hasMany(students, { as: "students", foreignKey: "classID"});
   projectfiles.belongsTo(files, { as: "file", foreignKey: "file_id"});
   files.hasMany(projectfiles, { as: "projectfiles", foreignKey: "file_id"});
-  advisors.belongsTo(majors, { as: "major", foreignKey: "majorsID"});
-  majors.hasMany(advisors, { as: "advisors", foreignKey: "majorsID"});
   class_.belongsTo(majors, { as: "major", foreignKey: "majorsID"});
   majors.hasMany(class_, { as: "class_s", foreignKey: "majorsID"});
   projects.belongsTo(majors, { as: "major", foreignKey: "majorID"});
