@@ -21,8 +21,14 @@ router.get('/project', chkRoles('student'), StudentController.project);
 
 //[GET] /student/details/Toppic/:id
 router.get('/details/Toppic/:id', chkRoles('student'), StudentController.projectDetails);
+//[GET] /admin/search
+router.get('/search', chkRoles('student'), StudentController.searchStudents);
 
+//[POST] /student/create-toppic
+router.post('/registerToppic', chkRoles('student'), StudentController.createToppic);
 
+//[DELETE] /delete-topic/:projectId
+router.delete('/delete-topic/:projectId', chkRoles('student'), StudentController.deleteToppic);
 
 
 module.exports = router;    

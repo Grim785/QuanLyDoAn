@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+exports.router = router;
 
 const chkRoles = require('../../config/chkRoles');
 

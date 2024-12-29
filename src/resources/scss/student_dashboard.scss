@@ -13,7 +13,7 @@
 
 .student-dashboard .card {
     position: relative;
-    /* Đảm bảo thẻ <a> được đặt tương đối với .card */
+    /* Đảm bảo thẻ <a> và icon được đặt tương đối với .card */
 }
 
 .student-dashboard .card-footer-details {
@@ -28,4 +28,14 @@
     font-size: 0.7rem;
     text-decoration: underline;
     color: #007bff;
+}
+
+.student-dashboard .card-icon-check {
+    position: absolute;
+    top: 5px;
+    /* Khoảng cách từ đỉnh của card */
+    right: 5px;
+    /* Khoảng cách từ cạnh phải của card */
+    font-size: 1.2rem;
+    color: green;
 }

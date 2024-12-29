@@ -14,55 +14,212 @@
                         </button>
                     </form>
                 </div>
+
                 <!-- Table content -->
                 <div class="flex-grow-1 overflow-auto">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead class="table-light">
                                 <tr class="text-nowrap">
-                                    <th scope="col"><input type="checkbox" name="" id=""></th>
+                                    <th scope="col"><input type="checkbox" id="select-all"></th>
                                     <th scope="col">Tên đề tài</th>
                                     <th scope="col">Mô tả</th>
                                     <th scope="col">Trạng thái</th>
-                                    <th scope="col">Chuyên ngành</th>
-                                    <th scope="col">Ngày đăng kí</th>
                                     <th scope="col">Sinh viên đăng kí</th>
-                                    <th scope="col">Lớp</th>
-                                    <th scope="col" class="text-end"></th>
+                                    <th scope="col" class="text-end">Hành động</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-nowrap">
+                            <tbody id="pending-projects-list" class="text-nowrap">
+                                {{#each listRegiToppic}}
+                                {{#each projectadvisors}}
+                                {{#if project}} <!-- Kiểm tra nếu có dữ liệu project -->
                                 <tr class="align-middle">
                                     <th scope="row">
-                                        <input type="checkbox">
+                                        <input type="checkbox" class="project-checkbox" data-id="{{project.id}}">
                                     </th>
                                     <td>
-                                        đề tài
+                                        <div class="student-list-container">{{project.title}}</div>
                                     </td>
-                                    <td>đề tài</td>
-                                    <td>đề tài</td>
-                                    <td>đề tài</td>
-                                    <td>đề tài</td>
-                                    <td>đề tài</td>
-                                    <td>đề tài</td>
+                                    <td>
+                                        <div class="student-list-container">{{project.description}}</div>
+                                    </td>
+                                    <td>
+                                        {{#if (eq project.projectsregister.status 'pending')}}Chờ
+                                        duyệt{{else}}Khác{{/if}}
+                                    </td>
+                                    <td>
+                                        <div class="student-list-container">
+                                            {{#each project.projectstudents}}
+                                            {{#if student}} <!-- Kiểm tra nếu có dữ liệu student -->
+                                            <span>{{student.lastname}} {{student.firstname}}
+                                                ({{student.studentID}})</span>
+                                            {{#unless @last}}, {{/unless}} <!-- Thêm dấu phẩy trừ lần cuối -->
+                                            {{/if}}
+                                            {{/each}}
+                                        </div>
+                                    </td>
                                     <td class="text-end">
-                                        <input type="button" value="Duyệt" class="btn btn-success">
-                                        <input type="button" value="Hủy" class="btn btn-danger">
+                                        <button class="btn btn-success btn-sm approve-btn"
+                                            data-id="{{project.id}}">Duyệt</button>
+                                        <button class="btn btn-danger btn-sm reject-btn"
+                                            data-id="{{project.id}}">Hủy</button>
                                     </td>
                                 </tr>
+                                {{/if}}
+                                {{/each}}
+                                {{/each}}
                             </tbody>
                         </table>
                     </div>
                 </div>
+
+                <!-- Footer -->
                 <div class="border rounded-bottom p-2 d-flex justify-content-end align-items-center"
                     style="height: 50px;">
                     <div class="add-account-section d-flex align-items-center gap-2" style="flex-grow: 1;">
-                        
+                        <span id="selected-count">0 đề tài được chọn</span>
                     </div>
-                    <button id="add-account-btn" type="button" class="btn btn-success btn-sm mx-1">Duyệt đã chọn</button>
-                    <button id="add-account-btn" type="button" class="btn btn-danger btn-sm mx-1">Hủy đã chọn</button>
+                    <button id="approve-selected" type="button" class="btn btn-success btn-sm mx-1">Duyệt đã
+                        chọn</button>
+                    <button id="reject-selected" type="button" class="btn btn-danger btn-sm mx-1">Hủy đã chọn</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .student-list-container {
+        max-width: 300px;
+        /* Đặt chiều rộng tối đa của ô */
+        white-space: nowrap;
+        /* Hiển thị nội dung trong một dòng */
+        overflow-x: auto;
+        /* Kích hoạt thanh cuộn ngang nếu nội dung vượt quá chiều rộng */
+        scrollbar-width: thin;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const selectAllCheckbox = document.getElementById('select-all');
+        const projectCheckboxes = document.querySelectorAll('.project-checkbox');
+        const approveSelectedButton = document.getElementById('approve-selected');
+        const rejectSelectedButton = document.getElementById('reject-selected');
+        const selectedCountDisplay = document.getElementById('selected-count');
+
+        // Cập nhật số lượng đề tài được chọn
+        const updateSelectedCount = () => {
+            const selectedCount = document.querySelectorAll('.project-checkbox:checked').length;
+            selectedCountDisplay.textContent = `${selectedCount} đề tài được chọn`;
+        };
+
+        // Chọn tất cả checkbox
+        selectAllCheckbox.addEventListener('change', (event) => {
+            const isChecked = event.target.checked;
+            projectCheckboxes.forEach((checkbox) => {
+                checkbox.checked = isChecked;
+            });
+            updateSelectedCount();
+        });
+
+        // Cập nhật số lượng khi chọn từng checkbox
+        projectCheckboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', updateSelectedCount);
+        });
+
+        // Duyệt các đề tài được chọn
+        approveSelectedButton.addEventListener('click', () => {
+            const selectedIds = Array.from(document.querySelectorAll('.project-checkbox:checked')).map(
+                (checkbox) => checkbox.getAttribute('data-id')
+            );
+            if (selectedIds.length > 0) {
+                console.log('Duyệt các đề tài:', selectedIds);
+                // Gửi yêu cầu duyệt (cần thêm logic backend)
+            } else {
+                alert('Vui lòng chọn ít nhất một đề tài để duyệt!');
+            }
+        });
+
+        // Hủy các đề tài được chọn
+        rejectSelectedButton.addEventListener('click', () => {
+            const selectedIds = Array.from(document.querySelectorAll('.project-checkbox:checked')).map(
+                (checkbox) => checkbox.getAttribute('data-id')
+            );
+            if (selectedIds.length > 0) {
+                console.log('Hủy các đề tài:', selectedIds);
+                // Gửi yêu cầu hủy (cần thêm logic backend)
+            } else {
+                alert('Vui lòng chọn ít nhất một đề tài để hủy!');
+            }
+        });
+
+        // Duyệt từng đề tài
+        document.querySelectorAll('.approve-btn').forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const projectId = event.target.getAttribute('data-id');
+
+                // Hiển thị thông báo xác nhận
+                const confirmed = confirm('Bạn có chắc chắn muốn duyệt đề tài này?');
+                if (!confirmed) {
+                    return; // Hủy hành động nếu người dùng không xác nhận
+                }
+
+                try {
+                    const response = await fetch(`/advisor/approve-topic/${projectId}`, {
+                        method: 'POST',
+                    });
+
+                    const result = await response.json();
+                    if (response.ok) {
+                        alert(result.message);
+                        // Cập nhật giao diện sau khi duyệt thành công
+                        event.target.closest('tr').remove(); // Xóa dòng đề tài khỏi bảng
+                    } else {
+                        alert(result.message || 'Không thể duyệt đề tài.');
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi duyệt đề tài:', error);
+                    alert('Đã xảy ra lỗi, vui lòng thử lại sau.');
+                }
+            });
+        });
+
+
+        // Hủy từng đề tài
+        document.querySelectorAll('.reject-btn').forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const projectId = event.target.getAttribute('data-id');
+
+                // Hiển thị hộp thoại nhập lý do hủy
+                const note = prompt('Vui lòng nhập lý do hủy đề tài:');
+                if (!note) {
+                    alert('Bạn phải nhập lý do để hủy đề tài!');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/advisor/reject-topic/${projectId}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ note }), // Gửi lý do hủy tới backend
+                    });
+
+                    const result = await response.json();
+                    if (response.ok) {
+                        alert(result.message);
+                        // Xóa dòng đề tài khỏi giao diện
+                        event.target.closest('tr').remove();
+                    } else {
+                        alert(result.message || 'Không thể hủy đề tài.');
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi hủy đề tài:', error);
+                    alert('Đã xảy ra lỗi, vui lòng thử lại sau.');
+                }
+            });
+        });
+
+
+    });
+</script>

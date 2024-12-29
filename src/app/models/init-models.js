@@ -7,6 +7,7 @@ var _projectadvisors = require("./projectadvisors");
 var _projectfeedback = require("./projectfeedback");
 var _projectfiles = require("./projectfiles");
 var _projects = require("./projects");
+var _projectsregister = require("./projectsregister");
 var _projectstudents = require("./projectstudents");
 var _students = require("./students");
 var _suggestedprojects = require("./suggestedprojects");
@@ -21,6 +22,7 @@ function initModels(sequelize) {
   var projectfeedback = _projectfeedback(sequelize, DataTypes);
   var projectfiles = _projectfiles(sequelize, DataTypes);
   var projects = _projects(sequelize, DataTypes);
+  var projectsregister = _projectsregister(sequelize, DataTypes);
   var projectstudents = _projectstudents(sequelize, DataTypes);
   var students = _students(sequelize, DataTypes);
   var suggestedprojects = _suggestedprojects(sequelize, DataTypes);
@@ -50,6 +52,8 @@ function initModels(sequelize) {
   projects.hasMany(projectfeedback, { as: "projectfeedbacks", foreignKey: "project_id"});
   projectfiles.belongsTo(projects, { as: "project", foreignKey: "project_id"});
   projects.hasMany(projectfiles, { as: "projectfiles", foreignKey: "project_id"});
+  projectsregister.belongsTo(projects, { as: "project", foreignKey: "project_id"});
+  projects.hasOne(projectsregister, { as: "projectsregister", foreignKey: "project_id"});
   projectstudents.belongsTo(projects, { as: "project", foreignKey: "project_id"});
   projects.hasMany(projectstudents, { as: "projectstudents", foreignKey: "project_id"});
   projectstudents.belongsTo(students, { as: "student", foreignKey: "student_id"});
@@ -72,6 +76,7 @@ function initModels(sequelize) {
     projectfeedback,
     projectfiles,
     projects,
+    projectsregister,
     projectstudents,
     students,
     suggestedprojects,

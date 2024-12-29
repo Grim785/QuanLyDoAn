@@ -9,8 +9,12 @@ router.get('/dashboard', chkRoles('advisor'), AdvisorController.dashboard);
 //[GET] /advisor/topic
 router.get('/topic', chkRoles('advisor'), AdvisorController.topic);
 
-//[POST]
-// router.post('/login', controllers.site.chklogin);
+//[POST] /advisor/approve-topic/:id
+router.post('/approve-topic/:id', chkRoles('advisor'), AdvisorController.approveToppic);
+//[POST] /advisor/reject-topic/:id
+router.post('/reject-topic/:id', chkRoles('advisor'), AdvisorController.rejectTopic);
+
+
 
 
 module.exports = router;    

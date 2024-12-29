@@ -1,239 +1,82 @@
-<div class="container scroll py-4">
-    <h2 class="text-start mb-4">Đăng Ký Đề Tài</h2>
-    <form action="">
-        <!-- Thông tin sinh viên -->
-        <div class="card mb-4">
-            <div class="card-header bg-danger text-white">Thông tin sinh viên đăng ký</div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="class" class="form-label">Lớp</label>
-                        <input type="text" id="class" name="class" class="form-control" placeholder="Nhập lớp của bạn"
-                            required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="major" class="form-label">Chuyên ngành</label>
-                        <select id="major" name="major" class="form-select">
-                            <option value="" selected>--Chọn chuyên ngành--</option>
-                            {{#each major}}
-                            <option value="{{this.id}}">{{this.name}}</option>
-                            {{/each}}
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" name="email" class="form-control"
-                            placeholder="Nhập email của bạn" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="phone" class="form-label">Số điện thoại</label>
-                        <input type="tel" id="phone" name="phone" class="form-control"
-                            placeholder="Nhập số điện thoại của bạn" required>
+<form method="post" action="/student/registerToppic" id="create-toppic-detais" class="container my-2 scroll create-toppic" style="height: 70vh;">
+    <div class="row gy-2">
+        <h3>Tạo mới đề tài</h3>
+        <div class="col-12">
+            <fieldset class="reset">
+                <legend class="reset">THÔNG TIN ĐỀ TÀI</legend>
+                <div class="container">
+                    <div class="row">
+                        <!-- Tên đề tài và chuyên ngành -->
+                        <div class="col-lg-4 col-12">
+                            <p class="mb-1">Tên đề tài</p>
+                            <input type="text" class="form-control mb-1" name="title" id="title" placeholder="Nhập tên đề tài" required>
+                            <p class="mb-1">Chuyên ngành liên quan</p>
+                            <select name="majorId" id="majorId" class="form-select mb-1" required>
+                                <option value="">-- Chọn chuyên ngành --</option>
+                                {{#each major}}
+                                <option value="{{id}}">{{name}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <!-- Mô tả -->
+                        <div class="col-lg-5 col-12 d-flex flex-column">
+                            <p class="mb-1">Mô tả</p>
+                            <textarea class="form-control flex-fill mb-1" name="description" id="description"></textarea>
+                        </div>
+                        <!-- Trạng thái -->
                     </div>
                 </div>
+            </fieldset>
+        </div>
+
+        <div class="col-12 d-flex">
+             <!-- Sinh viên tham gia -->
+            <div class="col-sm-7 formfor-student">
+                <fieldset class="reset">
+                    <legend class="reset">Sinh viên tham gia</legend>
+                    <div class="container gy-1">
+                        <div class="row gy-1">
+                            <div class="col-lg-3 d-flex align-items-center">
+                                <label for="tim-sinh-vien" class="text-nowrap">Tìm sinh viên:</label>
+                            </div>
+                            <div class="col-lg-7">
+                                <input type="text" id="tim-sinh-vien" class="form-control" placeholder="Nhập mã sinh viên">
+                            </div>
+                            <div class="col-lg-2 d-flex justify-content-end text-center">
+                                <button type="button" id="btn-tim" class="btn btn-info text-white"><i class="fa-solid fa-magnifying-glass me-2 text-white"></i>Tìm</button>
+                            </div>
+                        </div>
+                        <div id="card-tabs" class="mt-2"></div>
+                        <!-- Popup kết quả tìm kiếm -->
+                        <div id="popup-ket-qua" class="popup-results"></div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- Giảng viên hướng dẫn -->
+            <div class="col-sm-5 d-flex formfor-advisor">
+                <fieldset class="reset flex-fill">
+                    <legend class="reset">Giảng viên hướng dẫn</legend>
+                    <select name="advisorId" id="advisorId" class="form-select">
+                        <option value="">-- Chọn giảng viên --</option>
+                        {{#each advisors}}
+                        <option value="{{id}}">{{lastname}} {{firstname}}</option>
+                        {{/each}}
+                    </select>
+                </fieldset>
             </div>
         </div>
 
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">Thành viên tham gia</div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <!-- Thanh tìm kiếm -->
-                    <div class="col-md-6">
-                        <label for="searchStudent" class="form-label">Tìm kiếm Sinh viên</label>
-                        <input type="text" id="searchStudent" class="form-control" placeholder="Nhập mã sinh viên...">
-                        <ul id="searchResults" class="list-group mt-2" style="display:none;"></ul>
-                        <!-- Danh sách kết quả tìm kiếm -->
-                    </div>
-                </div>
-
-                <!-- Khu vực tab sinh viên đã chọn -->
-                <div id="selectedStudents" class="mt-3">
-                    <!-- Các tab sinh viên sẽ được thêm vào đây -->
-                </div>
-            </div>
-        </div>
-{{!-- <ul>
-    {{#each studentID}}
-        <li>{{this}}</li>
-    {{/each}}
-</ul> --}}
-        <!-- Lựa chọn đề tài -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">Lựa chọn đề tài</div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="suggestion" class="form-label">Đề xuất</label>
-                        <select id="suggestion" name="suggestion" class="form-select">
-                            <option value="">Chọn đề tài</option>
-                            {{#each suggestedProjects}}
-                            <option value="{{this.id}}">{{this.title}}</option>
-                            {{/each}}
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="customTopic" class="form-label">Tự chọn</label>
-                        <input type="text" id="customTopic" name="customTopic" class="form-control"
-                            placeholder="Nhập tên đề tài tự chọn">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Thông tin đề tài -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">Thông tin đề tài</div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="topicName" class="form-label">Tên đề tài</label>
-                        <input type="text" id="topicName" name="topicName" class="form-control"
-                            placeholder="Nhập tên đề tài" required disabled>
-                    </div>
-                    {{!-- <div class="col-md-6">
-                        <label for="advisor" class="form-label">Người hướng dẫn</label>
-                        <select id="advisor" name="advisor" class="form-select">
-                            <option selected>Nguyễn Đức Cương</option>
-                            <option value="1">Lê Thị Cẩm Tú</option>
-                            <option value="2">Từ Thị Xuân Hiền</option>
-                            <option value="3">Nguyễn Phương Hồng</option>
-                            <option value="4">Quách Biên Cương</option>
-                            <option value="5">Nguyễn Thị Phương Loan</option>
-                        </select>
-                    </div> --}}
-                    <div class="col-12">
-                        <label for="description" class="form-label">Mô tả</label>
-                        <textarea id="description" name="description" class="form-control" rows="5"
-                            placeholder="Nhập mô tả ngắn gọn về đề tài"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Nút đăng ký -->
-        <div class="text-end">
-            <button type="submit" class="btn btn-primary">Đăng Ký</button>
-        </div>
-    </form>
-</div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const suggestionSelect = document.getElementById('suggestion');
-        const customTopicInput = document.getElementById('customTopic');
-        const topicNameInput = document.getElementById('topicName');
-
-        // Khi người dùng nhập vào ô "Tự chọn"
-        customTopicInput.addEventListener('input', () => {
-            if (customTopicInput.value.trim() !== '') {
-                suggestionSelect.disabled = true; // Vô hiệu hóa "Đề xuất"
-                topicNameInput.value = customTopicInput.value; // Đồng bộ tên đề tài
-            } else {
-                suggestionSelect.disabled = false; // Bật lại "Đề xuất"
-                topicNameInput.value = suggestionSelect.value || ''; // Đồng bộ giá trị "Đề xuất"
-            }
-        });
-
-        // Khi người dùng chọn từ danh sách "Đề xuất"
-        suggestionSelect.addEventListener('change', () => {
-            if (suggestionSelect.value !== '') {
-                customTopicInput.disabled = true; // Vô hiệu hóa "Tự chọn"
-                // Đồng bộ tên đề tài với text của option được chọn
-                topicNameInput.value = suggestionSelect.options[suggestionSelect.selectedIndex].text;
-            } else {
-                customTopicInput.disabled = false; // Bật lại "Tự chọn"
-                topicNameInput.value = customTopicInput.value || ''; // Đồng bộ giá trị "Tự chọn"
-            }
-        });
-        const students = {{{json studentID}}};  // Sử dụng helper `json`
-        const selectedStudents = [];  // Mảng lưu các mã sinh viên đã chọn
         
-        // Hàm tìm kiếm sinh viên
-        function searchStudent() {
-            const searchValue = document.getElementById('searchStudent').value.trim();
-            const resultsList = document.getElementById('searchResults');
 
-            // Clear previous results
-            resultsList.innerHTML = '';
-            resultsList.style.display = 'none'; // Hide the list if no results
-
-            if (searchValue) {
-                // Tìm kiếm kết quả gần đúng
-                const filteredStudents = students.filter(student => student.studentID.includes(searchValue));
+        <!-- Nút tạo mới -->
+        <div class="col-12 d-flex justify-content-between">
+            <!-- Thông báo phản hồi -->
+            <p id="responseMessage" class="mt-3"></p>
+            <button type="submit" class="btn btn-success createtoppic w-25">Tạo mới</button>
+        </div>
+    </div>
 
 
-                if (filteredStudents.length > 0) {
-                    resultsList.style.display = 'block'; // Hiển thị danh sách kết quả
-                    // Hiển thị tối đa 5 kết quả
-                    filteredStudents.slice(0, 5).forEach(student => {
-                        const listItem = document.createElement('li');
-                        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                        listItem.textContent = student.studentID;
-                        listItem.setAttribute('data-id', student);
-
-                        // Tạo nút chọn
-                        const selectButton = document.createElement('button');
-                        selectButton.className = 'btn btn-sm btn-primary';
-                        selectButton.textContent = 'Chọn';
-                        selectButton.type = 'button';
-                        selectButton.onclick = () => selectStudent(student.studentID);
-
-                        listItem.appendChild(selectButton);
-                        resultsList.appendChild(listItem);
-                    });
-                } else {
-                    resultsList.style.display = 'none'; // Ẩn danh sách nếu không có kết quả
-                }
-            }
-        }
-
-        // Hàm khi chọn sinh viên
-        function selectStudent(studentId) {
-            if (selectedStudents.includes(studentId)) {
-                alert('Mã sinh viên này đã được chọn.');
-                return; // Nếu mã sinh viên đã có trong danh sách, không cho chọn lại
-            }
-            const confirmation = confirm('Bạn có chắc chắn muốn chọn sinh viên này?');
-            if (confirmation) {
-                // Thêm mã sinh viên vào mảng đã chọn
-                selectedStudents.push(studentId);  
-                // Thêm sinh viên vào khu vực tab dưới dạng input
-                const selectedStudentsDiv = document.getElementById('selectedStudents');
-                const studentInputWrapper = document.createElement('div');
-                studentInputWrapper.className = 'student-tab d-flex align-items-center mb-2';
-
-                // Tạo thẻ input chứa mã sinh viên
-                const studentInput = document.createElement('input');
-                studentInput.type = 'text';
-                studentInput.name = 'selectedStudents[]'; // Dữ liệu sẽ được gửi qua POST dưới dạng mảng
-                studentInput.disabled = true;
-                studentInput.value = studentId;
-
-                // Thêm vào div thẻ input và nút xóa
-                studentInputWrapper.appendChild(studentInput);
-
-                // Tạo nút xóa
-                const removeButton = document.createElement('button');
-                removeButton.className = 'btn btn-danger btn-sm ms-2';
-                removeButton.textContent = 'Xóa';
-                removeButton.onclick = () => removeStudentTab(studentInputWrapper);
-
-                studentInputWrapper.appendChild(removeButton);
-                selectedStudentsDiv.appendChild(studentInputWrapper);
-
-                // Xóa nội dung ô tìm kiếm sau khi chọn
-                document.getElementById('searchStudent').value = '';
-                // Ẩn danh sách kết quả tìm kiếm sau khi chọn
-                document.getElementById('searchResults').style.display = 'none';
-            }
-        }
-
-        // Hàm xóa tab sinh viên
-        function removeStudentTab(studentTab) {
-            studentTab.remove();
-        }
-
-        // Gán sự kiện cho ô tìm kiếm
-        document.getElementById('searchStudent').addEventListener('input', searchStudent);
-    });
-</script>
+</form>
+<script src="/js/createToppicStudent.js"></script>
