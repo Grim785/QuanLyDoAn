@@ -7,10 +7,12 @@ const models = initModels(sequelize);
 const { users, students, advisors, majors, class_, projects, projectsregister, projectstudents, projectadvisors, projectfiles, files, progress } = models;
 
 class StudentController {
-    //[GET] /student/dashboard
+//[GET] /student
+    //---Giao diện trang chủ sinh viên /dashboard
     async dashboard(req, res, next) {
         try {
             const user_id = req.session.user.id;
+            const role = req.session.user.role;
             // Truy vấn dữ liệu----------------------------
             const student = await students.findOne({
                 where: { usersID: user_id },
@@ -62,78 +64,37 @@ class StudentController {
                 //Truyền dữ liệu hiển thị thành phần------
                 showHeaderFooter: true,
                 showNav: true,
-                student: true,
+                role: role,
                 //----------------------------------------
             });
         } catch (error) {
             console.log(error);
         }
     }
-    //[GET] /student/registertopic
-    async registertopic(req, res, next) {
+    //---Giao diện đăng ký đề tài /register-topic
+    async registerTopic(req, res, next) {
         try {
+            const role = req.session.user.role;
             const major = await majors.findAll();
             const advisor = await advisors.findAll();
 
-            res.render('roles/student/RegisterTopic', {
+            res.render('roles/student/register-topic', {
                 title: 'Thêm mới đề tài',
                 major: major,
                 advisors: advisor,
                 //Truyền dữ liệu hiển thị thành phần------
                 showHeaderFooter: true,
                 showNav: true,
-                student: true,
+                role: role,
                 //----------------------------------------
             });
         } catch (error) {
             console.log(error);
         }
     }
-
-    //[DELETE] 
-    async deleteToppic (req, res, next){
-        const {projectId} = req.params;
-    
-        try {
-            // Xóa đề tài
-            const deleteCount = await projects.destroy({
-                where: { id: projectId },
-            });
-    
-            if (deleteCount === 0) {
-                return res.status(404).json({ message: 'Không tìm thấy đề tài cần xóa.' });
-            }
-    
-            res.status(200).json({ message: 'Đã xóa đề tài thành công.' });
-        } catch (error) {
-            console.error('Lỗi khi xóa đề tài:', error);
-            res.status(500).json({ message: 'Đã xảy ra lỗi khi xóa đề tài.' });
-        }
-    }
-    async searchStudents(req, res, next) {
-        try {
-            // Lấy query từ fontend -------------------
-            const query = req.query.query;
-            if (!query) {
-                return res.status(400).json({ message: 'Yêu cầu tìm kiếm không hợp lệ' });
-            }
-            // Tìm sinh viên------------------------------------
-            const results = await students.findAll({
-                where: {
-                    studentID: {
-                        [Op.like]: `%${query}%`
-                    }
-                },
-                attributes: ['id', 'studentID', 'lastname', 'firstname']
-            });
-            res.json(results);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    //[POST] /student/create-toppic
-    async createToppic(req, res, next) {
+//[POST] /student
+    //---Chức năng đăng ký đề tài /register-topic 
+    async createTopic(req, res, next) {
         const data = req.body;
         console.log('Data received:', data);
 
@@ -226,9 +187,33 @@ class StudentController {
             res.status(400).send({ message: error.message || 'Lỗi khi tạo dự án' });
         }
     }
+//[DELETE] /student
+    //---Chức năng xóa thông tin đề tài không được duyệt /delete-topic/:id
+    async deleteTopic (req, res, next){
+        const {projectId} = req.params;
+    
+        try {
+            // Xóa đề tài
+            const deleteCount = await projects.destroy({
+                where: { id: projectId },
+            });
+    
+            if (deleteCount === 0) {
+                return res.status(404).json({ message: 'Không tìm thấy đề tài cần xóa.' });
+            }
+    
+            res.status(200).json({ message: 'Đã xóa đề tài thành công.' });
+        } catch (error) {
+            console.error('Lỗi khi xóa đề tài:', error);
+            res.status(500).json({ message: 'Đã xảy ra lỗi khi xóa đề tài.' });
+        }
+    }
 
 
-    // //[GET] /student/updateprocess
+
+
+
+    //[GET] /student/updateprocess
     updateprocess(req, res, next) {
         res.render('roles/student/UpdateProcess', {
             title: 'Cập nhật tiến độ',
@@ -238,145 +223,5 @@ class StudentController {
             updateprocessactive: true,
         });
     }
-
-    // //[GET] /student/AccountInfo
-    async accountinfo(req, res, next) {
-        try {
-            const user_id = req.session.user.id;
-            const student = await students.findOne({
-                where: { usersID: user_id },
-                include: [
-                    { model: users, as: 'user', attributes: ['gmail', 'phone'] },
-                    // {model: files, as: 'files', attributes: ['file_path']}
-                ],
-                attributes: ['studentID', 'lastname', 'firstname', 'date_of_birth', 'gender', 'address'],
-            });
-            if (!student) {
-                return res.status(404).render('error', {
-                    title: 'Error',
-                    message: 'Student not found',
-                });
-            }
-            const student_data = student.toJSON();
-            res.render('roles/student/AccountInfo', {
-                title: 'Thông tin tài khoản',
-                data: student_data,
-                dashboardactive: true,
-                //Truyền dữ liệu hiển thị thành phần------
-                showHeaderFooter: true,
-                showNav: true,
-                student: true,
-                //----------------------------------------
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    //[GET] /student/project
-    project(req, res, next) {
-        res.render('roles/student/testupload', {
-            title: 'AccountInfo',
-            showHeaderFooter: true,
-            showNav: true,
-            student: true,
-        });
-    }
-    async projectDetails(req, res, next) {
-        const topicId = req.params.id;
-        const Progress = await progress.findAll({
-            where:{project_id: topicId}
-        })
-        console.log(Progress.title);
-        try {
-            const projectDetails = await projects.findOne({
-                where: { id: topicId },
-                include: [
-                    // Nối đến bảng chuyên ngành lấy thông tin chuyên ngành của đề tài
-                    {
-                        model: majors,
-                        as: 'major',
-                        attributes: ['name'],
-                    },
-                    // Lấy thông tin giảng viên tham gia
-                    {
-                        model: projectadvisors,
-                        as: 'projectadvisors',
-                        attributes: ['advisor_id'],
-                        include: [
-                            {
-                                model: advisors,
-                                as: 'advisor',
-                                attributes: ['lastname', 'firstname']
-                            }
-                        ]
-                    },
-                    // Lấy thông tin sinh viên tham gia
-                    {
-                        model: projectstudents,
-                        as: 'projectstudents',
-                        attributes: ['student_id'],
-                        include: [
-                            {
-                                model: students,
-                                as: 'student',
-                                attributes: ['studentID', 'lastname', 'firstname', 'classID'],
-                                include: [
-                                    {
-                                        model: users,
-                                        as: 'user',
-                                        attributes: ['role']
-                                    },
-                                    {
-                                        model: class_,
-                                        as: 'class',
-                                        attributes: ['classID']
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    // Lấy thông tin file liên kết với dự án
-                    {
-                        model: projectfiles,
-                        as: 'projectfiles',
-                        include: [
-                            {
-                                model: files,
-                                as: 'file',
-                                attributes: ['file_name', 'file_path']
-                            }
-                        ]
-                    }
-                ],
-                attributes: ['title', 'description', 'start_date', 'end_date', 'status'],
-            });
-
-            // In dữ liệu dễ đọc với JSON.stringify để debug
-            console.log(JSON.stringify(projectDetails, null, 2));
-
-            // Lấy thông tin file (nếu có)
-            const projectFile = projectDetails.projectfiles.length > 0 ? projectDetails.projectfiles[0].file : null;
-
-            // Render dữ liệu ra view
-            res.render('roles/student/TopicDetails', {
-                title: 'AccountInfo',
-                progress:Progress,
-                projectDetails: projectDetails,
-                projectFile: projectFile, // Truyền thông tin file
-                // Truyền dữ liệu hiển thị thành phần
-                showHeaderFooter: true,
-                showNav: true,
-                student: true,
-            });
-        } catch (error) {
-            console.log(error);
-            res.status(500).render('error', {
-                title: 'Error',
-                message: 'An error occurred while fetching the topic'
-            });
-        }
-    }
-    //[POST]
-
 }
 module.exports = new StudentController();

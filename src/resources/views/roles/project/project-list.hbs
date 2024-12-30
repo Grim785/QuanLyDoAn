@@ -1,0 +1,117 @@
+<div class="container my-2 table-container project-list">
+  <div class="d-flex justify-content-start my-1">
+    <input type="text" id="search-bar" class="form-control" placeholder="Tìm kiếm tên đề tài..."
+      style="width: 300px;" />
+  </div>
+  <table class="table table-hover table-striped align-middle">
+    <thead class="table-primary">
+      <tr>
+        <th>
+          <input type="checkbox" id="select-all" />
+        </th>
+        <th>ID</th>
+        <th>Tên đề tài</th>
+        <th>Mô tả</th>
+        <th>Ngày bắt đầu</th>
+        <th>Ngày kết thúc</th>
+        <th>Trạng thái</th>
+        <th>Giảng viên hướng dẫn</th>
+        <th>Sinh viên 1</th>
+        <th>Sinh viên 2</th>
+        <th>Sinh viên 3</th>
+        <th>Sinh viên 4</th>
+      </tr>
+    </thead>
+    <tbody id="project-tbody">
+      <!-- Dòng mẫu hiển thị dữ liệu -->
+      {{#each list}}
+      <tr>
+        <td>
+          <input type="checkbox" class="row-select" data-id="{{id}}" />
+        </td>
+        <td>{{id}}</td>
+        <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="title"
+            value="{{this.title}}" /></td>
+        <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="description"
+            value="{{description}}" /></td>
+        <td><input type="date" class="form-control form-control-xs cell-input" data-id="{{id}}" name="start_date"
+            value="{{start_date}}" /></td>
+        <td><input type="date" class="form-control form-control-xs cell-input" data-id="{{id}}" name="end_date"
+            value="{{end_date}}" /></td>
+        <td>
+          <select class="form-select form-select-xs cell-input" data-id="{{id}}" name="status">
+            <option value="not_started" {{#ifCond status 'not_started' }}selected{{/ifCond}}>Chưa bắt đầu</option>
+            <option value="in_progress" {{#ifCond status 'in_progress' }}selected{{/ifCond}}>Đang thực hiện</option>
+            <option value="completed" {{#ifCond status 'completed' }}selected{{/ifCond}}>Hoàn thành</option>
+          </select>
+        </td>
+        <td>
+          <input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="advisor"
+            value="{{#if this.projectadvisors.[0].advisor}}{{this.projectadvisors.[0].advisor.advisorID}} - {{this.projectadvisors.[0].advisor.lastname}} {{this.projectadvisors.[0].advisor.firstname}}{{else}}{{/if}}" />
+        </td>
+        {{#each projectstudents}}
+        <td>
+          <input type="text" class="form-control form-control-xs cell-input" data-id="{{../id}}"
+            name="student_{{@index}}"
+            value="{{this.student.studentID}} - {{this.student.lastname}} {{this.student.firstname}}" />
+        </td>
+        {{/each}}
+        {{#if (lt projectstudents.length 4)}}
+        {{#each (repeat (subtract 4 projectstudents.length))}}
+        <td>
+          <input type="text" class="form-control form-control-xs cell-input" data-id="{{../id}}"
+            name="student_{{add ../projectstudents.length @index}}" value="" />
+        </td>
+        {{/each}}
+        {{/if}}
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="button-container text-end  fs-6">
+  <button class="btn btn-primary" id="add-button">Thêm mới</button>
+  <button class="btn btn-danger" id="delete-button">Xóa</button>
+  <button class="btn btn-warning" id="edit-button">Sửa</button>
+</div>
+
+<!-- Modal thêm mới -->
+<div class="modal-overlay" id="modal-overlay" style="display: none;"></div>
+<div class="modal" id="add-modal" tabindex="-1" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Thêm mới đề tài</h5>
+        <button type="button" class="btn-close" id="close-modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="add-form">
+          <div class="mb-3">
+            <label for="new-title" class="form-label">Tên đề tài</label>
+            <input type="text" class="form-control" id="new-title" name="title" required />
+          </div>
+          <div class="mb-3">
+            <label for="new-description" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="new-description" name="description" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="new-majorID" class="form-label">Chọn chuyên ngành</label>
+            <select class="form-control" id="new-majorID" name="majorID" required>
+              <option value="">-- Chọn chuyên ngành --</option>
+              {{#each majorList}}
+              <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel-button">Hủy</button>
+        <button type="button" class="btn btn-primary" id="save-button">Lưu</button>
+      </div>
+    </div>
+  </div>
+  <div id="user-role" data-role="{{role}}" style="display: none;"></div>
+</div>
+<script src="/js/project-list.js"></script>

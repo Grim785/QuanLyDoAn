@@ -5,32 +5,20 @@
     {{!-- menu --}}
     <div class="flex-grow-1">
         <ul class="list-group mt-3">
-            {{#if student}}
-            <a href="/student/dashboard" class="list-group-item text-light border-0"><i
-                    class="fa-solid fa-house px-2"></i>Trang chủ</a>
-            <a href="/student/AccountInfo" class="list-group-item text-light border-0"><i
-                    class="fa-solid fa-user px-2"></i>Thông tin cá nhân</a>
-            <a href="/student/RegisterTopic" class="list-group-item text-light border-0"><i
-                    class="fa-solid fa-pen px-2"></i>Đăng kí đề tài</a>
-            <a href="/student/UpdateProcess" class="list-group-item text-light border-0"><i
-                    class="fa-solid fa-circle-up px-2"></i>Cập nhật tiến độ</a>
-            <a href="/student/project" class="list-group-item text-light border-0">Test upload file</a>
+            {{#if (eq role 'student')}}
+            <a href="/student/dashboard" class="list-group-item text-light border-0"><i class="fa-solid fa-house px-2"></i>Trang chủ</a>
+            <a href="/project/project-list" class="list-group-item text-light border-0"><i class="fa-solid fa-list px-2"></i>Danh sách đề tài</a>
+            <a href="/student/register-topic" class="list-group-item text-light border-0"><i class="fa-solid fa-pen px-2"></i>Đăng kí đề tài</a>
             {{/if}}
-            {{#if advisor}}
-            <a href="/advisor/dashboard" class="list-group-item text-light border-0" aria-current="true">Trang chủ</a>
-            <a href="/advisor/Topic" class="list-group-item text-light border-0">Tra cứu đề tài</a>
-            <a href="/advisor/" class="list-group-item text-light border-0">Chấm điểm đề tài</a>
-            <a href="/advisor/" class="list-group-item text-light border-0">Thông tin cá nhân</a>
+            {{#if (eq role 'advisor')}}
+            <a href="/advisor/approve-topic-list" class="list-group-item text-light border-0"><i class="fa-solid fa-check-to-slot px-2"></i>Duyệt đề tài</a>
+            <a href="/project/project-list" class="list-group-item text-light border-0"><i class="fa-solid fa-list px-2"></i>Danh sách đề tài</a>
             {{/if}}
-            {{#if admin}}
-            <a href="/admin/TopicList" class="list-group-item text-light border-0">Quản lí danh sách đề tài</a>
-            <a href="/admin/create-toppic" class="list-group-item text-light border-0">Tạo mới đề tài</a>
+            {{#if (eq role 'admin')}}
+            <a href="/project/project-list" class="list-group-item text-light border-0">Danh sách đề tài</a>
             <a href="/admin/RegisterTopicList" class="list-group-item text-light border-0">Danh sách đăng kí đề tài</a>
-            <a href="/admin/AccountManagement" class="list-group-item text-light border-0">Quản lí tài khoản</a>
-            <a href="/admin/AdvisorManagement" class="list-group-item text-light border-0">Quản lí thông tin giảng
-                viên</a>
-            <a href="/admin/StudentManagement" class="list-group-item text-light border-0">Quản lí thông tin sinh
-                viên</a>
+            <a href="/admin/AdvisorManagement" class="list-group-item text-light border-0">Quản lí thông tin giảng viên</a>
+            <a href="/admin/student-management" class="list-group-item text-light border-0">Quản lí thông tin sinh viên</a>
             {{/if}}
         </ul>
     </div>

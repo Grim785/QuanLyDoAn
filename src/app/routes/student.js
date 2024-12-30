@@ -4,31 +4,20 @@ const router = express.Router();
 const chkRoles = require('../../config/chkRoles');
 const StudentController = require('../controllers/StudentController');
 
-//[GET] /student/dashboard
-router.get('/dashboard', chkRoles('student'), StudentController.dashboard);
+//[GET] /student
+    //---Giao diện trang chủ sinh viên
+    router.get('/dashboard', chkRoles('student'), StudentController.dashboard);
+    //---Giao diện đăng ký đề tài
+    router.get('/register-topic', chkRoles('student'), StudentController.registerTopic);
+//[POST] /student
+    //---Chức năng đăng ký đề tài
+    router.post('/register-topic', chkRoles('student'), StudentController.createTopic);
+//[DELETE] /student
+    //---Chức năng xóa thông tin đề tài không được duyệt
+    router.delete('/delete-topic/:id', chkRoles('student'), StudentController.deleteTopic);
 
-//[GET] /student/registertopic
-router.get('/registertopic', chkRoles('student'), StudentController.registertopic);
 
 //[GET] /student/updateprocess
 router.get('/updateprocess', chkRoles('student'), StudentController.updateprocess);
-
-//[GET] /student/accountinfo
-router.get('/accountinfo', chkRoles('student'), StudentController.accountinfo);
-
-//[GET] /student/project
-router.get('/project', chkRoles('student'), StudentController.project);
-
-//[GET] /student/details/Toppic/:id
-router.get('/details/Toppic/:id', chkRoles('student'), StudentController.projectDetails);
-//[GET] /admin/search
-router.get('/search', chkRoles('student'), StudentController.searchStudents);
-
-//[POST] /student/create-toppic
-router.post('/registerToppic', chkRoles('student'), StudentController.createToppic);
-
-//[DELETE] /delete-topic/:projectId
-router.delete('/delete-topic/:projectId', chkRoles('student'), StudentController.deleteToppic);
-
 
 module.exports = router;    

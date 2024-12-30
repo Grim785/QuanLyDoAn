@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const path = require('path');
 const fs = require('fs');
-const s3 = require('../../config/aws'); // Import AWS config
+const s3 = require('../../config/aws');
 require('dotenv').config();
 
 const sequelize = require("../../config/db");
@@ -9,26 +9,25 @@ const initModels = require("../models/init-models");
 
 // Khởi tạo tất cả các model và quan hệ
 const models = initModels(sequelize);
-const { users, files } = models; // Chỉ lấy những model cần thiết
+const { users, files } = models; 
 
 class SiteController {
-    // [GET] /login
+//[GET] /
+    //---Giao diện đăng nhập --- /login
     login(req, res, next) {
-        res.render('loginnew', {
+        res.render('login', {
             title: 'Đăng nhập hệ thống',
             showHeaderFooter: false,
             showNav: false,
         });
     }
-
-    // [GET] /errlogin
+    //---Giao diện lỗi chưa đăng nhập--- /errlogin
     errlogin(req, res, next) {
         res.render('errlogin', {
             title: 'Err Login',
         });
     }
-
-    // [GET] /err403
+    //---Giao diện lỗi quyền truy cập /err403
     err403(req, res, next) {
         res.render('err403', {
             user: req.session.user,
@@ -38,8 +37,7 @@ class SiteController {
             student: true,
         });
     }
-
-    // [GET] /logout
+    //---Chức năng đăng xuất /logout
     async logout(req, res, next) {
         try {
             req.session.destroy(err => {
@@ -51,30 +49,30 @@ class SiteController {
             next(error); // Xử lý lỗi nếu có
         }
     }
-
-    //[GET] /loadFile
-    async loadFileproject(req, res, next){
+    //---Chức năng tìm kiếm sinh viên /student-search
+    async searchStudents(req, res, next) {
         try {
-            const { project_id } = req.params;
-            console.log(project_id);
-    
-            const projectFile = await projectfiles.findOne({
-                where: { project_id },
-                include: [{ model: files }],
-            });
-    
-            if (projectFile) {
-                res.status(200).json({ file: projectFile.file });
-            } else {
-                res.status(404).json({ message: 'No file found for this project' });
+            // Lấy query từ fontend -------------------
+            const query = req.query.query;
+            if (!query) {
+                return res.status(400).json({ message: 'Yêu cầu tìm kiếm không hợp lệ' });
             }
+            // Tìm sinh viên------------------------------------
+            const results = await students.findAll({
+                where: {
+                    studentID: {
+                        [Op.like]: `%${query}%`
+                    }
+                },
+                attributes: ['id', 'studentID', 'lastname', 'firstname']
+            });
+            res.json(results);
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Failed to load file', error: error.message });
+            console.log(error);
         }
     }
-
-    // [POST] /chklogin
+//[POST] /
+    //---Kiểm tra đăng nhập /chklogin
     async chklogin(req, res, next) {
         const { username, password, rememberMe } = req.body;
         try {
@@ -89,6 +87,8 @@ class SiteController {
             }
 
             req.session.user = user; // Lưu thông tin người dùng vào session
+            global.userRole = {role: req.session.user.role};
+            console.log("Thông tin: " + global.userRole.role);
             if (rememberMe) {
                 res.cookie('userId', user.id, { maxAge: 7 * 24 * 60 * 60 * 1000 }); // Cookie 7 ngày
             }
@@ -98,8 +98,7 @@ class SiteController {
             next(error);
         }
     }
-
-    // [POST] /upload
+    //---Tải file /upload/project
     async uploadFile(req, res) {
         try {
             const file = req.file;
@@ -165,6 +164,81 @@ class SiteController {
         } catch (error) {
             console.error(error);
             res.status(500).send('File upload failed');
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    //[GET] /loadFile
+    async loadFileproject(req, res, next){
+        try {
+            const { project_id } = req.params;
+            console.log(project_id);
+    
+            const projectFile = await projectfiles.findOne({
+                where: { project_id },
+                include: [{ model: files }],
+            });
+    
+            if (projectFile) {
+                res.status(200).json({ file: projectFile.file });
+            } else {
+                res.status(404).json({ message: 'No file found for this project' });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Failed to load file', error: error.message });
         }
     }
 }

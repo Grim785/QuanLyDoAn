@@ -1,0 +1,119 @@
+<div class="container my-2 table-container student-list">
+  <div class="d-flex justify-content-start my-1">
+    <input type="text" id="search-bar" class="form-control" placeholder="Tìm kiếm mã hoặc tên sinh viên..."
+      style="width: 300px;" />
+  </div>
+  <table class="table table-hover table-striped align-middle">
+    <thead class="table-primary">
+      <tr>
+        <th>
+          <input type="checkbox" id="select-all" />
+        </th>
+        <th>ID</th>
+        <th>Mã sinh viên</th>
+        <th>Họ và tên đệm</th>
+        <th>Tên</th>
+        <th>Ngày sinh</th>
+        <th>Giới tính</th>
+        <th>Địa chỉ</th>
+        <th>Lớp</th>
+        <th>Tài khoản liên kết</th>
+      </tr>
+    </thead>
+    <tbody id="student-tbody">
+      <!-- Dòng mẫu hiển thị dữ liệu -->
+      {{#each list}}
+      <tr>
+        <td>
+          <input type="checkbox" class="row-select" data-id="{{id}}" />
+        </td>
+        <td>{{id}}</td>
+        <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="studentID"
+            value="{{studentID}}" /></td>
+        <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="lastname"
+            value="{{lastname}}" /></td>
+        <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="firstname"
+            value="{{firstname}}" /></td>
+        <td><input type="date" class="form-control form-control-xs cell-input" data-id="{{id}}" name="date_of_birth"
+            value="{{date_of_birth}}" /></td>
+        <td>
+          <select class="form-select form-select-xs cell-input" data-id="{{id}}" name="gender">
+            <option value="Nam" {{#ifCond gender 'Nam' }}selected{{/ifCond}}>Nam</option>
+            <option value="Nữ" {{#ifCond gender 'Nữ' }}selected{{/ifCond}}>Nữ</option>
+          </select>
+        </td>
+        <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="address"
+            value="{{address}}" /></td>
+        <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="classID"
+            value="{{class.classID}}" /></td>
+        <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="username"
+            value="{{user.username}}" /></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="button-container text-end fs-6">
+  <button class="btn btn-primary" id="add-button">Thêm mới</button>
+  <button class="btn btn-danger" id="delete-button">Xóa</button>
+  <button class="btn btn-warning" id="edit-button">Sửa</button>
+</div>
+
+<!-- Modal thêm mới -->
+<div class="modal-overlay" id="modal-overlay" style="display: none;"></div>
+<div class="modal" id="add-modal" tabindex="-1" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Thêm mới sinh viên</h5>
+        <button type="button" class="btn-close" id="close-modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="add-form">
+          <div class="mb-3">
+            <label for="new-studentID" class="form-label">Mã sinh viên</label>
+            <input type="text" class="form-control" id="new-studentID" name="studentID" required />
+          </div>
+          <div class="mb-3">
+            <label for="new-lastname" class="form-label">Họ và tên đệm</label>
+            <input type="text" class="form-control" id="new-lastname" name="lastname" required />
+          </div>
+          <div class="mb-3">
+            <label for="new-firstname" class="form-label">Tên</label>
+            <input type="text" class="form-control" id="new-firstname" name="firstname" required />
+          </div>
+          <div class="mb-3">
+            <label for="new-date-of-birth" class="form-label">Ngày sinh</label>
+            <input type="date" class="form-control" id="new-date-of-birth" name="date_of_birth" required />
+          </div>
+          <div class="mb-3">
+            <label for="new-gender" class="form-label">Giới tính</label>
+            <select class="form-control" id="new-gender" name="gender" required>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="new-address" class="form-label">Địa chỉ</label>
+            <input type="text" class="form-control" id="new-address" name="address" required />
+          </div>
+          <div class="mb-3">
+            <label for="new-classID" class="form-label">Lớp</label>
+            <input type="text" class="form-control" id="new-classID" name="classID" required />
+          </div>
+          <div class="mb-3">
+            <label for="new-username" class="form-label">Tài khoản liên kết</label>
+            <input type="text" class="form-control" id="new-username" name="username" required />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel-button">Hủy</button>
+        <button type="button" class="btn btn-primary" id="save-button">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/student-list.js"></script>

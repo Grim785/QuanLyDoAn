@@ -39,3 +39,35 @@
     font-size: 1.2rem;
     color: green;
 }
+
+
+.student-dashboard .card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    /* Lớp phủ mờ */
+    z-index: 10;
+    /* Đảm bảo lớp phủ nằm trên cùng */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    pointer-events: auto;
+    /* Đảm bảo chỉ lớp phủ nhận sự kiện */
+    border-radius: 0.5rem;
+}
+
+.student-dashboard .card-overlay marquee {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.student-dashboard .card-overlay .btn-ok {
+    z-index: 11;
+}

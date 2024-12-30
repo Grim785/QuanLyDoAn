@@ -1,0 +1,79 @@
+.project-list{
+    height: 65vh;
+    /* Điều chỉnh để thêm vùng chứa nút */
+    width: 165vh;
+    overflow-y: auto;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.project-list .table th,
+.project-list .table td {
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    padding: 2 10px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+}
+
+.project-list td input[type="checkbox"],
+.project-list th input[type="checkbox"] {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+}
+
+.project-list .form-control-xs,
+.project-list .form-select-xs {
+    font-size: 0.7rem;
+    line-height: 1;
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+
+.project-list .cell-input {
+    margin: 0;
+    padding: 0.3rem;
+    box-sizing: border-box;
+    background-color: transparent;
+    width: 200px;
+}
+
+.project-list .cell-input:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 1px #007bff;
+}
+
+.project-list .button-container {
+    height: 50px;
+}
+
+.project-list .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1049;
+}
+
+.project-list .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
+    background-color: #ffffff24;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.project-list .modal-dialog {
+    width: 400px;
+}

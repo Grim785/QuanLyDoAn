@@ -103,9 +103,9 @@
                         {{#if (eq projectsregister.status 'rejected')}}
                         <!-- Lớp phủ khi bị từ chối -->
                         <div class="card-overlay">
-                            <marquee behavior="scroll" direction="left" class="mb-3">
+                            <p class="mb-3 text-white">
                                 Đề tài của nhóm bạn đã bị từ chối, vui lòng đăng ký lại
-                            </marquee>
+                            </p>
                             <button class="text-light btn btn-danger btn-ok" data-id="{{id}}">OK</button>
                         </div>
                         {{/if}}
@@ -123,7 +123,7 @@
 
                         <!-- Chi tiết -->
                         <div class="card-footer-details" style="z-index: 0;">
-                            <a href="/student/details/Toppic/{{id}}" class="">Xem chi tiết>></a>
+                            <a href="/project/{{id}}/detail" class="">Xem chi tiết>></a>
                         </div>
                     </div>
                     {{/each}}
@@ -144,81 +144,4 @@
         </div>
     </div>
 </article>
-<style>
-    .card-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.75);
-        /* Lớp phủ mờ */
-        z-index: 10;
-        /* Đảm bảo lớp phủ nằm trên cùng */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        color: white;
-        pointer-events: auto;
-        /* Đảm bảo chỉ lớp phủ nhận sự kiện */
-        border-radius: 0.5rem;
-    }
-
-    .card-overlay marquee {
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #fff;
-        margin-bottom: 15px;
-    }
-
-    .card-overlay .btn-ok {
-        z-index: 11;
-    }
-</style>
-<script>
-    const progressbar = document.querySelector('.progressbar');
-    let progress = 90
-
-    function enableProgressbar() {
-        progressbar.setAttribute("role", "progressbar");
-        progressbar.setAttribute("aria-valuenow", progress);
-        progressbar.setAttribute("aria-live", "polite");
-        progressbar.style.setProperty("--progress", progress + "%")
-    }
-    enableProgressbar()
-
-
-
-
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.btn-ok').forEach(button => {
-            button.addEventListener('click', async (event) => {
-                const projectId = event.target.getAttribute('data-id');
-
-                if (!confirm('Bạn có chắc chắn muốn xóa đề tài này?')) return;
-
-                try {
-                    const response = await fetch(`/student/delete-topic/${projectId}`, {
-                        method: 'DELETE',
-                    });
-
-                    const result = await response.json();
-                    if (response.ok) {
-                        alert(result.message);
-                        // Xóa thẻ khỏi giao diện
-                        event.target.closest('.card').remove();
-                        window.location.href = '/student/RegisterTopic';
-                    } else {
-                        alert(result.message || 'Không thể xóa đề tài.');
-                    }
-                } catch (error) {
-                    console.error('Lỗi khi xóa đề tài:', error);
-                    alert('Đã xảy ra lỗi, vui lòng thử lại sau.');
-                }
-            });
-        });
-    });
-
-</script>
+<script src="/js/student-dashboard.js"></script>

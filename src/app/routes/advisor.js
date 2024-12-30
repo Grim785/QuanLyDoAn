@@ -3,18 +3,18 @@ const router = express.Router();
 
 const AdvisorController = require('../controllers/AdvisorController');
 const chkRoles = require('../../config/chkRoles');
-//[GET] /advisor/dashboard
-router.get('/dashboard', chkRoles('advisor'), AdvisorController.dashboard);
+//[GET] /advisor
+    //---Giao diện danh sách duyệt đề tài
+    router.get('/approve-topic-list', chkRoles('advisor'), AdvisorController.approveList);
 
-//[GET] /advisor/topic
-router.get('/topic', chkRoles('advisor'), AdvisorController.topic);
-
-//[POST] /advisor/approve-topic/:id
-router.post('/approve-topic/:id', chkRoles('advisor'), AdvisorController.approveToppic);
-//[POST] /advisor/reject-topic/:id
-router.post('/reject-topic/:id', chkRoles('advisor'), AdvisorController.rejectTopic);
-
-
-
+//[POST] /advisor
+    //---Duyệt chọn đề tài
+    router.post('/approve-topic/:id', chkRoles('advisor'), AdvisorController.approveTopic);
+    //---Từ chối chọn đề tài
+    router.post('/reject-topic/:id', chkRoles('advisor'), AdvisorController.rejectTopic);
+    // Duyệt nhiều đề tài
+    router.post('/approve-topics', chkRoles('advisor'), AdvisorController.approveMultipleTopics);
+    // Hủy nhiều đề tài
+    router.post('/reject-topics', chkRoles('advisor'), AdvisorController.rejectMultipleTopics);
 
 module.exports = router;    
