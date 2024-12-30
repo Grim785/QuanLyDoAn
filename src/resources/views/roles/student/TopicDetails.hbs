@@ -48,15 +48,14 @@
         <div class="col-6">
             <div class="container container_process overflow-auto">
                 <div class="row g-5">
+                    {{#each progress}}
                     <div class="col-12 process-card">
-                        <div class="bg-light h-100 border rounded"></div>
+                        <div class="bg-light h-100 border rounded">
+                            <p>{{this.title}}</p>
+                            <p>nội dung: {{this.content}}</p>
+                        </div>
                     </div>
-                    <div class="col-12 process-card">
-                        <div class="bg-light h-100 border rounded"></div>
-                    </div>
-                    <div class="col-12 process-card">
-                        <div class="bg-light h-100 border rounded"></div>
-                    </div>
+                    {{/each}}
                 </div>
             </div>
         </div>

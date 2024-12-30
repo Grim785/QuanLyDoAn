@@ -401,3 +401,22 @@ REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `c
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+
+
+DROP TABLE IF EXISTS `progress`;
+CREATE TABLE IF NOT EXISTS `progress` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `project_id` int NOT NULL,
+  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FK_progress_project` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+REPLACE INTO `progress` (`id`, `title`, `content`, `project_id`, `createdAt`, `updatedAt`) VALUES
+	(1,'tiến trình 1','nội dung tuần 1',1,'2024-12-27 00:14:33', '2024-12-27 00:14:33')
+  (2,'tiến trình 2','nội dung tuần 1',1,'2024-12-27 00:14:33', '2024-12-27 00:14:33')
+  (3,'tiến trình 3','nội dung tuần 1',1,'2024-12-27 00:14:33', '2024-12-27 00:14:33')
+  (4,'tiến trình 4','nội dung tuần 1',1,'2024-12-27 00:14:33', '2024-12-27 00:14:33')

@@ -4,7 +4,7 @@ const initModels = require("../models/init-models");
 // Khởi tạo tất cả các model và quan hệ
 const models = initModels(sequelize);
 // Truy cập model
-const { users, students, advisors, majors, class_, projects, projectsregister, projectstudents, projectadvisors, projectfiles, files } = models;
+const { users, students, advisors, majors, class_, projects, projectsregister, projectstudents, projectadvisors, projectfiles, files, progress } = models;
 
 class StudentController {
     //[GET] /student/dashboard
@@ -283,6 +283,10 @@ class StudentController {
     }
     async projectDetails(req, res, next) {
         const topicId = req.params.id;
+        const Progress = await progress.findAll({
+            where:{project_id: topicId}
+        })
+        console.log(Progress.title);
         try {
             const projectDetails = await projects.findOne({
                 where: { id: topicId },
@@ -356,6 +360,7 @@ class StudentController {
             // Render dữ liệu ra view
             res.render('roles/student/TopicDetails', {
                 title: 'AccountInfo',
+                progress:Progress,
                 projectDetails: projectDetails,
                 projectFile: projectFile, // Truyền thông tin file
                 // Truyền dữ liệu hiển thị thành phần
