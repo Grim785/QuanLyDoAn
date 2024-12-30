@@ -283,10 +283,6 @@ class StudentController {
     }
     async projectDetails(req, res, next) {
         const topicId = req.params.id;
-        const Progress = await progress.findAll({
-            where:{project_id: topicId}
-        })
-        console.log(Progress.title);
         try {
             const projectDetails = await projects.findOne({
                 where: { id: topicId },
@@ -339,7 +335,7 @@ class StudentController {
                     {
                         model: progress,
                         as: 'progresses',
-                        attributes:['title', 'content'],
+                        attributes:['title', 'content','id'],
                         include: [
                             {
                                 model: projectfiles,
@@ -362,13 +358,15 @@ class StudentController {
             // In dữ liệu dễ đọc với JSON.stringify để debug
             console.log(JSON.stringify(projectDetails, null, 2));
 
+            const progresses = projectDetails.progresses;
+
             // Lấy thông tin file (nếu có)
             const projectFile = projectDetails.progresses.length > 0 ? projectDetails.progresses[0].file : null;
 
             // Render dữ liệu ra view
             res.render('roles/student/TopicDetails', {
                 title: 'AccountInfo',
-                progress:Progress,
+                progress:progresses,
                 projectDetails: projectDetails,
                 projectFile: projectFile, // Truyền thông tin file
                 // Truyền dữ liệu hiển thị thành phần
