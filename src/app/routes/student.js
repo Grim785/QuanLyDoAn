@@ -30,5 +30,13 @@ router.post('/registerToppic', chkRoles('student'), StudentController.createTopp
 //[DELETE] /delete-topic/:projectId
 router.delete('/delete-topic/:projectId', chkRoles('student'), StudentController.deleteToppic);
 
+//[Delete] /deleteProgress/:progressId
+router.delete('/deleteProgress/:progressid', chkRoles('student'), StudentController.deleteProgress);
+
+//[POST] /addPogress
+router.post('/addProgress',chkRoles('student'), StudentController.addProgress); //
+
+//[PUT] /updatePogress/:progressId
+router.put('/updateProgress/:Id',chkRoles('student'),StudentController.updateProgress); //
 
 module.exports = router;    

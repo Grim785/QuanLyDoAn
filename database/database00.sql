@@ -416,7 +416,7 @@ CREATE TABLE IF NOT EXISTS `progress` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 REPLACE INTO `progress` (`id`, `title`, `content`, `project_id`, `createdAt`, `updatedAt`) VALUES
-	(1,'tiến trình 1','nội dung tuần 1',1,'2024-12-27 00:14:33', '2024-12-27 00:14:33')
-  (2,'tiến trình 2','nội dung tuần 1',1,'2024-12-27 00:14:33', '2024-12-27 00:14:33')
-  (3,'tiến trình 3','nội dung tuần 1',1,'2024-12-27 00:14:33', '2024-12-27 00:14:33')
+	(1,'tiến trình 1','nội dung tuần 1',1,'2024-12-27 00:14:33', '2024-12-27 00:14:33'),
+  (2,'tiến trình 2','nội dung tuần 1',1,'2024-12-27 00:14:33', '2024-12-27 00:14:33'),
+  (3,'tiến trình 3','nội dung tuần 1',2,'2024-12-27 00:14:33', '2024-12-27 00:14:33'),
   (4,'tiến trình 4','nội dung tuần 1',1,'2024-12-27 00:14:33', '2024-12-27 00:14:33')

@@ -348,7 +348,7 @@ class StudentController {
                         ]
                     }
                 ],
-                attributes: ['title', 'description', 'start_date', 'end_date', 'status'],
+                attributes: ['id','title', 'description', 'start_date', 'end_date', 'status'],
             });
 
             // In dữ liệu dễ đọc với JSON.stringify để debug
@@ -377,6 +377,52 @@ class StudentController {
         }
     }
     //[POST]
+    async addProgress(req, res, next) {
+        const title = req.body.title;
+        const projectid=req.body.projectid;
+        try {
+            await progress.create({
+                title: title,
+                content:'',
+                project_id: projectid
+            })
+            res.json({ success: true });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
+        }
+    }
 
+
+    //[DELETE]
+    async deleteProgress(req, res, next) {
+        const id = req.params.progressid;
+        console.log(id);
+        try {
+            await progress.destroy({
+                where: { id: id }
+            });
+            res.json({ success: true });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
+        }
+    }
+
+    //[PUT]
+    async updateProgress(req, res, next) {
+        const {Id} = req.params;
+        const title = req.body.title;
+        const content = req.body.content;
+        try {
+            await progress.update({
+                title: title,
+                content: content,
+            }, {
+                where: { id: Id }
+            });
+            res.json({ success: true });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi' });
+        }
+    }
 }
 module.exports = new StudentController();
