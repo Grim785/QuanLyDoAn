@@ -9,11 +9,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     title: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: false
     },
     content: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: true
     },
     project_id: {
       type: DataTypes.INTEGER,
@@ -37,11 +37,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "project_id",
-        unique: true,
+        name: "FK_progress_project",
         using: "BTREE",
         fields: [
-          { name: "project_id"},
+          { name: "project_id" },
         ]
       },
     ]

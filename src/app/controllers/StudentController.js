@@ -283,9 +283,6 @@ class StudentController {
     }
     async projectDetails(req, res, next) {
         const topicId = req.params.id;
-        const Progress = await progress.findAll({
-            where:{project_id: topicId}
-        })
         console.log(Progress.title);
         try {
             const projectDetails = await projects.findOne({
@@ -337,13 +334,21 @@ class StudentController {
                     },
                     // Lấy thông tin file liên kết với dự án
                     {
-                        model: projectfiles,
-                        as: 'projectfiles',
+                        model: progress,
+                        as: 'progresses',
+                        attributes:['title', 'content'],
                         include: [
                             {
-                                model: files,
-                                as: 'file',
-                                attributes: ['file_name', 'file_path']
+                                model: projectfiles,
+                                as: 'projectfiles',
+                                attributes: ['file_id'],
+                                include: [
+                                    {
+                                        model: files,
+                                        as: 'file',
+                                        attributes: ['file_name','file_path']
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -354,13 +359,14 @@ class StudentController {
             // In dữ liệu dễ đọc với JSON.stringify để debug
             console.log(JSON.stringify(projectDetails, null, 2));
 
+
             // Lấy thông tin file (nếu có)
-            const projectFile = projectDetails.projectfiles.length > 0 ? projectDetails.projectfiles[0].file : null;
+            const projectFile = projectDetails.progresses.length > 0 ? projectDetails.progresses[0].file : null;
 
             // Render dữ liệu ra view
             res.render('roles/student/TopicDetails', {
                 title: 'AccountInfo',
-                progress:Progress,
+                progress: projectDetails.progresses,
                 projectDetails: projectDetails,
                 projectFile: projectFile, // Truyền thông tin file
                 // Truyền dữ liệu hiển thị thành phần

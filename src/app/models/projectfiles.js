@@ -1,12 +1,12 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('projectfiles', {
-    project_id: {
+    progress_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'projects',
+        model: 'progress',
         key: 'id'
       }
     },
@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "project_id" },
+          { name: "progress_id" },
           { name: "file_id" },
         ]
       },
