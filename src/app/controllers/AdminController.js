@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt'); //Import mã hóa mật khẩu
-const { where, Op } = require("sequelize");
+const { where, Op, Sequelize } = require("sequelize");
 const sequelize = require("../../config/db");
 const initModels = require("../models/init-models");
 // Khởi tạo tất cả các model và quan hệ
@@ -66,748 +66,384 @@ class AdminController {
     }
     //---Chức năng tìm kiếm bảng sinh viên
     async studentSearch(req, res, next) {
-        const query = req.query.query || '';
         try {
-            const whereClause = query
-                ? {
-                    [Sequelize.Op.or]: [
-                        { studentID: { [Sequelize.Op.like]: `%${query}%` } },
-                        { lastname: { [Sequelize.Op.like]: `%${query}%` } },
-                        { firstname: { [Sequelize.Op.like]: `%${query}%` } },
-                    ],
-                }
-                : {}; // Không áp dụng bộ lọc nếu query rỗng
-
-            const filteredStudents = await students.findAll({
-                where: whereClause,
-                include: [
-                    {
-                        model: users,
-                        as: 'user',
-                        attributes: ['id', 'username'],
-                    },
-                    {
-                        model: class_,
-                        as: 'class',
-                        attributes: ['classID'],
-                    },
-                ],
-            });
-            res.status(200).json(filteredStudents);
-        } catch (error) {
-            console.error('Error searching students:', error);
-            res.status(500).json({ message: 'Lỗi khi tìm kiếm sinh viên' });
-        }
-    }
-    //[POST] /admin
-    //[PUT] /admin
-    //[DELETE] /admin
-
-
-    //[GET] /admin/AccountManagement
-    async AccountManagement(req, res, next) {
-        try {
-            const listUsers = await users.findAll({
-                include: [
-                    { model: students, as: 'students', attributes: ['lastname', 'firstname'] },
-                    { model: advisors, as: 'advisors', attributes: ['lastname', 'firstname'] }
-                ],
-                attributes: ['id', 'username', 'role', 'active', 'createdAt', 'updatedAt']
-            });
-            // console.log(JSON.stringify(listUsers, null, 2)); 
-            res.render('roles/admin/AccountManagement', {
-                title: 'Danh sách tài khoản',
-                listUsers: listUsers,
-                //Truyền dữ liệu hiển thị thành phần------
-                showHeaderFooter: true,
-                showNav: true,
-                admin: true,
-                //----------------------------------------
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    //[GET] /admin/AdvisorManagement
-
-    //[GET] /admin/StudentManagement
-
-    // [POST] /admin/addRecord
-    async addAdvisor(req, res, next) {
-        try {
-            const { advisorID, lastname, firstname, date_of_birth, gender, address, username } = req.body;
-
-
-            // Kiểm tra trùng lặp advisorID
-            const existingAdvisor = await advisors.findOne({ where: { advisorID } });
-            if (existingAdvisor) {
-                return res.status(400).json({ message: 'Mã giảng viên đã tồn tại trong hệ thống.' });
-            }
-
-            // Kiểm tra trùng lặp username
-            const existingUser = await users.findOne({ where: { username } });
-            if (!existingUser) {
-                return res.status(400).json({ message: 'Tài khoản liên kết không tồn tại.' });
-            }
-
-            // Kiểm tra userID đã liên kết ở bảng advisors hoặc students
-            const linkedAdvisor = await advisors.findOne({ where: { userID: existingUser.id } });
-            const linkedStudent = await students.findOne({ where: { usersID: existingUser.id } });
-
-            if (linkedAdvisor || linkedStudent) {
-                return res.status(400).json({ message: 'Tài khoản này đã được liên kết với một người dùng khác.' });
-            }
-
-            // Cập nhật vai trò của user thành 'advisor'
-            await existingUser.update({ role: 'advisor' });
-
-            const newAdvisor = await advisors.create({
-                advisorID,
-                lastname,
-                firstname,
-                date_of_birth,
-                gender,
-                address,
-                userID: existingUser.id
-            });
-
-            res.status(201).json({ message: 'Thêm giảng viên thành công!', advisor: newAdvisor });
-        } catch (error) {
-            console.log(error);
-            res.status(500).send('Lỗi khi thêm giảng viên.');
-        }
-    }
-
-    // [POST] /admin/addRecord
-    async addStudent(req, res, next) {
-        try {
-            const { studentID, lastname, firstname, date_of_birth, gender, address, classID, username } = req.body;
-
-            // Kiểm tra trùng lặp advisorID
-            const existingStudent = await students.findOne({ where: { studentID } });
-            if (existingStudent) {
-                return res.status(400).json({ message: 'Mã sinh viên đã tồn tại trong hệ thống.' });
-            }
-
-            // Kiểm tra trùng lặp username
-            const existingUser = await users.findOne({ where: { username } });
-            if (!existingUser) {
-                return res.status(400).json({ message: 'Tài khoản liên kết không tồn tại.' });
-            }
-
-            // Kiểm tra userID đã liên kết ở bảng advisors hoặc students
-            const linkedAdvisor = await advisors.findOne({ where: { userID: existingUser.id } });
-            const linkedStudent = await students.findOne({ where: { usersID: existingUser.id } });
-
-            if (linkedAdvisor || linkedStudent) {
-                return res.status(400).json({ message: 'Tài khoản này đã được liên kết với một người dùng khác.' });
-            }
-
-            // Cập nhật vai trò của user thành 'advisor'
-            await existingUser.update({ role: 'student' });
-
-            // Kiểm tra tồn tại classID
-            const existingClass = await class_.findOne({ where: { classID: classID } });
-            if (!existingClass) {
-                return res.status(400).json({ message: 'Lớp học không tồn tại.' });
-            }
-
-            const newStudent = await students.create({
-                studentID,
-                lastname,
-                firstname,
-                date_of_birth,
-                gender,
-                classID: existingClass.id,
-                address,
-                usersID: existingUser.id
-            });
-
-            res.status(201).json({ message: 'Thêm sinh viên thành công!', student: newStudent });
-        } catch (error) {
-            console.log(error);
-            res.status(500).send('Lỗi khi thêm sinh viên.');
-        }
-    }
-
-    // [DELETE] /admin/AdvisorManagement/delete/:id
-    async deleteAdvisor(req, res, next) {
-        try {
-            const { id } = req.params;
-            const advisor = await advisors.findByPk(id);
-
-            if (!advisor) {
-                return res.status(404).send('Giảng viên không tồn tại.');
-            }
-
-            await advisor.destroy();
-
-            res.status(200).json({ message: 'Xóa giảng viên thành công!' });
-        } catch (error) {
-            console.log(error);
-            res.status(500).send('Lỗi khi xóa giảng viên.');
-        }
-    }
-    // [DELETE] /admin/AdvisorManagement/delete/:id
-    async deleteStudent(req, res, next) {
-        try {
-            const { id } = req.params;
-            const student = await students.findByPk(id);
-
-            if (!student) {
-                return res.status(404).send('Sinh viên không tồn tại.');
-            }
-
-            await student.destroy();
-
-            res.status(200).json({ message: 'Xóa sinh viên thành công!' });
-        } catch (error) {
-            console.log(error);
-            res.status(500).send('Lỗi khi xóa sinh viên.');
-        }
-    }
-
-    // [PUT] /admin/AdvisorManagement/update/:id
-    async updateAdvisor(req, res, next) {
-        try {
-            const { id } = req.params;
-            const { advisorID, lastname, firstname, date_of_birth, gender, address, username } = req.body;
-            const advisor = await advisors.findByPk(id);
-
-            if (!advisor) {
-                return res.status(404).send('Giảng viên không tồn tại.');
-            }
-
-            // Kiểm tra trùng lặp advisorID nếu thay đổi
-            if (advisor.advisorID !== advisorID) {
-                const existingAdvisor = await advisors.findOne({ where: { advisorID } });
-                if (existingAdvisor) {
-                    return res.status(400).json({ message: 'Mã giảng viên đã tồn tại trong hệ thống.' });
-                }
-            }
-
-            // Kiểm tra trùng lặp username nếu thay đổi
-            const existingUser = await users.findOne({ where: { username } });
-            if (!existingUser) {
-                return res.status(400).json({ message: 'Tài khoản liên kết không tồn tại.' });
-            }
-
-            // Kiểm tra userID đã liên kết ở bảng advisors hoặc students nếu thay đổi
-            if (advisor.userID !== existingUser.id) {
-                const linkedAdvisor = await advisors.findOne({ where: { userID: existingUser.id } });
-                const linkedStudent = await students.findOne({ where: { usersID: existingUser.id } });
-
-                if (linkedAdvisor || linkedStudent) {
-                    return res.status(400).json({ message: 'Tài khoản này đã được liên kết với một người dùng khác.' });
-                }
-            }
-
-            // Cập nhật vai trò của user thành 'advisor' nếu chưa đúng
-            if (existingUser.role !== 'advisor') {
-                await existingUser.update({ role: 'advisor' });
-            }
-
-            await advisor.update({
-                advisorID,
-                lastname,
-                firstname,
-                date_of_birth,
-                gender,
-                address,
-                userID: existingUser.id
-            });
-
-            res.status(200).json({ message: 'Cập nhật giảng viên thành công!' });
-        } catch (error) {
-            console.log(error);
-            res.status(500).send('Lỗi khi cập nhật giảng viên.');
-        }
-    }
-    // [PUT] /admin/StudentManagement/update/:id
-    async updateStudent(req, res, next) {
-        try {
-            const { id } = req.params;
-            const { studentID, lastname, firstname, date_of_birth, gender, address, classID, username } = req.body;
-
-            const student = await students.findByPk(id);
-            if (!student) {
-                return res.status(404).json({ message: 'Sinh viên không tồn tại.' });
-            }
-
-            // Kiểm tra và xử lý thay đổi studentID
-            if (student.studentID !== studentID) {
-                const existingStudent = await students.findOne({ where: { studentID } });
-                if (existingStudent) {
-                    return res.status(400).json({ message: 'Mã sinh viên đã tồn tại trong hệ thống.' });
-                }
-            }
-
-            // Kiểm tra và xử lý thay đổi classID
-            const existingClass = await class_.findOne({ where: { classID } });
-            if (!existingClass) {
-                return res.status(400).json({ message: 'Lớp học không tồn tại.' });
-            }
-
-            // Kiểm tra và xử lý thay đổi username
-            let existingUser = await users.findOne({ where: { id: student.usersID } });
-            if (!existingUser) {
-                return res.status(400).json({ message: 'Tài khoản liên kết không tồn tại.' });
-            }
-
-            if (existingUser.username !== username) {
-                const newUser = await users.findOne({ where: { username } });
-                if (!newUser) {
-                    return res.status(400).json({ message: 'Tài khoản liên kết mới không tồn tại.' });
-                }
-
-                // Kiểm tra xem tài khoản mới có liên kết với người dùng khác không
-                const linkedAdvisor = await advisors.findOne({ where: { userID: newUser.id } });
-                const linkedStudent = await students.findOne({ where: { usersID: newUser.id } });
-
-                if (linkedAdvisor || linkedStudent) {
-                    return res.status(400).json({ message: 'Tài khoản mới đã được liên kết với người dùng khác.' });
-                }
-
-                existingUser = newUser;
-            }
-
-            // So sánh dữ liệu hiện tại với dữ liệu mới
-            if (
-                student.studentID === studentID &&
-                student.lastname === lastname &&
-                student.firstname === firstname &&
-                student.date_of_birth === date_of_birth &&
-                student.gender === gender &&
-                student.address === address &&
-                student.classID === existingClass.id &&
-                student.usersID === existingUser.id
-            ) {
-                return res.status(200).json({ message: 'Không có thay đổi để cập nhật.' });
-            }
-
-            // Cập nhật vai trò của user thành 'student' nếu cần
-            if (existingUser.role !== 'student') {
-                await existingUser.update({ role: 'student' });
-            }
-
-            // Cập nhật thông tin sinh viên
-            await student.update({
-                studentID,
-                lastname,
-                firstname,
-                date_of_birth,
-                gender,
-                address,
-                classID: existingClass.id,
-                usersID: existingUser.id,
-            });
-
-            res.status(200).json({ message: 'Cập nhật sinh viên thành công!' });
-        } catch (error) {
-            console.error(error);
-            res.status(500).send('Lỗi khi cập nhật sinh viên.');
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    AdvisorList(req, res, next) {
-        res.render('roles/admin/AdvisorList', {
-            title: 'Dashboard admin',
-            showHeaderFooter: true,
-            showNav: true,
-            admin: true,
-            advisorlistactive: true,
-        });
-    }
-
-    async loadcreateToppic(req, res, next) {
-        try {
-            const major = await majors.findAll();
-            const advisor = await advisors.findAll();
-
-            res.render('roles/admin/create-new-topic', {
-                title: 'Thêm mới đề tài',
-                major: major,
-                advisors: advisor,
-                //Truyền dữ liệu hiển thị thành phần------
-                showHeaderFooter: true,
-                showNav: true,
-                admin: true,
-                //----------------------------------------
-            });
-        } catch (error) {
-            console.log(error);
-        }
-
-    }
-    async searchStudents(req, res, next) {
-        try {
-            // Lấy query từ fontend -------------------
-            const query = req.query.query;
-            if (!query) {
-                return res.status(400).json({ message: 'Yêu cầu tìm kiếm không hợp lệ' });
-            }
-            // Tìm sinh viên------------------------------------
+            const query = req.query.query || '';
             const results = await students.findAll({
                 where: {
                     studentID: {
                         [Op.like]: `%${query}%`
                     }
                 },
-                attributes: ['id', 'studentID', 'lastname', 'firstname']
-            });
+                include: [
+                    {
+                        model: users,
+                        as: 'user'
+                    },
+                    {
+                        model: class_,
+                        as: 'class'
+                    }
+                ]
+            })
             res.json(results);
         } catch (error) {
-            console.log(error);
+            console.error('Lỗi khi tìm kiếm:', error);
+            res.status(500).json({ error: 'Đã xảy ra lỗi trong quá trình tìm kiếm' });
         }
     }
-    async userDetail(req, res, next) {
+    //---Chức năng tìm kiếm giảng viên
+    async advisorSearch(req, res, next) {
         try {
-            const userId = req.params.id;
-            const user = await users.findOne({
-                where: { id: userId }
-            });
-            if (!user) {
-                return res.status(404).render('error', { message: 'Tài khoản không tồn tại' });
-            }
-
-            if (user.role === 'student') {
-                const student = await students.findOne({ where: { usersID: userId } })
-                res.render('roles/admin/detailStudent', {
-                    title: `Chi tiết sinh viên: ${user.username}`,
-                    student
-                });
-            } else if (user.role === 'advisor') {
-                const advisor = await advisors.findOne({ where: { userID: userId } })
-                res.render('roles/admin/detailAdvisor', {
-                    title: `Chi tiết giảng viên: ${user.username}`,
-                    advisor
-                });
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    async updateAccount(req, res, next) {
-        const userId = req.params.id;
-        const updatedData = req.body;
-
-        try {
-            // Kiểm tra nếu username đã thay đổi
-            if (updatedData.username) {
-                // Kiểm tra xem username đã tồn tại chưa (ngoại trừ người dùng hiện tại)
-                const existingUser = await users.findOne({
-                    where: {
-                        username: updatedData.username,
-                        id: { [Op.ne]: userId }, // Kiểm tra ngoại trừ user hiện tại
+            const query = req.query.query || '';
+            const results = await advisors.findAll({
+                where: {
+                    advisorID: {
+                        [Op.like]: `%${query}%`
                     }
-                });
-
-                if (existingUser) {
-                    return res.status(400).json({ success: false, message: 'Username đã tồn tại' });
-                }
-            }
-
-            // Nếu không có lỗi về username, tiến hành cập nhật thông tin người dùng
-            await users.update(updatedData, { where: { id: userId } });
-            res.json({ success: true });
+                },
+                include: [
+                    {
+                        model: users,
+                        as: 'user'
+                    },
+                ]
+            })
+            res.json(results);
         } catch (error) {
-            console.log(error);
-            res.json({ success: false });
+            console.error('Lỗi khi tìm kiếm:', error);
+            res.status(500).json({ error: 'Đã xảy ra lỗi trong quá trình tìm kiếm' });
         }
     }
-
-    async addAccount(req, res, next) {
-        const { username, password, role } = req.body;
+//[POST] /admin
+    //---Chức năng thêm sinh viên mới
+    async addStudent(req, res) {
         try {
-            if (!username || !password || !role) {
-                return res.status(400).json({ success: false, message: 'Thiếu thông tin cần thiết!' });
+            const {
+                studentID,
+                lastname,
+                firstname,
+                date_of_birth,
+                gender,
+                address,
+                classID,
+                username
+            } = req.body;
+
+            // Kiểm tra dữ liệu đầu vào
+            if (!studentID || !lastname || !firstname || !date_of_birth || !gender || !address || !classID || !username) {
+                return res.status(400).json({ error: 'Vui lòng điền đầy đủ thông tin.' });
             }
+
+            // Kiểm tra trùng lặp studentID
+            const existingStudent = await students.findOne({ where: { studentID } });
+            if (existingStudent) {
+                return res.status(409).json({ error: `Mã sinh viên ${studentID} đã tồn tại.` });
+            }
+
+            // Kiểm tra trùng lặp username
             const existingUser = await users.findOne({ where: { username } });
             if (existingUser) {
-                return res.status(400).json({ success: false, message: 'Tên tài khoản đã tồn tại!' });
+                return res.status(409).json({ error: `Tài khoản ${username} đã tồn tại.` });
             }
-            const hashedPassword = await bcrypt.hash(password, 10);
-            await users.create({
-                username: username,
+
+            // Tìm lớp học theo classID
+            const classData = await class_.findOne({
+                where: { classID },
+                attributes: ['id', 'classID', 'status']
+            });
+
+            if (!classData) {
+                return res.status(404).json({ error: `Không tìm thấy lớp học với mã ${classID}.` });
+            }
+
+            if (classData.status !== 'active') {
+                return res.status(400).json({ error: `Lớp học ${classID} hiện không hoạt động.` });
+            }
+
+            // Tạo người dùng mới trong bảng users
+            const hashedPassword = await bcrypt.hash('123', 10); // Mã hóa mật khẩu mặc định
+            const user = await users.create({
+                username,
                 password: hashedPassword,
-                role: role,
-                active: true,
+                role: 'student' // Đặt role mặc định là student
             });
-            res.json({ success: true });
+
+            // Thêm sinh viên mới vào bảng students
+            const student = await students.create({
+                studentID,
+                lastname,
+                firstname,
+                date_of_birth,
+                gender,
+                address,
+                classID: classData.id, // Sử dụng id của lớp học từ bảng class_
+                usersID: user.id // Liên kết với bảng users
+            });
+
+            res.status(201).json({ message: 'Thêm sinh viên thành công!', student });
         } catch (error) {
-            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
+            console.error('Lỗi khi thêm sinh viên:', error);
+            res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm sinh viên.' });
         }
     }
-    async deleteAccount(req, res, next) {
-        const { id } = req.params;
+    //---Chức năng xóa sinh viên
+    async deleteStudents(req, res) {
         try {
-            const user = await users.findByPk(id);
-            if (!user) {
-                return res.status(404).json({ success: false, message: 'Tài khoản không tồn tại!' });
+            const { ids } = req.body;
+
+            if (!ids || !Array.isArray(ids) || ids.length === 0) {
+                return res.status(400).json({ error: 'Danh sách ID không hợp lệ.' });
             }
-            await user.destroy();
-            res.json({ success: true });
+
+            // Tìm danh sách usersID liên kết với các sinh viên được chọn
+            const studentRecords = await students.findAll({
+                where: { id: ids },
+                attributes: ['usersID'] // Chỉ lấy thông tin usersID
+            });
+
+            const userIDs = studentRecords.map((record) => record.usersID);
+
+            // Xóa sinh viên từ danh sách ID
+            await students.destroy({
+                where: { id: ids }
+            });
+
+            // Xóa người dùng liên kết từ bảng users
+            await users.destroy({
+                where: { id: userIDs }
+            });
+
+            res.status(200).json({ message: 'Xóa sinh viên và tài khoản liên kết thành công!' });
         } catch (error) {
-            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
+            console.error('Lỗi khi xóa sinh viên:', error);
+            res.status(500).json({ error: 'Đã xảy ra lỗi khi xóa sinh viên.' });
         }
     }
-
-
-
-
-
-    RegisterTopicList(req, res, next) {
-        res.render('roles/admin/RegisterTopicList', {
-            title: 'Dashboard admin',
-            showHeaderFooter: true,
-            showNav: true,
-            admin: true,
-            registertopiclistactive: true,
-        });
-    }
-
-    EditAccount(req, res, next) {
-        res.render('roles/admin/EditAccount', {
-            title: 'Dashboard admin',
-            showHeaderFooter: true,
-            showNav: true,
-            admin: true,
-            editaccountactive: true,
-        });
-    }
-
-    //[POST] /admin/create-toppic
-    async createToppic(req, res, next) {
-        const data = req.body;
-        console.log('Data received:', data);
-
-        const studentlist = Array.isArray(data.students) ? data.students : [];
-        console.log(studentlist);
-        const dateProject = new Date();
-
-        const transaction = await sequelize.transaction();
+    //---Chức năng sửa thông tin sinh viên
+    async updateStudents(req, res) {
         try {
+            const { students: updatedStudents } = req.body;
+
+            if (!updatedStudents || !Array.isArray(updatedStudents) || updatedStudents.length === 0) {
+                return res.status(400).json({ error: 'Dữ liệu cập nhật không hợp lệ.' });
+            }
+
+            for (const studentData of updatedStudents) {
+                const { id, studentID, username, classID, ...rest } = studentData;
+
+                // Tìm sinh viên hiện tại
+                const currentStudent = await students.findOne({ where: { id } });
+                if (!currentStudent) {
+                    return res.status(404).json({ error: `Không tìm thấy sinh viên với ID ${id}.` });
+                }
+
+                // Nếu studentID thay đổi, cập nhật username tương ứng
+                if (currentStudent.studentID !== studentID) {
+                    const newUsername = `${studentID}`;
+
+                    // Kiểm tra xem username mới có bị trùng lặp không
+                    const existingUser = await users.findOne({ where: { username: newUsername } });
+                    if (existingUser) {
+                        return res.status(409).json({ error: `Tài khoản ${newUsername} đã tồn tại.` });
+                    }
+
+                    // Cập nhật username trong bảng users
+                    await users.update({ username: newUsername }, { where: { id: currentStudent.usersID } });
+                }
+
+                // Tìm lớp học theo mã classID
+                const classData = await class_.findOne({ where: { classID } });
+                if (!classData) {
+                    return res.status(404).json({ error: `Không tìm thấy lớp học với mã ${classID}.` });
+                }
+
+                // Cập nhật thông tin sinh viên
+                await students.update(
+                    { studentID, classID: classData.id, ...rest },
+                    { where: { id } }
+                );
+            }
+
+            res.status(200).json({ message: 'Cập nhật sinh viên thành công!' });
+        } catch (error) {
+            console.error('Lỗi khi cập nhật sinh viên:', error);
+            res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật sinh viên.' });
+        }
+    }
+    //---Chức năng thêm giảng viên mới
+    async addAdvisor(req, res) {
+        try {
+            const {
+                advisorID,
+                lastname,
+                firstname,
+                date_of_birth,
+                gender,
+                address,
+                username
+            } = req.body;
+
             // Kiểm tra dữ liệu đầu vào
-            if (!data.title || !data.description || !data.status || !data.majorId) {
-                throw new Error('Thiếu thông tin bắt buộc');
+            if (!advisorID || !lastname || !firstname || !date_of_birth || !gender || !address || !username) {
+                return res.status(400).json({ error: 'Vui lòng điền đầy đủ thông tin.' });
             }
 
-            // Thêm dữ liệu vào bảng project
-            const project = await projects.create({
-                title: data.title,
-                description: data.description,
-                status: data.status,
-                majorID: data.majorId,
-                start_date: data.status === 'in_progress' ? dateProject : null
-            }, { transaction });
-
-            try {
-                for (const studentId of studentlist) {
-                    const existingProject = await projectstudents.findOne({
-                        where: { student_id: studentId },
-                        include: [
-                            {
-                                model: projects,
-                                as: 'project',
-                                where: {
-                                    status: ['not_started', 'in_progress'],
-                                },
-                            },
-                            {
-                                model: students,
-                                as: 'student',
-                                where: {
-                                    id: studentId,  // So khớp với student_id
-                                },
-                                attributes: ['studentID', 'lastname', 'firstname'], // Lấy những trường cần thiết
-                            },
-                        ],
-                    });
-
-                    console.log(existingProject);
-
-                    if (existingProject) {
-                        // Nếu sinh viên đã tham gia dự án khác với trạng thái not_started hoặc in_progress
-                        const { studentID, lastname, firstname } = existingProject.student;
-                        res.status(400).send({ message: `Sinh viên ${studentID} - ${lastname} ${firstname} đã tham gia một dự án khác. Vui lòng kiểm tra lại!` });
-                        return; // Dừng quá trình nếu có lỗi
-                    }
-
-                    // Nếu không có lỗi, tiếp tục thêm sinh viên vào dự án
-                    await projectstudents.create({
-                        project_id: project.id,
-                        student_id: studentId,
-                    }, { transaction });
-                }
-            } catch (error) {
-                console.error('Lỗi khi xử lý sinh viên:', error.message);
-                // Trong trường hợp có lỗi, rollback giao dịch
-                await transaction.rollback();
-                res.status(500).send({ message: 'Lỗi hệ thống. Vui lòng thử lại!' });
+            // Kiểm tra trùng lặp studentID
+            const existingStudent = await advisors.findOne({ where: { advisorID } });
+            if (existingStudent) {
+                return res.status(409).json({ error: `Mã giảng viên ${advisorID} đã tồn tại.` });
             }
 
-            // Thêm giảng viên hướng dẫn nếu có
-            if (data.advisorId) {
-                await projectadvisors.create({
-                    project_id: project.id,
-                    advisor_id: data.advisorId
-                }, { transaction });
+            // Kiểm tra trùng lặp username
+            const existingUser = await users.findOne({ where: { username } });
+            if (existingUser) {
+                return res.status(409).json({ error: `Tài khoản ${username} đã tồn tại.` });
             }
 
-            await transaction.commit();
-            res.status(200).send({ message: 'Tạo đề tài thành công, vui lòng kiểm tra lại tại trang danh sách' });
-        } catch (error) {
-            await transaction.rollback();
-            console.error('Error creating project or students:', error);
-            res.status(400).send({ message: error.message || 'Lỗi khi tạo dự án' });
-        }
-    }
-
-
-    async updateTopic(req, res, next) {
-        const { id } = req.params;
-        const { title, description, start_date, end_date, status, advisor, students: studentList } = req.body;
-
-        const transaction = await sequelize.transaction(); // Bắt đầu giao dịch
-
-        try {
-            let validStartDate = null;
-            let validEndDate = null;
-
-            if (status !== 'not_started') {
-                validStartDate = start_date && !isNaN(Date.parse(start_date)) ? new Date(start_date) : null;
-                validEndDate = end_date && !isNaN(Date.parse(end_date)) ? new Date(end_date) : null;
-            }
-
-            await projects.update(
-                {
-                    title,
-                    description,
-                    start_date: validStartDate,
-                    end_date: validEndDate,
-                    status,
-                },
-                { where: { id }, transaction }
-            );
-
-            // Xóa giảng viên cũ
-            await projectadvisors.destroy({ where: { project_id: id }, transaction });
-
-            // Thêm giảng viên mới nếu có
-            if (advisor && advisor.trim() !== '') {
-                const advisorID = advisor.split(' - ')[0];
-                const advisorRecord = await advisors.findOne({ where: { advisorID }, transaction });
-
-                if (advisorRecord) {
-                    await projectadvisors.create(
-                        {
-                            project_id: id,
-                            advisor_id: advisorRecord.id,
-                        },
-                        { transaction }
-                    );
-                } else {
-                    throw new Error('Giảng viên không tồn tại. Vui lòng kiểm tra lại!');
-                }
-            }
-
-
-            await projectstudents.destroy({
-                where: { project_id: id },
-                transaction,
+            // Tạo người dùng mới trong bảng users
+            const hashedPassword = await bcrypt.hash('123', 10); // Mã hóa mật khẩu mặc định
+            const user = await users.create({
+                username,
+                password: hashedPassword,
+                role: 'advisor' // Đặt role mặc định là advisor
             });
 
-            // Xử lý thêm sinh viên
-            const studentsToAdd = [];
-            for (const student of studentList.filter(s => s && s !== '')) {
-                const studentID = student.split(' - ')[0];
-                const studentRecord = await students.findOne({ where: { studentID }, transaction });
+            // Thêm sinh viên mới vào bảng students
+            const advisor = await advisors.create({
+                advisorID,
+                lastname,
+                firstname,
+                date_of_birth,
+                gender,
+                address,
+                userID: user.id // Liên kết với bảng users
+            });
 
-                if (studentRecord) {
-                    const existingProject = await projectstudents.findOne({
-                        where: { student_id: studentRecord.id },
-                        include: [{
-                            model: projects,
-                            as: 'project',
-                            where: {
-                                status: ['not_started', 'in_progress'],
-                            },
-                        }],
-                        transaction,
-                    });
+            res.status(201).json({ message: 'Thêm giảng viên thành công!', advisor });
+        } catch (error) {
+            console.error('Lỗi khi thêm giảng viên:', error);
+            res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm giảng viên.' });
+        }
+    }
+    //---Chức năng xóa giảng viên
+    async deleteAdvisor(req, res) {
+        try {
+            const { ids } = req.body;
 
-                    if (existingProject) {
-                        const studentInfo = await students.findOne({
-                            where: { id: existingProject.student_id },
-                            transaction,
-                        });
+            if (!ids || !Array.isArray(ids) || ids.length === 0) {
+                return res.status(400).json({ error: 'Danh sách ID không hợp lệ.' });
+            }
 
-                        // Gửi phản hồi lỗi và hủy giao dịch
-                        await transaction.rollback();
-                        return res.status(400).send({
-                            message: `Sinh viên ${studentInfo.studentID} - ${studentInfo.lastname} ${studentInfo.firstname} đã tham gia một dự án khác. Vui lòng kiểm tra lại!`
-                        });
+            // Tìm danh sách usersID liên kết với các sinh viên được chọn
+            const studentRecords = await advisors.findAll({
+                where: { id: ids },
+                attributes: ['userID'] // Chỉ lấy thông tin usersID
+            });
+
+            const userIDs = studentRecords.map((record) => record.userID);
+
+            // Xóa sinh viên từ danh sách ID
+            await advisors.destroy({
+                where: { id: ids }
+            });
+
+            // Xóa người dùng liên kết từ bảng users
+            await users.destroy({
+                where: { id: userIDs }
+            });
+
+            res.status(200).json({ message: 'Xóa giảng viên và tài khoản liên kết thành công!' });
+        } catch (error) {
+            console.error('Lỗi khi xóa giảng viên:', error);
+            res.status(500).json({ error: 'Đã xảy ra lỗi khi xóa giảng viên.' });
+        }
+    }
+    //---Chức năng sửa thông tin sinh viên
+    async updateAdvisor(req, res) {
+        try {
+            const { students: updatedStudents } = req.body;
+
+            if (!updatedStudents || !Array.isArray(updatedStudents) || updatedStudents.length === 0) {
+                return res.status(400).json({ error: 'Dữ liệu cập nhật không hợp lệ.' });
+            }
+
+            for (const studentData of updatedStudents) {
+                const { id, advisorID, username, classID, ...rest } = studentData;
+
+                // Tìm sinh viên hiện tại
+                const currentStudent = await advisors.findOne({ where: { id } });
+                if (!currentStudent) {
+                    return res.status(404).json({ error: `Không tìm thấy giảng viên với ID ${id}.` });
+                }
+
+                // Nếu studentID thay đổi, cập nhật username tương ứng
+                if (currentStudent.advisorID !== advisorID) {
+                    const newUsername = `${advisorID}`;
+
+                    // Kiểm tra xem username mới có bị trùng lặp không
+                    const existingUser = await users.findOne({ where: { username: newUsername } });
+                    if (existingUser) {
+                        return res.status(409).json({ error: `Tài khoản ${newUsername} đã tồn tại.` });
                     }
 
-                    studentsToAdd.push({
-                        project_id: id,
-                        student_id: studentRecord.id,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                    });
+                    // Cập nhật username trong bảng users
+                    await users.update({ username: newUsername }, { where: { id: currentStudent.userID } });
                 }
+
+                // // Tìm lớp học theo mã classID
+                // const classData = await class_.findOne({ where: { classID } });
+                // if (!classData) {
+                //     return res.status(404).json({ error: `Không tìm thấy lớp học với mã ${classID}.` });
+                // }
+
+                // Cập nhật thông tin sinh viên
+                await advisors.update(
+                    { advisorID, ...rest },
+                    { where: { id } }
+                );
             }
 
-            if (studentsToAdd.length > 0) {
-                await projectstudents.bulkCreate(studentsToAdd, { transaction });
-            }
+            res.status(200).json({ message: 'Cập nhật giảng viên thành công!' });
+        } catch (error) {
+            console.error('Lỗi khi cập nhật giảng viên:', error);
+            res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật giảng viên.' });
+        }
+    }
 
-            await transaction.commit(); // Xác nhận giao dịch
-            res.status(200).json({ message: 'Cập nhật thành công!' });
-        } catch (error) {
-            if (!transaction.finished) {
-                await transaction.rollback(); // Hủy giao dịch nếu chưa rollback
-            }
-            console.error('Error updating project:', error);
-            if (!res.headersSent) { // Kiểm tra xem phản hồi đã được gửi hay chưa
-                res.status(500).json({ message: error.message || 'Lỗi khi cập nhật đề tài.', error });
-            }
-        }
-    }
-    async deleteProject(req, res, next) {
-        const { id } = req.params;
-        try {
-            const project = await projects.findByPk(id);
-            if (!project) {
-                return res.status(404).json({ success: false, message: 'Dự án không tồn tại!' });
-            }
-            await project.destroy();
-            res.json({ success: true, message: 'Xóa dự án thành công!' });
-        } catch (error) {
-            console.error('Error deleting project:', error);
-            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi khi xóa dự án!' });
-        }
-    }
+    //[PUT] /admin
+    //[DELETE] /admin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

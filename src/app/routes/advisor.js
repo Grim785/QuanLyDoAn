@@ -6,7 +6,8 @@ const chkRoles = require('../../config/chkRoles');
 //[GET] /advisor
     //---Giao diện danh sách duyệt đề tài
     router.get('/approve-topic-list', chkRoles('advisor'), AdvisorController.approveList);
-
+    //---Giao diện danh sách đề tài được phân công
+    router.get('/assigned-topic-list', chkRoles('advisor'), AdvisorController.assignedList);
 //[POST] /advisor
     //---Duyệt chọn đề tài
     router.post('/approve-topic/:id', chkRoles('advisor'), AdvisorController.approveTopic);

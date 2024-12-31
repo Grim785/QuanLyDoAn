@@ -47,7 +47,7 @@ class ProjectController {
         ]
       });
       res.render('roles/project/project-list', {
-        title: 'Dashboard admin',
+        title: 'Danh sách đề tài',
         list: list,
         majorList: majorList,
         //Truyền dữ liệu hiển thị thành phần------
@@ -63,10 +63,6 @@ class ProjectController {
   //---Giao diện chi tiết đề tài
   async projectDetails(req, res, next) {
     const topicId = req.params.id;
-    // const Progress = await progress.findAll({
-    //     where:{project_id: topicId}
-    // })
-    // console.log(Progress.title);
     try {
       const role = req.session.user.role;
       const projectDetails = await projects.findOne({

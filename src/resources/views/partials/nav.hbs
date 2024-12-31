@@ -11,13 +11,13 @@
             <a href="/student/register-topic" class="list-group-item text-light border-0"><i class="fa-solid fa-pen px-2"></i>Đăng kí đề tài</a>
             {{/if}}
             {{#if (eq role 'advisor')}}
+            <a href="/advisor/assigned-topic-list" class="list-group-item text-light border-0"><i class="fa-solid fa-chalkboard-user px-2"></i>Các đề tài hướng dẫn</a>
             <a href="/advisor/approve-topic-list" class="list-group-item text-light border-0"><i class="fa-solid fa-check-to-slot px-2"></i>Duyệt đề tài</a>
             <a href="/project/project-list" class="list-group-item text-light border-0"><i class="fa-solid fa-list px-2"></i>Danh sách đề tài</a>
             {{/if}}
             {{#if (eq role 'admin')}}
             <a href="/project/project-list" class="list-group-item text-light border-0">Danh sách đề tài</a>
-            <a href="/admin/RegisterTopicList" class="list-group-item text-light border-0">Danh sách đăng kí đề tài</a>
-            <a href="/admin/AdvisorManagement" class="list-group-item text-light border-0">Quản lí thông tin giảng viên</a>
+            <a href="/admin/advisor-management" class="list-group-item text-light border-0">Quản lí thông tin giảng viên</a>
             <a href="/admin/student-management" class="list-group-item text-light border-0">Quản lí thông tin sinh viên</a>
             {{/if}}
         </ul>

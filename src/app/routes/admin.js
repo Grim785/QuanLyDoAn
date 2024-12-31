@@ -10,42 +10,22 @@ const AdminController = require('../controllers/AdminController');
     //---Giao diện quản lý giảng viên
     router.get('/advisor-management', chkRoles('admin'), AdminController.advisorManagement);
     //---Chức năng tìm kiếm sinh viên
-    router.get('/search', chkRoles('admin'), AdminController.studentSearch);
+    router.get('/students/search', chkRoles('admin'), AdminController.studentSearch);
+    //---Chức năng tìm kiếm giảng viene
+    router.get('/advisor/search', chkRoles('admin'), AdminController.advisorSearch);
 //[POST] /admin
+    //---Chức năng thêm sinh viên mới
+    router.post('/students/add', chkRoles('admin'), AdminController.addStudent);
+    //---Chức năng xóa sinh viên
+    router.post('/students/delete', chkRoles('admin'), AdminController.deleteStudents);
+    //--Chức năng sửa thông tin sinh viên
+    router.post('/students/update', chkRoles('admin'), AdminController.updateStudents);
+    //---Chức năng thêm giảng viên mới
+    router.post('/adviors/add', chkRoles('admin'), AdminController.addAdvisor);
+    //---Chức năng xóa giảng viên
+    router.post('/adviors/delete', chkRoles('admin'), AdminController.deleteAdvisor);
+    //--Chức năng sửa thông tin sinh viên
+    router.post('/adviors/update', chkRoles('admin'), AdminController.updateAdvisor);
 //[PUT] /admin
 //[DELETE] /admin
-
-
-
-
-
-
-//[GET] /admin/EditAccount
-router.get('/create-toppic', chkRoles('admin'), AdminController.loadcreateToppic);
-
-
-
-//[POST] /admin/addRecord
-router.post('/addRecordStudent', chkRoles('admin'), AdminController.addStudent);
-//[DELETE] /admin/deleteAccount/:id
-router.delete('/deleteRecordStudent/:id', chkRoles('admin'), AdminController.deleteStudent);
-//[PUT] /admin/updateAccount/:id
-router.put('/updateRecordStudent/:id', chkRoles('admin'), AdminController.updateStudent);
-//[POST] /admin/addRecord
-router.post('/addRecord', chkRoles('admin'), AdminController.addAdvisor);
-//[DELETE] /admin/deleteAccount/:id
-router.delete('/deleteRecord/:id', chkRoles('admin'), AdminController.deleteAdvisor);
-//[PUT] /admin/updateAccount/:id
-router.put('/updateRecord/:id', chkRoles('admin'), AdminController.updateAdvisor);
-//[POST] /admin/create-toppic
-router.post('/create-toppic', chkRoles('admin'), AdminController.createToppic);
-//[POST] /admin/updateAccount/:id
-router.post('/updateAccount/:id', chkRoles('admin'), AdminController.updateAccount);
-//[POST] /admin/addAccount
-router.post('/addAccount', chkRoles('admin'), AdminController.addAccount);
-//[POST] /admin/updateToppic/:id
-router.put('/updateToppic/:id', chkRoles('admin'), AdminController.updateTopic);
-//[DELETE] /admin/deleteAccount/:id
-router.delete('/deleteProject/:id', chkRoles('admin'), AdminController.deleteProject);
-
 module.exports = router;    

@@ -65,6 +65,57 @@ class AdvisorController {
         }
 
     }
+    //---Giao diện danh sách duyệt đề tài được phân công
+    async assignedList(req, res, next) {
+        const user_id = req.session.user.id;
+        const role = req.session.user.role;
+        try {
+            const listToppic = await advisors.findAll({
+                where: {userID: user_id},
+                include: [{
+                    model: projectadvisors,
+                    as: 'projectadvisors',
+                    include: [
+                        {
+                            model: projects,
+                            as: 'project',
+                            where: {status: 'in_progress'},
+                            include: [
+                                {
+                                    model: projectsregister,
+                                    as: 'projectsregister',
+                                },
+                                {
+                                    model: projectstudents,
+                                    as: 'projectstudents',
+                                    include: [
+                                        {
+                                            model: students,
+                                            as: 'student'
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }]
+            });
+            // Kết quả JSON sạch
+            console.log(JSON.stringify(listToppic, null, 2));
+            res.render('roles/advisor/assigned-topic-list', {
+                title: 'Danh sách đề tài hướng dẫn',
+                listRegiToppic: listToppic,
+                //Truyền dữ liệu hiển thị thành phần------
+                showHeaderFooter: true,
+                showNav: true,
+                role: role,
+                //----------------------------------------
+            });
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 //[POST] /advisor
     //---Duyệt chọn đề tài /approve-topic/:id
     async approveTopic(req, res, next){

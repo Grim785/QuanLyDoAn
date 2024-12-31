@@ -47,7 +47,7 @@
         <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="classID"
             value="{{class.classID}}" /></td>
         <td><input type="text" class="form-control form-control-xs cell-input" data-id="{{id}}" name="username"
-            value="{{user.username}}" /></td>
+            value="{{user.username}}" readonly/></td>
       </tr>
       {{/each}}
     </tbody>
@@ -104,7 +104,7 @@
           </div>
           <div class="mb-3">
             <label for="new-username" class="form-label">Tài khoản liên kết</label>
-            <input type="text" class="form-control" id="new-username" name="username" required />
+            <input type="text" class="form-control" id="new-username" name="username" required disabled />
           </div>
         </form>
       </div>
@@ -115,5 +115,4 @@
     </div>
   </div>
 </div>
-
-<script src="/js/student-list.js"></script>
+<script src="/js/student-management.js"></script>
