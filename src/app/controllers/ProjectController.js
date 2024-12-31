@@ -3,7 +3,7 @@ const sequelize = require("../../config/db");
 const initModels = require("../models/init-models");
 // Khởi tạo tất cả các model và quan hệ
 const models = initModels(sequelize);
-const { projects, projectadvisors, advisors, projectstudents, students, users, class_, projectfiles, files, majors } = models;
+const { projects, projectadvisors, advisors, projectstudents, students, users, class_, projectfiles, files, majors, progress } = models;
 
 class ProjectController {
 //[GET] /project
@@ -46,6 +46,8 @@ class ProjectController {
           }
         ]
       });
+
+
       res.render('roles/project/project-list', {
         title: 'Danh sách đề tài',
         list: list,
@@ -123,6 +125,11 @@ class ProjectController {
                 attributes: ['file_name', 'file_path']
               }
             ]
+          },
+          {
+            model: progress,
+            as: 'progresses',
+            attributes: ['id', 'title', 'content', 'project_id']
           }
         ],
         attributes: ['title', 'description', 'start_date', 'end_date', 'status'],
@@ -130,7 +137,7 @@ class ProjectController {
 
       // In dữ liệu dễ đọc với JSON.stringify để debug
       console.log(JSON.stringify(projectDetails, null, 2));
-
+      const progresses = projectDetails.progresses;
       // Lấy thông tin file (nếu có)
       const projectFile = projectDetails.projectfiles.length > 0 ? projectDetails.projectfiles[0].file : null;
 
@@ -138,6 +145,7 @@ class ProjectController {
       res.render('roles/project/project-detail', {
         title: 'Chi tiết đề tài',
         // progress: Progress,
+        progress:progresses,
         projectDetails: projectDetails,
         projectFile: projectFile, // Truyền thông tin file
         // Truyền dữ liệu hiển thị thành phần
