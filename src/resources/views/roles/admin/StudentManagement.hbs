@@ -50,7 +50,18 @@
         </tbody>
     </table>
 </div>
-<div class="m-2 d-flex justify-content-end">
+<div>
+
+
+</div>
+<div class="m-2 d-flex justify-content-between">
+    {{!-- form nhập từ excel --}}
+    <form action="/import-excel" method="post" enctype="multipart/form-data" class="d-flex h-100">
+        <input type="file" name="excel" id="" class="excel-files h-100" required>
+        <input type="text" name="pagecur" value="StudentManagement" hidden>
+        <button class="excel-btn btn btn-primary" type="submit">nhập từ excel</button>
+    </form>
+    {{!-- thêm dòng mới --}}
     <button id="add-row-button" class="btn btn-primary">Thêm dòng mới</button>
 </div>
 <style>
@@ -108,6 +119,13 @@
         font-size: 0.8rem;
         line-height: 1;
         padding: 0;
+    }
+
+
+    input[name=excel]::file-selector-button {
+        border: 2px solid #6c5ce7;
+        adding: .2em .4em;
+        border-radius: .2em;
     }
 </style>
 <script>
@@ -252,5 +270,6 @@
             }
         }
     });
+
 
 </script>

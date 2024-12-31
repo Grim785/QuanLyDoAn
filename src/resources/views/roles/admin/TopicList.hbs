@@ -73,6 +73,14 @@
       </tbody>
     </table>
   </div>
+  <div class="m-2 d-flex justify-content-end">
+    {{!-- form nhập từ excel --}}
+    <form action="/import-excel" method="post" enctype="multipart/form-data" class="d-flex h-100">
+        <input type="file" name="excel" id="" class="excel-files h-100" required>
+        <input type="text" name="pagecur" value="StudentManagement" hidden>
+        <button class="excel-btn btn btn-primary" type="submit">nhập từ excel</button>
+    </form>
+  </div>
   <style>
     .table-container {
       height: 70vh;
