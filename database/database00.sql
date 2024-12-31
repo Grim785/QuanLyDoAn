@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `advisors` (
   CONSTRAINT `advisors_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.advisors: ~3 rows (approximately)
+-- Dumping data for table database00.advisors: ~2 rows (approximately)
 REPLACE INTO `advisors` (`id`, `advisorID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `address`, `userID`, `createdAt`, `updatedAt`) VALUES
 	(1, '19992222', 'Lưu Thị', 'Thu Thủy', '1991-12-27', 'Nữ', '22A/74 Quận 1, Tp. Hồ Chí Minh', 3, '2024-12-27 00:24:23', '2024-12-29 01:25:52'),
 	(2, '19992707', 'Hoàng Minh', 'Tuấn', '1978-12-27', 'Nam', '17E Quận Bình Thạnh, Tp. Hồ Chí Minh', 2, '2024-12-27 00:25:52', '2024-12-27 00:25:52');
@@ -175,12 +175,9 @@ CREATE TABLE IF NOT EXISTS `progress` (
   CONSTRAINT `FK_progress_project` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.progress: ~0 rows (approximately)
+-- Dumping data for table database00.progress: ~1 rows (approximately)
 REPLACE INTO `progress` (`id`, `title`, `content`, `project_id`, `createdAt`, `updatedAt`) VALUES
-	(1, 'tiến trình 1', 'nội dung tuần 1', 1, '2024-12-27 00:14:33', '2024-12-27 00:14:33'),
-	(2, 'tiến trình 2', 'nội dung tuần 1', 1, '2024-12-27 00:14:33', '2024-12-27 00:14:33'),
-	(3, 'tiến trình 3', 'nội dung tuần 1', 2, '2024-12-27 00:14:33', '2024-12-27 00:14:33'),
-	(4, 'tiến trình 4', 'nội dung tuần 1', 1, '2024-12-27 00:14:33', '2024-12-27 00:14:33');
+	(6, 'Báo cáo khởi đầu', '- Lên kế hoạch', 1, '2024-12-31 16:34:24', '2024-12-31 16:35:54');
 
 -- Dumping structure for table database00.projectadvisors
 DROP TABLE IF EXISTS `projectadvisors`;
@@ -195,10 +192,11 @@ CREATE TABLE IF NOT EXISTS `projectadvisors` (
   CONSTRAINT `projectadvisors_ibfk_2` FOREIGN KEY (`advisor_id`) REFERENCES `advisors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectadvisors: ~1 rows (approximately)
+-- Dumping data for table database00.projectadvisors: ~2 rows (approximately)
 REPLACE INTO `projectadvisors` (`project_id`, `advisor_id`, `createdAt`, `updatedAt`) VALUES
 	(1, 1, '2024-12-29 13:44:23', '2024-12-29 13:44:23'),
-	(2, 1, '2024-12-31 17:20:34', '2024-12-31 17:20:34');
+	(2, 1, '2024-12-31 17:20:34', '2024-12-31 17:20:34'),
+	(22, 2, '2024-12-31 16:24:33', '2024-12-31 16:24:33');
 
 -- Dumping structure for table database00.projectfeedback
 DROP TABLE IF EXISTS `projectfeedback`;
@@ -250,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`majorID`) REFERENCES `majors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projects: ~19 rows (approximately)
+-- Dumping data for table database00.projects: ~18 rows (approximately)
 REPLACE INTO `projects` (`id`, `title`, `description`, `start_date`, `end_date`, `status`, `majorID`, `createdAt`, `updatedAt`) VALUES
 	(1, 'Hệ thống quản lý đồ án tốt nghiệp - Khoa công nghệ thông tin', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tinHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tàiHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', '2024-12-31', NULL, 'in_progress', 1, '2024-12-27 00:27:51', '2024-12-31 04:45:33'),
 	(2, 'Hệ thống quản lý khám bệnh', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:34:02', '2024-12-29 09:18:19'),
@@ -269,7 +267,8 @@ REPLACE INTO `projects` (`id`, `title`, `description`, `start_date`, `end_date`,
 	(15, 'Nghiên cứu xu hướng thanh toán không tiền mặt và ảnh hưởng đến thương mại điện tử tại Việt Nam ', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:40:33', '2024-12-29 09:18:15'),
 	(16, 'Xây dựng hệ thống quản lý bán hàng sử dụng mã nguồn mở (OpenCart) ', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:41:00', '2024-12-30 17:24:26'),
 	(17, 'Xây dựng hệ thống mạng cho doanh nghiệp Thành Phát (Side - to - side)', 'Mô tả', NULL, NULL, 'not_started', 2, '2024-12-27 00:41:34', '2024-12-30 17:24:26'),
-	(18, 'Thiết kế mạng và giải pháp quản trị mạng cho công ty Gia Hoà ', 'Mô tả', NULL, NULL, 'not_started', 2, '2024-12-27 00:42:06', '2024-12-30 17:24:26');
+	(18, 'Thiết kế mạng và giải pháp quản trị mạng cho công ty Gia Hoà ', 'Mô tả', NULL, NULL, 'not_started', 2, '2024-12-27 00:42:06', '2024-12-30 17:24:26'),
+	(22, 'Hệ thống quản lý sinh viên', 'Hệ thống quản lý sinh viên', '2024-12-31', NULL, 'in_progress', 1, '2024-12-31 16:24:33', '2024-12-31 16:25:56');
 
 -- Dumping structure for table database00.projectsregister
 DROP TABLE IF EXISTS `projectsregister`;
@@ -283,10 +282,11 @@ CREATE TABLE IF NOT EXISTS `projectsregister` (
   CONSTRAINT `fk_project` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectsregister: ~0 rows (approximately)
+-- Dumping data for table database00.projectsregister: ~2 rows (approximately)
 REPLACE INTO `projectsregister` (`project_id`, `status`, `note`, `createdAt`, `updatedAt`) VALUES
 	(1, 'approved', '', '2024-12-29 16:26:34', '2024-12-31 04:45:33'),
-	(2, 'pending', NULL, '2024-12-31 17:19:44', '2024-12-31 17:19:49');
+	(2, 'pending', NULL, '2024-12-31 17:19:44', '2024-12-31 17:19:49'),
+	(22, 'approved', NULL, '2024-12-31 16:24:33', '2024-12-31 16:25:56');
 
 -- Dumping structure for table database00.projectstudents
 DROP TABLE IF EXISTS `projectstudents`;
@@ -301,11 +301,13 @@ CREATE TABLE IF NOT EXISTS `projectstudents` (
   CONSTRAINT `projectstudents_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectstudents: ~2 rows (approximately)
+-- Dumping data for table database00.projectstudents: ~3 rows (approximately)
 REPLACE INTO `projectstudents` (`project_id`, `student_id`, `createdAt`, `updatedAt`) VALUES
 	(1, 1, '2024-12-29 13:44:23', '2024-12-29 13:44:23'),
 	(1, 2, '2024-12-29 13:44:23', '2024-12-29 13:44:23'),
-	(2, 4, '2024-12-31 17:19:37', '2024-12-31 17:20:55');
+	(2, 4, '2024-12-31 17:19:37', '2024-12-31 17:20:55'),
+	(22, 3, '2024-12-31 16:24:33', '2024-12-31 16:24:33'),
+	(22, 5, '2024-12-31 16:24:33', '2024-12-31 16:24:33');
 
 -- Dumping structure for procedure database00.ResetAutoIncrement
 DROP PROCEDURE IF EXISTS `ResetAutoIncrement`;
@@ -364,7 +366,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   CONSTRAINT `students_ibfk_2` FOREIGN KEY (`usersID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.students: ~6 rows (approximately)
+-- Dumping data for table database00.students: ~5 rows (approximately)
 REPLACE INTO `students` (`id`, `studentID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `address`, `majorsID`, `usersID`, `classID`, `createdAt`, `updatedAt`) VALUES
 	(1, '22001976', 'Trần Nguyên', 'Phát', '2004-07-27', 'Nam', '999/3A Quận 12, Tp. Hồ Chí Minh', 1, 4, 1, '2024-12-27 00:14:33', '2024-12-27 00:14:33'),
 	(2, '22001955', 'Lê Thanh', 'Ngân', '2004-12-27', 'Nữ', '111/5A Gò Vấp, Tp. Hồ Chí Minh', 2, 5, 3, '2024-12-27 00:17:52', '2024-12-27 00:17:52'),
@@ -405,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.users: ~10 rows (approximately)
+-- Dumping data for table database00.users: ~8 rows (approximately)
 REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `createdAt`, `updatedAt`, `active`) VALUES
 	(1, 'admin', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'admin', '123123@gmail.com', '1111111111', '2024-12-27 00:01:01', '2024-12-27 00:01:14', 1),
 	(2, '19992707', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'advisor', '123321@gmail.com', '2222222222', '2024-12-27 00:02:47', '2024-12-27 00:03:24', 1),
