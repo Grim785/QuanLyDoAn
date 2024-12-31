@@ -52,11 +52,24 @@
                     {{#each progress}}
                     <div class="col-12 process-card">
                         <div class="bg-light h-100 border rounded p-3 container_id d-flex flex-column">
-                            <input type="text" class="form-control bg-transparent border-0 title_progress mb-2"
-                                data-id="{{this.id}}" data-content="{{this.content}}" value="{{progress.title}}">
-                            <textarea name="" id="" class="flex-fill form-control content_progress mb-2"
-                                data-id="{{this.id}}" data-title="{{this.title}}">{{this.content}}</textarea>
-                            <div class="d-flex justify-content-end">
+                            <!-- Tiêu đề -->
+                            <div class="d-flex align-items-center mb-2">
+                                <label for="title-{{this.id}}" class="form-label me-2 mb-0">Tiêu đề:</label>
+                                <input type="text" id="title-{{this.id}}"
+                                    class="form-control w-50 bg-transparent border-0 title_progress"
+                                    data-id="{{this.id}}" data-content="{{this.content}}" value="{{this.title}}"
+                                    readonly>
+                            </div>
+
+                            <!-- Nội dung -->
+                            <div class="d-flex flex-column flex-grow-1">
+                                <label for="content-{{this.id}}" class="form-label mb-1">Nội dung:</label>
+                                <textarea name="" id="content-{{this.id}}"
+                                    class="flex-grow-1 form-control content_progress" data-id="{{this.id}}"
+                                    data-title="{{this.title}}" style="resize: none;">{{this.content}}</textarea>
+                            </div>
+
+                            <div class="d-flex justify-content-end mt-3">
                                 <button class="remove_progress_btn btn btn-danger" value="{{this.id}}">Xóa</button>
                             </div>
                         </div>
@@ -93,6 +106,7 @@
                                 <button type="submit" class="btn btn-success w-100 mt-2">
                                     <i class="fa-solid fa-upload me-2"></i> Tải lên
                                 </button>
+                                <input type="hidden" id="projectId" name="projectId" value="{{projectDetails.id}}" />
                             </form>
                             <!-- Thanh tiến trình -->
                             <div class="progress mt-3 d-none">
@@ -135,256 +149,4 @@
 {{else}}
 <h1>Lỗi thông tin</h1>
 {{/if}}
-<style>
-    .container-main {
-        height: 70vh;
-    }
-
-    .container_process {
-        height: 400px;
-        scrollbar-width: thin;
-    }
-
-    .status-icon {
-        height: 1rem;
-        width: 1rem;
-        border: 1px solid lightgray;
-        border-radius: 50%;
-    }
-
-    .status-icon.completed {
-        background-color: #ffc107;
-    }
-
-    .status-icon.in-progress {
-        background-color: #28a745;
-    }
-
-    .status-icon.not-started {
-        background-color: #6c757d;
-    }
-
-    .description {
-        height: 10rem;
-    }
-
-    .process-card {
-        min-height: 250px;
-    }
-
-    .upload-file,
-    .comments-section {
-        height: 100%;
-    }
-
-    .file-container {
-        width: 100%;
-        /* Đặt chiều rộng cố định */
-        display: flex;
-        align-items: center;
-        /* Căn giữa theo chiều dọc */
-        justify-content: space-between;
-        /* Đảm bảo các phần tử giữ khoảng cách hợp lý */
-        white-space: nowrap;
-        /* Ngăn xuống dòng */
-        overflow: hidden;
-        /* Ẩn phần tràn */
-    }
-
-    .file-name {
-        max-width: 74%;
-        /* Set cố định chiều rộng của tên file */
-        overflow: hidden;
-        /* Ẩn phần tràn nếu quá dài */
-        text-overflow: ellipsis;
-        /* Hiển thị dấu "..." nếu vượt quá */
-        white-space: nowrap;
-        /* Ngăn xuống dòng */
-    }
-
-    #downloadFileBtn {
-        flex-shrink: 0;
-        /* Đảm bảo nút không co lại */
-        white-space: nowrap;
-        /* Giữ nút cố định, không bị xuống dòng */
-    }
-
-    /*Phần tiến trình*/
-
-    .add_card_progress h1 {
-        opacity: 0.5;
-    }
-
-    .add_card_progress:hover h1 {
-        opacity: 1;
-    }
-
-    .add_progress_container {
-        display: none;
-    }
-
-    .title_progress,
-    .content_progress {
-        cursor: pointer;
-    }
-
-    .title_progress:focus {
-        outline: none;
-        box-shadow: inset 0 0 0 1px #007bff;
-        background-color: white !important;
-    }
-</style>
-<script>
-    document.getElementById('uploadForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const progressContainer = document.querySelector('.progress');
-        const uploadMessage = document.getElementById('uploadMessage');
-        const form = e.target;
-        const formData = new FormData(form);
-
-        // Hiển thị thanh tiến trình
-        progressContainer.classList.remove('d-none');
-        uploadMessage.innerHTML = ''; // Xóa thông báo cũ
-
-        const xhr = new XMLHttpRequest();
-
-        xhr.onload = function () {
-            progressContainer.classList.add('d-none'); // Ẩn thanh tiến trình
-            if (xhr.status === 200) {
-                uploadMessage.innerHTML = `<div class="alert alert-success">Tải file thành công!</div>`;
-            } else {
-                uploadMessage.innerHTML = `<div class="alert alert-danger">Tải file thất bại: ${xhr.responseText}</div>`;
-            }
-        };
-
-        xhr.onerror = function () {
-            progressContainer.classList.add('d-none'); // Ẩn thanh tiến trình
-            uploadMessage.innerHTML = `<div class="alert alert-danger">Lỗi mạng, vui lòng thử lại.</div>`;
-        };
-
-        xhr.open('POST', '/upload/project', true);
-        xhr.send(formData);
-    });
-
-    /* thêm thẻ */
-
-    const cancelBtn = document.querySelector('.cancel_btn');
-    const addProcessContainer = document.querySelector('.add_progress_container');
-    const addIcon = document.querySelector('.add_icon');
-    const addProgressBtn = document.querySelector('.add_progress_btn');
-    const removeProgressBtn = document.querySelectorAll('.remove_progress_btn');
-    const titleProgressInput = document.querySelector('[name="TitleProgress"]');
-
-
-    /* giao diện thêm */
-    addIcon.addEventListener('click', function () {
-        addProcessContainer.classList.remove('d-none');
-        addIcon.classList.add('d-none');
-    });
-
-    /*hoàn tác */
-    cancelBtn.addEventListener('click', function () {
-        addProcessContainer.classList.add('d-none');
-        addIcon.classList.remove('d-none');
-    });
-
-    /* thêm tiến trình mới */
-
-    addProgressBtn.addEventListener('click', function () {
-        const title = titleProgressInput.value.trim();
-        const projectid = {{ projectDetails.id }};
-        if (!title) {
-            alert('Vui lòng nhập tên!');
-            return;
-        }
-    }
-
-    fetch(`/student/addProgress`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, projectid }),
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.success) {
-                alert("Thêm tiến độ mới thành công!");
-                location.reload();
-            } else {
-                alert(`Lỗi:${data.message}`);
-            }
-        })
-        .catch((error) => console.error('Error:', error));
-    });
-
-    /*Xóa Progress*/
-
-    removeProgressBtn.forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            progressid = btn.value;
-            if (confirm('Bạn có chắc muốn tiến trình này?')) {
-                fetch(`/student/deleteProgress/${progressid}`, { method: 'DELETE' })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data.success) {
-                            alert('Xóa tiến trình thành công!');
-                            location.reload();
-                        } else {
-                            alert(`Lỗi: ${data.message}`);
-                        }
-                    }).catch((error) => console.error('Lỗi:', error));
-            }
-        });
-    });
-
-    /* cập nhật progress */
-    const inputs = document.querySelectorAll('.title_progress')
-    const contents = document.querySelectorAll('.content_progress')
-
-    contents.forEach(content => {
-        content.addEventListener("blur", function (event) {
-            const newtitle = event.target.getAttribute("data-title"); // title progress mới
-            const Id = event.target.getAttribute("data-id"); // Lấy ID progress đã chọn
-            const newcontent = event.target.value;
-            // Gửi dữ liệu đến server
-            fetch_update(Id, newtitle, newcontent);
-        });
-    });
-
-    inputs.forEach(input => {
-        input.addEventListener("blur", function (event) {
-            const newtitle = event.target.value; // title progress mới
-            const Id = event.target.getAttribute("data-id"); // Lấy ID progress đã chọn
-            const newcontent = event.target.getAttribute("data-content");
-            // Gửi dữ liệu đến server
-            fetch_update(Id, newtitle, newcontent);
-        });
-    })
-
-
-    function fetch_update(Id, newtitle, newcontent) {
-        fetch(`/student/updateProgress/${Id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                id: Id,
-                title: newtitle,// Giá trị mới
-                content: newcontent,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.success) {
-                    console.log("Cập nhật thành công!");
-                } else {
-                    console.error("Cập nhật thất bại:", data.message);
-                }
-            })
-            .catch((error) => {
-                console.error("Lỗi khi gửi dữ liệu:", error);
-            });
-
-    }
-</script>
+<script src="/js/project-detail.js"></script>

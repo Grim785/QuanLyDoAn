@@ -46,8 +46,6 @@ class ProjectController {
           }
         ]
       });
-
-
       res.render('roles/project/project-list', {
         title: 'Danh sách đề tài',
         list: list,
@@ -126,17 +124,16 @@ class ProjectController {
               }
             ]
           },
+          //Lấy thông tin báo cáo tiến độ
           {
             model: progress,
             as: 'progresses',
             attributes: ['id', 'title', 'content', 'project_id']
           }
         ],
-        attributes: ['title', 'description', 'start_date', 'end_date', 'status'],
+        attributes: ['id','title', 'description', 'start_date', 'end_date', 'status'],
       });
 
-      // In dữ liệu dễ đọc với JSON.stringify để debug
-      console.log(JSON.stringify(projectDetails, null, 2));
       const progresses = projectDetails.progresses;
       // Lấy thông tin file (nếu có)
       const projectFile = projectDetails.projectfiles.length > 0 ? projectDetails.projectfiles[0].file : null;
@@ -147,7 +144,7 @@ class ProjectController {
         // progress: Progress,
         progress:progresses,
         projectDetails: projectDetails,
-        projectFile: projectFile, // Truyền thông tin file
+        projectFile: projectFile,
         // Truyền dữ liệu hiển thị thành phần
         showHeaderFooter: true,
         showNav: true,
@@ -156,10 +153,6 @@ class ProjectController {
       });
     } catch (error) {
       console.log(error);
-      // res.status(500).render('error', {
-      //   title: 'Error',
-      //   message: 'An error occurred while fetching the topic'
-      // });
     }
   }
   //---Chức năng tìm kiếm đề tài
@@ -357,6 +350,51 @@ class ProjectController {
       res.status(500).json({ message: error.message || 'Lỗi khi cập nhật danh sách dự án.', error });
     }
   }
-
+  //---Chức năng thêm mới báo cáo tiến độ /addPogress
+  async addProgress(req, res, next) {
+      const title = req.body.title;
+      const projectid = req.body.projectid;
+      try {
+          await progress.create({
+              title: title,
+              content: '',
+              project_id: projectid
+          })
+          res.json({ success: true });
+      } catch (error) {
+          res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
+      }
+  }
+//[PUT] /project
+  async updateProgress(req, res, next) {
+    const { Id } = req.params;
+    const title = req.body.title;
+    const content = req.body.content;
+    try {
+        await progress.update({
+            title: title,
+            content: content,
+        }, {
+            where: { id: Id }
+        });
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Đã xảy ra lỗi' });
+    }
+  }
+//[DELETE] /project
+  //---Chức năng xóa tiến độ /deleteProgress/:progressId
+  async deleteProgress(req, res, next) {
+      const id = req.params.progressid;
+      console.log(id);
+      try {
+          await progress.destroy({
+              where: { id: id }
+          });
+          res.json({ success: true });
+      } catch (error) {
+          res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
+      }
+  }
 }
 module.exports = new ProjectController();

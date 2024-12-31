@@ -7,7 +7,7 @@ const models = initModels(sequelize);
 const { users, students, advisors, majors, class_, projects, projectsregister, projectstudents, projectadvisors, projectfiles, files, progress } = models;
 
 class StudentController {
-    //[GET] /student
+//[GET] /student
     //---Giao diện trang chủ sinh viên /dashboard
     async dashboard(req, res, next) {
         try {
@@ -92,7 +92,29 @@ class StudentController {
             console.log(error);
         }
     }
-    //[POST] /student
+    //---Chức năng tìm kiếm sinh viên - Form đăng ký đề tài
+    async searchStudents(req, res, next) {
+        try {
+            // Lấy query từ fontend -------------------
+            const query = req.query.query;
+            if (!query) {
+                return res.status(400).json({ message: 'Yêu cầu tìm kiếm không hợp lệ' });
+            }
+            // Tìm sinh viên------------------------------------
+            const results = await students.findAll({
+                where: {
+                    studentID: {
+                        [Op.like]: `%${query}%`
+                    }
+                },
+                attributes: ['id', 'studentID', 'lastname', 'firstname']
+            });
+            res.json(results);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+//[POST] /student
     //---Chức năng đăng ký đề tài /register-topic 
     async createTopic(req, res, next) {
         const data = req.body;
@@ -187,7 +209,7 @@ class StudentController {
             res.status(400).send({ message: error.message || 'Lỗi khi tạo dự án' });
         }
     }
-    //[DELETE] /student
+//[DELETE] /student
     //---Chức năng xóa thông tin đề tài không được duyệt /delete-topic/:id
     async deleteTopic(req, res, next) {
         const { projectId } = req.params;
@@ -206,55 +228,6 @@ class StudentController {
         } catch (error) {
             console.error('Lỗi khi xóa đề tài:', error);
             res.status(500).json({ message: 'Đã xảy ra lỗi khi xóa đề tài.' });
-        }
-    }
-
-
-
-
-    //[POST]
-    async addProgress(req, res, next) {
-        const title = req.body.title;
-        const projectid = req.body.projectid;
-        try {
-            await progress.create({
-                title: title,
-                content: '',
-                project_id: projectid
-            })
-            res.json({ success: true });
-        } catch (error) {
-            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
-        }
-    }
-    //[DELETE]
-    async deleteProgress(req, res, next) {
-        const id = req.params.progressid;
-        console.log(id);
-        try {
-            await progress.destroy({
-                where: { id: id }
-            });
-            res.json({ success: true });
-        } catch (error) {
-            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi!' });
-        }
-    }
-    //[PUT]
-    async updateProgress(req, res, next) {
-        const { Id } = req.params;
-        const title = req.body.title;
-        const content = req.body.content;
-        try {
-            await progress.update({
-                title: title,
-                content: content,
-            }, {
-                where: { id: Id }
-            });
-            res.json({ success: true });
-        } catch (error) {
-            res.status(500).json({ success: false, message: 'Đã xảy ra lỗi' });
         }
     }
 }

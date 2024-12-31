@@ -17,5 +17,12 @@ const chkRoles = require('../../config/chkRoles');
     router.post('/delete', chkRoles('admin'), ProjectController.deleteProject);
     //---Chức năng sửa đề tài
     router.post('/update', chkRoles('admin'), ProjectController.updateProject);
-
+    //---Chức năng thêm mới báo cáo tiến độ
+    router.post('/addProgress',chkRoles('student'), ProjectController.addProgress); 
+//[PUT] /project
+    //---Chức năng cập nhật tiến độ /updatePogress/:progressId
+    router.put('/updateProgress/:Id',chkRoles('student'),ProjectController.updateProgress); 
+//[DELETE] /project
+    //---Chức năng xóa tiến độ
+    router.delete('/deleteProgress/:progressid', chkRoles('student'), ProjectController.deleteProgress);
 module.exports = router;  

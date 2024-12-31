@@ -9,10 +9,10 @@ const initModels = require("../models/init-models");
 
 // Khởi tạo tất cả các model và quan hệ
 const models = initModels(sequelize);
-const { users, files } = models; 
+const { users, files, projectfiles } = models;
 
 class SiteController {
-//[GET] /
+    //[GET] /
     //---Giao diện đăng nhập --- /login
     login(req, res, next) {
         res.render('login', {
@@ -71,7 +71,7 @@ class SiteController {
             console.log(error);
         }
     }
-//[POST] /
+    //[POST] /
     //---Kiểm tra đăng nhập /chklogin
     async chklogin(req, res, next) {
         const { username, password, rememberMe } = req.body;
@@ -87,7 +87,7 @@ class SiteController {
             }
 
             req.session.user = user; // Lưu thông tin người dùng vào session
-            global.userRole = {role: req.session.user.role};
+            global.userRole = { role: req.session.user.role };
             console.log("Thông tin: " + global.userRole.role);
             if (rememberMe) {
                 res.cookie('userId', user.id, { maxAge: 7 * 24 * 60 * 60 * 1000 }); // Cookie 7 ngày
@@ -102,6 +102,7 @@ class SiteController {
     async uploadFile(req, res) {
         try {
             const file = req.file;
+            const projectId = req.body.projectId;
             if (!file) {
                 return res.status(400).json({ message: 'No file uploaded' });
             }
@@ -120,37 +121,43 @@ class SiteController {
             // Upload file lên S3
             const uploadResult = await s3.upload(params).promise();
 
-            const existingFile = await files.findOne({
-                where: { uploaded_by: req.session.user.id, is_avatar: req.body.is_avatar || 0 },
+            // Kiểm tra file đã tồn tại trong project
+            const existingProjectFile = await projectfiles.findOne({
+                where: { project_id: projectId },
+                include: [{ model: files, as: 'file'}],
             });
 
-            if (existingFile) {
+            if (existingProjectFile) {
                 // Xóa file cũ trên S3
                 await s3.deleteObject({
                     Bucket: process.env.AWS_BUCKET_NAME,
-                    Key: existingFile.file_name,
+                    Key: existingProjectFile.file.file_name,
                 }).promise();
 
-                // Cập nhật bản ghi
+                // Cập nhật file mới trong bảng files
                 await files.update(
                     {
                         file_name: fileName,
                         file_path: uploadResult.Location,
                         file_size: fileSize,
                         file_type: file.mimetype,
-                        is_avatar: req.body.is_avatar || 0,
                     },
-                    { where: { id: existingFile.id } }
+                    { where: { id: existingProjectFile.file_id } }
                 );
             } else {
-                // Tạo bản ghi mới
-                await files.create({
+                // Tạo mới file trong bảng files
+                const newFile = await files.create({
                     file_name: fileName,
                     file_path: uploadResult.Location,
                     uploaded_by: req.session.user.id,
                     file_size: fileSize,
                     file_type: file.mimetype,
-                    is_avatar: req.body.is_avatar || 0,
+                });
+
+                // Tạo liên kết giữa project và file mới
+                await projectfiles.create({
+                    project_id: projectId,
+                    file_id: newFile.id,
                 });
             }
 
@@ -169,68 +176,17 @@ class SiteController {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     //[GET] /loadFile
-    async loadFileproject(req, res, next){
+    async loadFileproject(req, res, next) {
         try {
             const { project_id } = req.params;
             console.log(project_id);
-    
+
             const projectFile = await projectfiles.findOne({
                 where: { project_id },
                 include: [{ model: files }],
             });
-    
+
             if (projectFile) {
                 res.status(200).json({ file: projectFile.file });
             } else {

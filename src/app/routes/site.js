@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const SiteController = require('../controllers/SiteController');
-const { uploadProject, uploadAvatar} = require('../../config/file');
+const { uploadProject} = require('../../config/file');
 
 //[GET] /
     //---Giao diện đăng nhập ---
