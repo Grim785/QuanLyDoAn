@@ -73,11 +73,13 @@
   <div class="row">
     <div class="col-6">
       {{!-- import excel --}}
+      {{#if (eq role 'admin')}}
       <form action="/import-excel" method="post" enctype="multipart/form-data" class="d-flex">
         <input type="file" name="excel" id="" class="form-control excel-files h-100" required>
         <input type="text" name="pagecur" value="project-list" hidden>
         <button class="excel-btn btn btn-primary text-nowrap" type="submit">nhập từ excel</button>
       </form>
+      {{/if}}
     </div>
     <div class="col-6 fs-6 text-end">
       <button class="btn btn-primary" id="add-button">Thêm mới</button>
