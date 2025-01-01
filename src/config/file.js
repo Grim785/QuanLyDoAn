@@ -31,4 +31,8 @@ const uploadAvatar = multer({
     },
 });
 
-module.exports = { uploadProject, uploadAvatar };
+const uploadExcel = multer({
+    dest: 'uploads/',
+});
+
+module.exports = { uploadProject, uploadAvatar, uploadExcel };

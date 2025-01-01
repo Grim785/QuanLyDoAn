@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const SiteController = require('../controllers/SiteController');
-const { uploadProject} = require('../../config/file');
+const { uploadProject, uploadAvatar, uploadExcel} = require('../../config/file');
 
 //[GET] /
     //---Giao diện đăng nhập ---
@@ -20,5 +20,8 @@ const { uploadProject} = require('../../config/file');
     router.post('/chklogin', SiteController.chklogin);
     //---Tải file
     router.post('/upload/project', uploadProject.single('file'), SiteController.uploadFile);
+    //---import-excel
+    router.post('/import-excel',uploadExcel.single('excel'),SiteController.importexcel);
+
     
 module.exports = router;

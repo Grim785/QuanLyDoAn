@@ -7,6 +7,8 @@ require('dotenv').config();
 const sequelize = require("../../config/db");
 const initModels = require("../models/init-models");
 
+const XLSX = require('xlsx');
+
 // Khởi tạo tất cả các model và quan hệ
 const models = initModels(sequelize);
 const { users, files, projectfiles } = models;
@@ -195,6 +197,166 @@ class SiteController {
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: 'Failed to load file', error: error.message });
+        }
+    }
+
+    //[POST]
+    async importexcel (req,res,next){
+        try{
+            const pagecur=req.body.pagecur;
+            console.log("trang hiện tại:"+ pagecur);
+            function formatToMySQLDate(date) {
+                const d = new Date(date);
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, '0'); // Thêm 1 vì tháng bắt đầu từ 0
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+            function convertExcelDate(excelTimestamp) {
+                // Nếu không phải là số hợp lệ, trả về null (không hợp lệ)
+                if (isNaN(excelTimestamp)) {
+                    return null;
+                }
+            
+                // Excel timestamp bắt đầu từ 1/1/1900
+                const startDate = new Date(1900, 0, 1);
+                const days = Math.floor(excelTimestamp) - 2; // Trừ 2 do lỗi Excel
+                startDate.setDate(startDate.getDate() + days);
+                
+                return startDate;
+            }
+            
+            // Hàm chuyển đổi ngày tháng thành định dạng 'YYYY-MM-DD HH:mm:ss'
+            function formatToDateTime(date) {
+                // Kiểm tra nếu date là đối tượng Date hợp lệ
+                if (!(date instanceof Date) || isNaN(date.getTime())) {
+                    return null; // Trả về null nếu không phải là ngày hợp lệ
+                }
+            
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const seconds = String(date.getSeconds()).padStart(2, '0');
+            
+                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            }
+            if(req.file.mimetype!='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            {
+                fs.unlinkSync(req.file.path);
+                return res.status(400).json({msg:'file not invalid'});
+            }
+            const workbook = XLSX.readFile(req.file.path);
+            const sheetName = workbook.SheetNames[0];
+            const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+            const successData = [];
+            const failureData = [];
+            for(let i = 0; i<data.length; i++) {
+                // excel sinh viên
+                if(pagecur=="student-management"){
+                    const {id, studentID, lastname, firstname, date_of_birth, gender, address, majorsID, usersID, classID, createdAt = new Date(), updatedAt = new Date()} = data[i];
+                    console.log({
+                        id,
+                        studentID,
+                        lastname,
+                        firstname,
+                        date_of_birth,
+                        gender,
+                        address,
+                        majorsID,
+                        usersID,
+                        classID,
+                        createdAt,
+                        updatedAt,
+                    });
+                    const formattedDateOfBirth = date_of_birth ? convertExcelDate(date_of_birth) : null;
+                    const formattedSQLDateOfBirth = new Date(formattedDateOfBirth);
+                    const formattedDateOfBirthSQL = formatToMySQLDate(formattedSQLDateOfBirth);
+                    const formattedCreatedAt = createdAt ? formatToDateTime(createdAt) : null;
+                    const formattedUpdatedAt = updatedAt ? formatToDateTime(updatedAt) : null;
+                    const formattedStudentid = `${studentID}`;
+                
+                    const values = [
+                        id || null,
+                        formattedStudentid || null,
+                        lastname || null,
+                        firstname || null,
+                        formattedDateOfBirthSQL,
+                        gender || null,
+                        address || null,
+                        majorsID || null,
+                        usersID || null,
+                        classID || null,
+                        formattedCreatedAt,
+                        formattedUpdatedAt,
+                    ];
+                    const sql ='REPLACE INTO `students`(id, studentID, lastname, firstname, date_of_birth, gender, address, majorsID, usersID, classID, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+                    console.log('Câu lệnh SQL:', sql);
+                    console.log('Tham số:', values);
+                    const [rows] = await sequelize.query(sql, {
+                        replacements: values
+                    });
+                    if (rows.affectedRows){
+                        successData.push(data[i]);
+                    }else{
+                        failureData.push(data[i]);
+                    }
+                }
+                
+                // excel giảng viên
+                if(pagecur=="AdvisorManagement")
+                {
+                    const {id, advisorID, lastname, firstname, date_of_birth, gender, address, userID, createdAt = new Date(), updatedAt = new Date()} = data[i];
+                    console.log({
+                        id,
+                        advisorID,
+                        lastname,
+                        firstname,
+                        date_of_birth,
+                        gender,
+                        address,
+                        userID,
+                        createdAt,
+                        updatedAt,
+                    });
+                    const formattedDateOfBirth = date_of_birth ? convertExcelDate(date_of_birth) : null;
+                    const formattedSQLDateOfBirth = new Date(formattedDateOfBirth);
+                    const formattedDateOfBirthSQL = formatToMySQLDate(formattedSQLDateOfBirth);
+                    const formattedCreatedAt = createdAt ? formatToDateTime(createdAt) : null;
+                    const formattedUpdatedAt = updatedAt ? formatToDateTime(updatedAt) : null;
+                    const formattedadvisorid = `${advisorID}`;
+                
+                    const values = [
+                        id || null,
+                        formattedadvisorid || null,
+                        lastname || null,
+                        firstname || null,
+                        formattedDateOfBirthSQL,
+                        gender || null,
+                        address || null,
+                        userID || null,
+                        formattedCreatedAt,
+                        formattedUpdatedAt,
+                    ];
+                    const sql ='REPLACE INTO `advisors`(id, advisorID, lastname, firstname, date_of_birth, gender, address, userID, createdAt, updatedAt) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+                    console.log('Câu lệnh SQL:', sql);
+                    console.log('Tham số:', values);
+                    const [rows] = await sequelize.query(sql, {
+                        replacements: values
+                    });
+                    if (rows.affectedRows){
+                        successData.push(data[i]);
+                    }else{
+                        failureData.push(data[i]);
+                    }
+                }
+            }   
+            fs.unlinkSync(req.file.path);
+            return res.redirect(`/admin/${pagecur}`)
+        }catch(error){
+            console.error(error);
+            res.status(500).send('Import excel failed');
         }
     }
 }

@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            fetch(`/student/addProgress`, {
+            fetch(`/project/addProgress`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title, projectid }),
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', function () {
             const progressid = btn.value;
             if (confirm('Bạn có chắc muốn xóa tiến trình này?')) {
-                fetch(`/student/deleteProgress/${progressid}`, { method: 'DELETE' })
+                fetch(`/project/deleteProgress/${progressid}`, { method: 'DELETE' })
                     .then((response) => {
                         if (!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`);
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const contents = document.querySelectorAll('.content_progress');
 
     function fetchUpdate(Id, newtitle, newcontent) {
-        fetch(`/student/updateProgress/${Id}`, {
+        fetch(`/project/updateProgress/${Id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
