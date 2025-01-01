@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `advisors` (
   CONSTRAINT `advisors_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.advisors: ~2 rows (approximately)
+-- Dumping data for table database00.advisors: ~3 rows (approximately)
 REPLACE INTO `advisors` (`id`, `advisorID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `address`, `userID`, `createdAt`, `updatedAt`) VALUES
 	(1, '19992222', 'Lưu Thị', 'Thu Thủy', '1991-12-27', 'Nữ', '22A/74 Quận 1, Tp. Hồ Chí Minh', 3, '2024-12-27 00:24:23', '2024-12-29 01:25:52'),
 	(2, '19992707', 'Hoàng Minh', 'Tuấn', '1978-12-27', 'Nam', '17E Quận Bình Thạnh, Tp. Hồ Chí Minh', 2, '2024-12-27 00:25:52', '2024-12-27 00:25:52');
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `progress` (
   CONSTRAINT `FK_progress_project` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.progress: ~1 rows (approximately)
+-- Dumping data for table database00.progress: ~0 rows (approximately)
 REPLACE INTO `progress` (`id`, `title`, `content`, `project_id`, `createdAt`, `updatedAt`) VALUES
 	(6, 'Báo cáo khởi đầu', '- Lên kế hoạch', 1, '2024-12-31 16:34:24', '2024-12-31 16:35:54');
 
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `projectadvisors` (
   CONSTRAINT `projectadvisors_ibfk_2` FOREIGN KEY (`advisor_id`) REFERENCES `advisors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectadvisors: ~2 rows (approximately)
+-- Dumping data for table database00.projectadvisors: ~1 rows (approximately)
 REPLACE INTO `projectadvisors` (`project_id`, `advisor_id`, `createdAt`, `updatedAt`) VALUES
 	(1, 1, '2024-12-29 13:44:23', '2024-12-29 13:44:23'),
 	(2, 1, '2024-12-31 17:20:34', '2024-12-31 17:20:34'),
@@ -248,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`majorID`) REFERENCES `majors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projects: ~18 rows (approximately)
+-- Dumping data for table database00.projects: ~19 rows (approximately)
 REPLACE INTO `projects` (`id`, `title`, `description`, `start_date`, `end_date`, `status`, `majorID`, `createdAt`, `updatedAt`) VALUES
 	(1, 'Hệ thống quản lý đồ án tốt nghiệp - Khoa công nghệ thông tin', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tinHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tàiHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', '2024-12-31', NULL, 'in_progress', 1, '2024-12-27 00:27:51', '2024-12-31 04:45:33'),
 	(2, 'Hệ thống quản lý khám bệnh', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:34:02', '2024-12-29 09:18:19'),
@@ -282,7 +282,7 @@ CREATE TABLE IF NOT EXISTS `projectsregister` (
   CONSTRAINT `fk_project` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectsregister: ~2 rows (approximately)
+-- Dumping data for table database00.projectsregister: ~0 rows (approximately)
 REPLACE INTO `projectsregister` (`project_id`, `status`, `note`, `createdAt`, `updatedAt`) VALUES
 	(1, 'approved', '', '2024-12-29 16:26:34', '2024-12-31 04:45:33'),
 	(2, 'pending', NULL, '2024-12-31 17:19:44', '2024-12-31 17:19:49'),
@@ -301,7 +301,7 @@ CREATE TABLE IF NOT EXISTS `projectstudents` (
   CONSTRAINT `projectstudents_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectstudents: ~3 rows (approximately)
+-- Dumping data for table database00.projectstudents: ~2 rows (approximately)
 REPLACE INTO `projectstudents` (`project_id`, `student_id`, `createdAt`, `updatedAt`) VALUES
 	(1, 1, '2024-12-29 13:44:23', '2024-12-29 13:44:23'),
 	(1, 2, '2024-12-29 13:44:23', '2024-12-29 13:44:23'),
@@ -366,29 +366,13 @@ CREATE TABLE IF NOT EXISTS `students` (
   CONSTRAINT `students_ibfk_2` FOREIGN KEY (`usersID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.students: ~5 rows (approximately)
+-- Dumping data for table database00.students: ~6 rows (approximately)
 REPLACE INTO `students` (`id`, `studentID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `address`, `majorsID`, `usersID`, `classID`, `createdAt`, `updatedAt`) VALUES
 	(1, '22001976', 'Trần Nguyên', 'Phát', '2004-07-27', 'Nam', '999/3A Quận 12, Tp. Hồ Chí Minh', 1, 4, 1, '2024-12-27 00:14:33', '2024-12-27 00:14:33'),
 	(2, '22001955', 'Lê Thanh', 'Ngân', '2004-12-27', 'Nữ', '111/5A Gò Vấp, Tp. Hồ Chí Minh', 2, 5, 3, '2024-12-27 00:17:52', '2024-12-27 00:17:52'),
 	(3, '22002044', 'Nguyễn Văn', 'Thanh', '2003-12-27', 'Nam', '333/4B Gò Vấp, Tp. Hồ Chí Minh', 3, 6, 2, '2024-12-27 00:19:22', '2024-12-27 00:20:50'),
 	(4, '22007865', 'Hoàng Minh', 'Nhân', '2002-12-27', 'Nam', '17/2D Bình Thạnh, Tp. Hồ Chí Minh', 1, 7, 1, '2024-12-27 00:20:45', '2024-12-27 00:20:45'),
 	(5, '22009999', 'Lê Nhật', 'Linh', '2004-10-27', 'Nữ', '55/2E Gò Vấp, Tp. Hồ Chí Minh', 2, 8, 3, '2024-12-27 00:22:32', '2024-12-27 00:22:32');
-
--- Dumping structure for table database00.suggestedprojects
-DROP TABLE IF EXISTS `suggestedprojects`;
-CREATE TABLE IF NOT EXISTS `suggestedprojects` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table database00.suggestedprojects: ~3 rows (approximately)
-REPLACE INTO `suggestedprojects` (`id`, `title`, `createdAt`, `updatedAt`) VALUES
-	(1, 'Ứng dụng quản lý nhà hàng tiệc cưới Mặt Trời Mới', '2024-12-23 21:04:33', '2024-12-23 21:04:33'),
-	(2, 'Giải pháp thiết kế hệ thống mạng trường Cao đẳng Bách Khoa Sài Gòn', '2024-12-23 21:04:33', '2024-12-23 21:04:33'),
-	(3, 'Đánh giá hiệu quả của các chiến lược tiếp thị số trong kinh doanh thương mại điện tử ', '2024-12-23 21:04:33', '2024-12-23 21:04:33');
 
 -- Dumping structure for table database00.users
 DROP TABLE IF EXISTS `users`;
@@ -407,7 +391,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.users: ~8 rows (approximately)
+-- Dumping data for table database00.users: ~10 rows (approximately)
 REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `createdAt`, `updatedAt`, `active`) VALUES
 	(1, 'admin', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'admin', '123123@gmail.com', '1111111111', '2024-12-27 00:01:01', '2024-12-27 00:01:14', 1),
 	(2, '19992707', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'advisor', '123321@gmail.com', '2222222222', '2024-12-27 00:02:47', '2024-12-27 00:03:24', 1),
