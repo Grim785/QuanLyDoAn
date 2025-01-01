@@ -358,7 +358,7 @@ class AdminController {
             res.status(500).json({ error: 'Đã xảy ra lỗi khi xóa giảng viên.' });
         }
     }
-    //---Chức năng sửa thông tin sinh viên
+    //---Chức năng sửa thông tin giảng viên
     async updateAdvisor(req, res) {
         try {
             const { students: updatedStudents } = req.body;
@@ -389,12 +389,6 @@ class AdminController {
                     // Cập nhật username trong bảng users
                     await users.update({ username: newUsername }, { where: { id: currentStudent.userID } });
                 }
-
-                // // Tìm lớp học theo mã classID
-                // const classData = await class_.findOne({ where: { classID } });
-                // if (!classData) {
-                //     return res.status(404).json({ error: `Không tìm thấy lớp học với mã ${classID}.` });
-                // }
 
                 // Cập nhật thông tin sinh viên
                 await advisors.update(

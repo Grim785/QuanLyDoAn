@@ -366,6 +366,7 @@ class ProjectController {
       }
   }
 //[PUT] /project
+  //---Chức năng sửa tiến độ /
   async updateProgress(req, res, next) {
     const { Id } = req.params;
     const title = req.body.title;

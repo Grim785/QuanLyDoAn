@@ -11,7 +11,6 @@ var _projects = require("./projects");
 var _projectsregister = require("./projectsregister");
 var _projectstudents = require("./projectstudents");
 var _students = require("./students");
-var _suggestedprojects = require("./suggestedprojects");
 var _users = require("./users");
 
 function initModels(sequelize) {
@@ -27,7 +26,6 @@ function initModels(sequelize) {
   var projectsregister = _projectsregister(sequelize, DataTypes);
   var projectstudents = _projectstudents(sequelize, DataTypes);
   var students = _students(sequelize, DataTypes);
-  var suggestedprojects = _suggestedprojects(sequelize, DataTypes);
   var users = _users(sequelize, DataTypes);
 
   advisors.belongsToMany(projects, { as: 'project_id_projects', through: projectadvisors, foreignKey: "advisor_id", otherKey: "project_id" });
@@ -84,7 +82,6 @@ function initModels(sequelize) {
     projectsregister,
     projectstudents,
     students,
-    suggestedprojects,
     users,
   };
 }
