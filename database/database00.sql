@@ -16,9 +16,9 @@
 
 
 -- Dumping database structure for database00
-DROP DATABASE IF EXISTS `database00`;
-CREATE DATABASE IF NOT EXISTS `database00` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `database00`;
+DROP DATABASE IF EXISTS `database01`;
+CREATE DATABASE IF NOT EXISTS `database01` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `database01`;
 
 -- Dumping structure for procedure database00.AddTimestamps
 DROP PROCEDURE IF EXISTS `AddTimestamps`;

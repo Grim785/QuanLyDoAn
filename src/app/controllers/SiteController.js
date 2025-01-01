@@ -303,49 +303,6 @@ class SiteController {
                             classID:classData.id,
                         },{where: {studentID}});
                     }
-                    // let values = [
-                    //     usersID,
-                    //     studentID,
-                    //     hashedPassword,
-                    //     'student',
-                    //     null,
-                    //     null,
-                    //     formattedCreatedAt,
-                    //     formattedUpdatedAt,
-                    //     1,
-                    // ];
-                    // let sql = 'REPLACE INTO `users`(id, username, password, role, gmail, phone, createdAt, updatedAt, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
-                    // console.log('Câu lệnh SQL:', sql);
-                    // console.log('Tham số:', values);
-                    // let [rows] = await sequelize.query(sql, {
-                    //     replacements: values
-                    // });
-                
-                    // values = [
-                    //     id || null,
-                    //     formattedStudentid || null,
-                    //     lastname || null,
-                    //     firstname || null,
-                    //     formattedDateOfBirthSQL,
-                    //     gender || null,
-                    //     address || null,
-                    //     majorsID || null,
-                    //     usersID = users.id,
-                    //     classID || null,
-                    //     formattedCreatedAt,
-                    //     formattedUpdatedAt,
-                    // ];
-                    // sql ='REPLACE INTO `students`(id, studentID, lastname, firstname, date_of_birth, gender, address, majorsID, usersID, classID, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-                    // console.log('Câu lệnh SQL:', sql);
-                    // console.log('Tham số:', values);
-                    // [rows] = await sequelize.query(sql, {
-                    //     replacements: values
-                    // });
-                    // if (rows.affectedRows){
-                    //     successData.push(data[i]);
-                    // }else{
-                    //     failureData.push(data[i]);
-                    // }
                 }
                 
                 // excel giảng viên
@@ -403,31 +360,6 @@ class SiteController {
                             address,
                         },{where: {advisorID}});
                     }
-
-                
-                    // const values = [
-                    //     id || null,
-                    //     formattedadvisorid || null,
-                    //     lastname || null,
-                    //     firstname || null,
-                    //     formattedDateOfBirthSQL,
-                    //     gender || null,
-                    //     address || null,
-                    //     userID || null,
-                    //     formattedCreatedAt,
-                    //     formattedUpdatedAt,
-                    // ];
-                    // const sql ='REPLACE INTO `advisors`(id, advisorID, lastname, firstname, date_of_birth, gender, address, userID, createdAt, updatedAt) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-                    // console.log('Câu lệnh SQL:', sql);
-                    // console.log('Tham số:', values);
-                    // const [rows] = await sequelize.query(sql, {
-                    //     replacements: values
-                    // });
-                    // if (rows.affectedRows){
-                    //     successData.push(data[i]);
-                    // }else{
-                    //     failureData.push(data[i]);
-                    // }
                 }
                 if(pagecur=='project-list'){
                     const {id, title, description, start_date, end_date, status, majorID, createdAt, updatedAt}=data[i];
