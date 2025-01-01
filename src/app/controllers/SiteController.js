@@ -385,6 +385,7 @@ class SiteController {
             if(pagecur!=='project-list') return res.redirect(`/admin/${pagecur}`)
             else return  res.redirect(`/project/${pagecur}`)
         }catch(error){
+            fs.unlinkSync(req.file.path);
             console.error(error);
             res.status(500).send('Import excel failed');
         }

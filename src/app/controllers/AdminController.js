@@ -128,7 +128,6 @@ class AdminController {
                 classID,
                 username
             } = req.body;
-            console.log("ngày sinh"+date_of_birth);
 
             // Kiểm tra dữ liệu đầu vào
             if (!studentID || !lastname || !firstname || !date_of_birth || !gender || !address || !classID || !username) {
