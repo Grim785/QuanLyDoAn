@@ -212,7 +212,7 @@ class StudentController {
 //[DELETE] /student
     //---Chức năng xóa thông tin đề tài không được duyệt /delete-topic/:id
     async deleteTopic(req, res, next) {
-        const { projectId } = req.params;
+        const projectId = req.params.id;
 
         try {
             // Xóa đề tài

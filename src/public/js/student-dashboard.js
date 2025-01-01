@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const projectId = event.target.getAttribute('data-id');
 
             if (!confirm('Bạn có chắc chắn muốn xóa đề tài này?')) return;
-
             try {
                 const response = await fetch(`/student/delete-topic/${projectId}`, {
                     method: 'DELETE',
@@ -27,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(result.message);
                     // Xóa thẻ khỏi giao diện
                     event.target.closest('.card').remove();
-                    window.location.href = '/student/RegisterTopic';
+                    window.location.href = '/student/register-topic';
                 } else {
                     alert(result.message || 'Không thể xóa đề tài.');
                 }
