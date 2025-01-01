@@ -179,28 +179,6 @@ class SiteController {
 
 
 
-    //[GET] /loadFile
-    async loadFileproject(req, res, next) {
-        try {
-            const { project_id } = req.params;
-            console.log(project_id);
-
-            const projectFile = await projectfiles.findOne({
-                where: { project_id },
-                include: [{ model: files }],
-            });
-
-            if (projectFile) {
-                res.status(200).json({ file: projectFile.file });
-            } else {
-                res.status(404).json({ message: 'No file found for this project' });
-            }
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Failed to load file', error: error.message });
-        }
-    }
-
     //[POST]
     async importexcel (req,res,next){
         try{
@@ -265,24 +243,46 @@ class SiteController {
                     const formattedUpdatedAt = updatedAt ? formatToDateTime(updatedAt) : null;
                     const formattedStudentid = `${studentID}`;
 
+                    const existingStudent = await students.findOne({ where: { studentID } });
 
-                    const hashedPassword = await bcrypt.hash('123', 10); // Mã hóa mật khẩu mặc định
-                    const user= await users.create({
-                        username:studentID,
-                        password: hashedPassword,
-                        role: 'student' // Đặt role mặc định là student
-                    });
+                
+                    // Kiểm tra trùng lặp username
+                    const existingUser = await users.findOne({ where: { username:studentID } });
+                    if (!existingUser&&!existingStudent) {
+                
+                    // Tìm lớp học theo classID
+                        const classData = await class_.findOne({
+                            where: { classID },
+                            attributes: ['id', 'classID', 'status']
+                        });
+                    
+                        if (!classData) {
+                            return res.status(404).json({ error: `Không tìm thấy lớp học với mã ${classID}.` });
+                        }
+                    
+                        if (classData.status !== 'active') {
+                            return res.status(400).json({ error: `Lớp học ${classID} hiện không hoạt động.` });
+                        }
 
-                    const student = await students.create({
-                        studentID,
-                        lastname,
-                        firstname,
-                        date_of_birth:formattedDateOfBirthSQL,
-                        gender,
-                        address,
-                        classID,
-                        usersID:user.id
-                    });
+
+                        const hashedPassword = await bcrypt.hash('123', 10); // Mã hóa mật khẩu mặc định
+                        const user= await users.create({
+                            username:studentID,
+                            password: hashedPassword,
+                            role: 'student' // Đặt role mặc định là student
+                        });
+
+                        const student = await students.create({
+                            studentID,
+                            lastname,
+                            firstname,
+                            date_of_birth:formattedDateOfBirthSQL,
+                            gender,
+                            address,
+                            classID:classData.id,
+                            usersID:user.id
+                        });
+                    }
                     // let values = [
                     //     usersID,
                     //     studentID,
@@ -350,22 +350,30 @@ class SiteController {
                         updatedAt,
                     });
 
-                    const hashedPassword = await bcrypt.hash('123', 10); // Mã hóa mật khẩu mặc định
-                    const user= await users.create({
-                        username:advisorID,
-                        password: hashedPassword,
-                        role: 'advisor' // Đặt role mặc định là student
-                    });
+                    const existingadvisor = await advisors.findOne({ where: { advisorID } });
 
-                    const advisor = await advisors.create({
-                        advisorID,
-                        lastname,
-                        firstname,
-                        date_of_birth:formattedDateOfBirthSQL,
-                        gender,
-                        address,
-                        userID:user.id
-                    });
+                
+                    // Kiểm tra trùng lặp username
+                    const existingUser = await users.findOne({ where: { username:advisorID } });
+                    if (!existingUser&&!existingadvisor) {
+
+                        const hashedPassword = await bcrypt.hash('123', 10); // Mã hóa mật khẩu mặc định
+                        const user= await users.create({
+                            username:advisorID,
+                            password: hashedPassword,
+                            role: 'advisor' // Đặt role mặc định là student
+                        });
+
+                        const advisor = await advisors.create({
+                            advisorID,
+                            lastname,
+                            firstname,
+                            date_of_birth:formattedDateOfBirthSQL,
+                            gender,
+                            address,
+                            userID:user.id
+                        });
+                    }
 
                 
                     // const values = [
