@@ -12,7 +12,7 @@ const { where } = require('sequelize');
 
 // Khởi tạo tất cả các model và quan hệ
 const models = initModels(sequelize);   
-const { users, files, projectfiles, students , advisors, projects} = models;
+const { users, files, projectfiles, students , advisors, projects,  class_} = models;
 
 class SiteController {
     //[GET] /
@@ -283,6 +283,26 @@ class SiteController {
                             usersID:user.id
                         });
                     }
+                    else{
+                        // Tìm lớp học theo classID
+                        const classData = await class_.findOne({
+                            where: { classID },
+                            attributes: ['id', 'classID', 'status']
+                        });
+                    
+                        if (!classData) {
+                            return res.status(404).json({ error: `Không tìm thấy lớp học với mã ${classID}.` });
+                        }
+                    
+                        const student = await students.update({
+                            lastname,
+                            firstname,
+                            date_of_birth:formattedDateOfBirthSQL,
+                            gender,
+                            address,
+                            classID:classData.id,
+                        },{where: {studentID}});
+                    }
                     // let values = [
                     //     usersID,
                     //     studentID,
@@ -373,6 +393,15 @@ class SiteController {
                             address,
                             userID:user.id
                         });
+                    }
+                    else{
+                        const advisor = await advisors.update({
+                            lastname,
+                            firstname,
+                            date_of_birth:formattedDateOfBirthSQL,
+                            gender,
+                            address,
+                        },{where: {advisorID}});
                     }
 
                 
