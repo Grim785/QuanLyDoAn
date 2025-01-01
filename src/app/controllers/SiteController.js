@@ -8,10 +8,11 @@ const sequelize = require("../../config/db");
 const initModels = require("../models/init-models");
 
 const XLSX = require('xlsx');
+const { where } = require('sequelize');
 
 // Khởi tạo tất cả các model và quan hệ
-const models = initModels(sequelize);
-const { users, files, projectfiles } = models;
+const models = initModels(sequelize);   
+const { users, files, projectfiles, students , advisors, projects} = models;
 
 class SiteController {
     //[GET] /
@@ -256,104 +257,164 @@ class SiteController {
                 // excel sinh viên
                 if(pagecur=="student-management"){
                     const {id, studentID, lastname, firstname, date_of_birth, gender, address, majorsID, usersID, classID, createdAt = new Date(), updatedAt = new Date()} = data[i];
-                    console.log({
-                        id,
-                        studentID,
-                        lastname,
-                        firstname,
-                        date_of_birth,
-                        gender,
-                        address,
-                        majorsID,
-                        usersID,
-                        classID,
-                        createdAt,
-                        updatedAt,
-                    });
+
                     const formattedDateOfBirth = date_of_birth ? convertExcelDate(date_of_birth) : null;
                     const formattedSQLDateOfBirth = new Date(formattedDateOfBirth);
                     const formattedDateOfBirthSQL = formatToMySQLDate(formattedSQLDateOfBirth);
                     const formattedCreatedAt = createdAt ? formatToDateTime(createdAt) : null;
                     const formattedUpdatedAt = updatedAt ? formatToDateTime(updatedAt) : null;
                     const formattedStudentid = `${studentID}`;
-                
-                    const values = [
-                        id || null,
-                        formattedStudentid || null,
-                        lastname || null,
-                        firstname || null,
-                        formattedDateOfBirthSQL,
-                        gender || null,
-                        address || null,
-                        majorsID || null,
-                        usersID || null,
-                        classID || null,
-                        formattedCreatedAt,
-                        formattedUpdatedAt,
-                    ];
-                    const sql ='REPLACE INTO `students`(id, studentID, lastname, firstname, date_of_birth, gender, address, majorsID, usersID, classID, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-                    console.log('Câu lệnh SQL:', sql);
-                    console.log('Tham số:', values);
-                    const [rows] = await sequelize.query(sql, {
-                        replacements: values
+
+
+                    const hashedPassword = await bcrypt.hash('123', 10); // Mã hóa mật khẩu mặc định
+                    const user= await users.create({
+                        username:studentID,
+                        password: hashedPassword,
+                        role: 'student' // Đặt role mặc định là student
                     });
-                    if (rows.affectedRows){
-                        successData.push(data[i]);
-                    }else{
-                        failureData.push(data[i]);
-                    }
+
+                    const student = await students.create({
+                        studentID,
+                        lastname,
+                        firstname,
+                        date_of_birth:formattedDateOfBirthSQL,
+                        gender,
+                        address,
+                        classID,
+                        usersID:user.id
+                    });
+                    // let values = [
+                    //     usersID,
+                    //     studentID,
+                    //     hashedPassword,
+                    //     'student',
+                    //     null,
+                    //     null,
+                    //     formattedCreatedAt,
+                    //     formattedUpdatedAt,
+                    //     1,
+                    // ];
+                    // let sql = 'REPLACE INTO `users`(id, username, password, role, gmail, phone, createdAt, updatedAt, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+                    // console.log('Câu lệnh SQL:', sql);
+                    // console.log('Tham số:', values);
+                    // let [rows] = await sequelize.query(sql, {
+                    //     replacements: values
+                    // });
+                
+                    // values = [
+                    //     id || null,
+                    //     formattedStudentid || null,
+                    //     lastname || null,
+                    //     firstname || null,
+                    //     formattedDateOfBirthSQL,
+                    //     gender || null,
+                    //     address || null,
+                    //     majorsID || null,
+                    //     usersID = users.id,
+                    //     classID || null,
+                    //     formattedCreatedAt,
+                    //     formattedUpdatedAt,
+                    // ];
+                    // sql ='REPLACE INTO `students`(id, studentID, lastname, firstname, date_of_birth, gender, address, majorsID, usersID, classID, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+                    // console.log('Câu lệnh SQL:', sql);
+                    // console.log('Tham số:', values);
+                    // [rows] = await sequelize.query(sql, {
+                    //     replacements: values
+                    // });
+                    // if (rows.affectedRows){
+                    //     successData.push(data[i]);
+                    // }else{
+                    //     failureData.push(data[i]);
+                    // }
                 }
                 
                 // excel giảng viên
-                if(pagecur=="AdvisorManagement")
+                if(pagecur=="advisor-management")
                 {
                     const {id, advisorID, lastname, firstname, date_of_birth, gender, address, userID, createdAt = new Date(), updatedAt = new Date()} = data[i];
+
+                    const formattedDateOfBirth = date_of_birth ? convertExcelDate(date_of_birth) : null;
+                    const formattedSQLDateOfBirth = new Date(formattedDateOfBirth);
+                    const formattedDateOfBirthSQL = formatToMySQLDate(formattedSQLDateOfBirth);
+
                     console.log({
                         id,
                         advisorID,
                         lastname,
                         firstname,
-                        date_of_birth,
+                        date_of_birth:formattedDateOfBirthSQL,
                         gender,
                         address,
                         userID,
                         createdAt,
                         updatedAt,
                     });
-                    const formattedDateOfBirth = date_of_birth ? convertExcelDate(date_of_birth) : null;
-                    const formattedSQLDateOfBirth = new Date(formattedDateOfBirth);
-                    const formattedDateOfBirthSQL = formatToMySQLDate(formattedSQLDateOfBirth);
-                    const formattedCreatedAt = createdAt ? formatToDateTime(createdAt) : null;
-                    const formattedUpdatedAt = updatedAt ? formatToDateTime(updatedAt) : null;
-                    const formattedadvisorid = `${advisorID}`;
-                
-                    const values = [
-                        id || null,
-                        formattedadvisorid || null,
-                        lastname || null,
-                        firstname || null,
-                        formattedDateOfBirthSQL,
-                        gender || null,
-                        address || null,
-                        userID || null,
-                        formattedCreatedAt,
-                        formattedUpdatedAt,
-                    ];
-                    const sql ='REPLACE INTO `advisors`(id, advisorID, lastname, firstname, date_of_birth, gender, address, userID, createdAt, updatedAt) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-                    console.log('Câu lệnh SQL:', sql);
-                    console.log('Tham số:', values);
-                    const [rows] = await sequelize.query(sql, {
-                        replacements: values
+
+                    const hashedPassword = await bcrypt.hash('123', 10); // Mã hóa mật khẩu mặc định
+                    const user= await users.create({
+                        username:advisorID,
+                        password: hashedPassword,
+                        role: 'advisor' // Đặt role mặc định là student
                     });
-                    if (rows.affectedRows){
-                        successData.push(data[i]);
-                    }else{
-                        failureData.push(data[i]);
-                    }
+
+                    const advisor = await advisors.create({
+                        advisorID,
+                        lastname,
+                        firstname,
+                        date_of_birth:formattedDateOfBirthSQL,
+                        gender,
+                        address,
+                        userID:user.id
+                    });
+
+                
+                    // const values = [
+                    //     id || null,
+                    //     formattedadvisorid || null,
+                    //     lastname || null,
+                    //     firstname || null,
+                    //     formattedDateOfBirthSQL,
+                    //     gender || null,
+                    //     address || null,
+                    //     userID || null,
+                    //     formattedCreatedAt,
+                    //     formattedUpdatedAt,
+                    // ];
+                    // const sql ='REPLACE INTO `advisors`(id, advisorID, lastname, firstname, date_of_birth, gender, address, userID, createdAt, updatedAt) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+                    // console.log('Câu lệnh SQL:', sql);
+                    // console.log('Tham số:', values);
+                    // const [rows] = await sequelize.query(sql, {
+                    //     replacements: values
+                    // });
+                    // if (rows.affectedRows){
+                    //     successData.push(data[i]);
+                    // }else{
+                    //     failureData.push(data[i]);
+                    // }
+                }
+                if(pagecur=='project-list'){
+                    const {id, title, description, start_date, end_date, status, majorID, createdAt, updatedAt}=data[i];
+                    console.log(id, title, description, start_date, end_date, status, majorID, createdAt, updatedAt);
+    
+                    const formattedstart = start_date ? convertExcelDate(start_date) : null;
+                    const formattedstartSQL = formatToMySQLDate(new Date(formattedstart));
+    
+                    const formattedend = end_date ? convertExcelDate(end_date) : null;
+                    const formattedendSQL = formatToMySQLDate(new Date(formattedend));
+    
+                    await projects.create({
+                        title,
+                        description,
+                        start_date: start_date?formattedstartSQL:null,
+                        end_date: end_date?  formattedendSQL: null,
+                        status,
+                        majorID,
+                    })
                 }
             }   
             fs.unlinkSync(req.file.path);
-            return res.redirect(`/admin/${pagecur}`)
+            if(pagecur!=='project-list') return res.redirect(`/admin/${pagecur}`)
+            else return  res.redirect(`/project/${pagecur}`)
         }catch(error){
             console.error(error);
             res.status(500).send('Import excel failed');

@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const fs = require('fs');
 const s3 = require('../../config/aws'); 
+const { Op } = require('sequelize');
 require('dotenv').config();
 
 const sequelize = require("../../config/db");
@@ -79,7 +80,12 @@ class AdvisorController {
                         {
                             model: projects,
                             as: 'project',
-                            where: {status: 'in_progress'},
+                            where: {
+                                [Op.or]:[
+                                    {status:'in_progress'},
+                                    {status: 'completed'}
+                                ]
+                            },
                             include: [
                                 {
                                     model: projectsregister,

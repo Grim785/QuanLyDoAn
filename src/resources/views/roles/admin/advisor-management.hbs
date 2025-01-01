@@ -53,10 +53,22 @@
   </table>
 </div>
 
-<div class="button-container text-end fs-6">
-  <button class="btn btn-primary" id="add-button">Thêm mới</button>
-  <button class="btn btn-danger" id="delete-button">Xóa</button>
-  <button class="btn btn-warning" id="edit-button">Sửa</button>
+<div class="button-container container text-end fs-6">
+  <div class="row">
+    <div class="col-6">
+      {{!-- import excel --}}
+      <form action="/import-excel" method="post" enctype="multipart/form-data" class="d-flex">
+        <input type="file" name="excel" id="" class="form-control excel-files h-100" required>
+        <input type="text" name="pagecur" value="advisor-management" hidden>
+        <button class="excel-btn btn btn-primary text-nowrap" type="submit">nhập từ excel</button>
+      </form>
+    </div>
+    <div class="col-6 fs-6 text-end">
+      <button class="btn btn-primary" id="add-button">Thêm mới</button>
+      <button class="btn btn-danger" id="delete-button">Xóa</button>
+      <button class="btn btn-warning" id="edit-button">Sửa</button>
+    </div>
+  </div>
 </div>
 
 <!-- Modal thêm mới -->
