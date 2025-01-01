@@ -32,7 +32,7 @@ const uploadAvatar = multer({
 });
 
 const uploadExcel = multer({
-    dest: 'uploads/',
+    dest: 'src/public/uploads/',
 });
 
 module.exports = { uploadProject, uploadAvatar, uploadExcel };

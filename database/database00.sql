@@ -99,10 +99,14 @@ CREATE TABLE IF NOT EXISTS `advisors` (
   CONSTRAINT `advisors_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.advisors: ~3 rows (approximately)
+-- Dumping data for table database00.advisors: ~6 rows (approximately)
 REPLACE INTO `advisors` (`id`, `advisorID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `address`, `userID`, `createdAt`, `updatedAt`) VALUES
-	(1, '19992222', 'Lưu Thị', 'Thu Thủy', '1991-12-27', 'Nữ', '22A/74 Quận 1, Tp. Hồ Chí Minh', 3, '2024-12-27 00:24:23', '2024-12-29 01:25:52'),
-	(2, '19992707', 'Hoàng Minh', 'Tuấn', '1978-12-27', 'Nam', '17E Quận Bình Thạnh, Tp. Hồ Chí Minh', 2, '2024-12-27 00:25:52', '2024-12-27 00:25:52');
+	(1, '11002221', 'Từ Thị', 'Xuân Hiền', '2025-01-01', 'Nữ', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 2, '2025-01-01 07:21:47', '2025-01-01 07:21:47'),
+	(2, '11002222', 'Nguyễn Đức', 'Cương', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 3, '2025-01-01 07:22:57', '2025-01-01 07:22:57'),
+	(3, '11002223', 'Lê Thị', 'Cẩm Tú', '2025-01-01', 'Nữ', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 4, '2025-01-01 07:23:30', '2025-01-01 07:23:30'),
+	(4, '11002224', 'Nguyễn Phương', 'Hồng', '2025-01-01', 'Nữ', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 5, '2025-01-01 07:24:00', '2025-01-01 07:24:00'),
+	(5, '11002225', 'Nguyễn Thị', 'Phương Loan', '2025-01-01', 'Nữ', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 6, '2025-01-01 07:24:25', '2025-01-01 07:24:25'),
+	(6, '11002226', 'Quách Biên', 'Cương', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 7, '2025-01-01 07:25:00', '2025-01-01 07:25:00');
 
 -- Dumping structure for table database00.class_
 DROP TABLE IF EXISTS `class_`;
@@ -122,8 +126,8 @@ CREATE TABLE IF NOT EXISTS `class_` (
 -- Dumping data for table database00.class_: ~3 rows (approximately)
 REPLACE INTO `class_` (`id`, `classID`, `status`, `majorsID`, `createdAt`, `updatedAt`) VALUES
 	(1, '22CPM01', 'active', 1, '2024-12-27 00:11:28', '2024-12-27 00:11:28'),
-	(2, '22CTMĐT01', 'active', 3, '2024-12-27 00:12:53', '2024-12-27 00:12:53'),
-	(3, '22CQTM01', 'active', 2, '2024-12-27 00:13:09', '2024-12-27 00:13:09');
+	(2, '22TMĐT01', 'active', 3, '2024-12-27 00:12:53', '2025-01-01 14:35:52'),
+	(3, '22QTM01', 'active', 2, '2024-12-27 00:13:09', '2025-01-01 14:35:54');
 
 -- Dumping structure for table database00.files
 DROP TABLE IF EXISTS `files`;
@@ -176,8 +180,6 @@ CREATE TABLE IF NOT EXISTS `progress` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table database00.progress: ~0 rows (approximately)
-REPLACE INTO `progress` (`id`, `title`, `content`, `project_id`, `createdAt`, `updatedAt`) VALUES
-	(6, 'Báo cáo khởi đầu', '- Lên kế hoạch', 1, '2024-12-31 16:34:24', '2024-12-31 16:35:54');
 
 -- Dumping structure for table database00.projectadvisors
 DROP TABLE IF EXISTS `projectadvisors`;
@@ -192,11 +194,11 @@ CREATE TABLE IF NOT EXISTS `projectadvisors` (
   CONSTRAINT `projectadvisors_ibfk_2` FOREIGN KEY (`advisor_id`) REFERENCES `advisors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectadvisors: ~1 rows (approximately)
+-- Dumping data for table database00.projectadvisors: ~2 rows (approximately)
 REPLACE INTO `projectadvisors` (`project_id`, `advisor_id`, `createdAt`, `updatedAt`) VALUES
-	(1, 1, '2024-12-29 13:44:23', '2024-12-29 13:44:23'),
-	(2, 1, '2024-12-31 17:20:34', '2024-12-31 17:20:34'),
-	(22, 2, '2024-12-31 16:24:33', '2024-12-31 16:24:33');
+	(1, 2, '2025-01-01 07:51:12', '2025-01-01 07:51:12'),
+	(2, 1, '2025-01-01 07:47:49', '2025-01-01 07:47:49'),
+	(3, 1, '2025-01-01 07:48:24', '2025-01-01 07:48:24');
 
 -- Dumping structure for table database00.projectfeedback
 DROP TABLE IF EXISTS `projectfeedback`;
@@ -248,27 +250,26 @@ CREATE TABLE IF NOT EXISTS `projects` (
   CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`majorID`) REFERENCES `majors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projects: ~19 rows (approximately)
+-- Dumping data for table database00.projects: ~22 rows (approximately)
 REPLACE INTO `projects` (`id`, `title`, `description`, `start_date`, `end_date`, `status`, `majorID`, `createdAt`, `updatedAt`) VALUES
-	(1, 'Hệ thống quản lý đồ án tốt nghiệp - Khoa công nghệ thông tin', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tinHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tàiHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', '2024-12-31', NULL, 'in_progress', 1, '2024-12-27 00:27:51', '2024-12-31 04:45:33'),
-	(2, 'Hệ thống quản lý khám bệnh', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:34:02', '2024-12-29 09:18:19'),
-	(3, 'Xây dựng ứng dụng web trên nền tảng Nodejs và MongoDB ', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:34:39', '2024-12-29 09:18:07'),
-	(4, 'Xây dựng trang web bán liên kiện máy tính', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:35:31', '2024-12-29 09:18:08'),
-	(5, 'Xây dựng phần mềm Quản lý phòng học', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:35:50', '2024-12-29 09:18:09'),
-	(6, 'Xây dựng website bán giày', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:36:12', '2024-12-29 09:18:09'),
-	(7, 'Phần Mềm Quản Lý Sinh Viên ', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:36:39', '2024-12-29 09:18:10'),
-	(8, 'Trang web bán hàng trang sức', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:36:56', '2024-12-29 09:18:11'),
-	(9, 'Thiết kế website bán thiết bị di động', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:37:15', '2024-12-29 09:18:11'),
-	(10, 'Thiết kế website bán mô hình lắp ráp', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:37:49', '2024-12-29 09:18:12'),
-	(11, 'Giải pháp Marketing thúc đẩy thương hiệu Khoa Công nghệ Thông tin trường Cao đẳng Bách khoa Sài Gòn trên nền tảng số', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:38:26', '2024-12-29 09:18:12'),
-	(12, 'Những yếu tố ảnh hưởng đến triển khai Chuyển đổi số tại trường cao đẳng Bách Khoa Sài Gòn', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:38:54', '2024-12-29 09:18:13'),
-	(13, 'Nâng cao hiệu quả Social Media marketing cho thương hiệu Gumac ', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:39:14', '2024-12-29 09:18:14'),
-	(14, 'Nghiên cứu về vai trò của trải nghiệm mua sắm trực tuyến trong việc thay đổi thói quen tiêu dùng của người tiêu dùng', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:39:55', '2024-12-29 09:18:14'),
-	(15, 'Nghiên cứu xu hướng thanh toán không tiền mặt và ảnh hưởng đến thương mại điện tử tại Việt Nam ', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:40:33', '2024-12-29 09:18:15'),
-	(16, 'Xây dựng hệ thống quản lý bán hàng sử dụng mã nguồn mở (OpenCart) ', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:41:00', '2024-12-30 17:24:26'),
-	(17, 'Xây dựng hệ thống mạng cho doanh nghiệp Thành Phát (Side - to - side)', 'Mô tả', NULL, NULL, 'not_started', 2, '2024-12-27 00:41:34', '2024-12-30 17:24:26'),
-	(18, 'Thiết kế mạng và giải pháp quản trị mạng cho công ty Gia Hoà ', 'Mô tả', NULL, NULL, 'not_started', 2, '2024-12-27 00:42:06', '2024-12-30 17:24:26'),
-	(22, 'Hệ thống quản lý sinh viên', 'Hệ thống quản lý sinh viên', '2024-12-31', NULL, 'in_progress', 1, '2024-12-31 16:24:33', '2024-12-31 16:25:56');
+	(1, 'Hệ thống quản lý đồ án tốt nghiệp - Khoa công nghệ thông tin', 'Ứng dụng cung cấp môi trường làm quản thích hợp trong việc quản lý đồ án tốt nghiệp của khoa công nghệ thông tinHỗ trợ sinh viên, đăng ký, đăng tải, báo cáo tiến độ đề tàiHỗ trợ giảng viên theo dõi, đánh giá, xem xét đề tài, theo dõi tiến độ đề tài', '2025-01-01', NULL, 'in_progress', 1, '2024-12-27 00:27:51', '2025-01-01 15:03:57'),
+	(2, 'Hệ thống quản lý khám bệnh', 'Mô tả', '2025-01-01', '2025-01-01', 'completed', 1, '2024-12-27 00:34:02', '2025-01-01 07:47:49'),
+	(3, 'Xây dựng ứng dụng web trên nền tảng Nodejs và MongoDB ', 'Mô tả', '2025-01-01', NULL, 'in_progress', 1, '2024-12-27 00:34:39', '2025-01-01 07:48:24'),
+	(4, 'Xây dựng trang web bán liên kiện máy tính', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:35:31', '2025-01-01 07:15:48'),
+	(5, 'Xây dựng phần mềm Quản lý phòng học', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:35:50', '2025-01-01 07:15:48'),
+	(6, 'Xây dựng website bán giày', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:36:12', '2025-01-01 07:15:48'),
+	(7, 'Phần Mềm Quản Lý Sinh Viên ', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:36:39', '2025-01-01 07:15:48'),
+	(8, 'Trang web bán hàng trang sức', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:36:56', '2025-01-01 07:15:48'),
+	(9, 'Thiết kế website bán thiết bị di động', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:37:15', '2025-01-01 07:15:48'),
+	(10, 'Thiết kế website bán mô hình lắp ráp', 'Mô tả', NULL, NULL, 'not_started', 1, '2024-12-27 00:37:49', '2025-01-01 07:15:48'),
+	(11, 'Giải pháp Marketing thúc đẩy thương hiệu Khoa Công nghệ Thông tin trường Cao đẳng Bách khoa Sài Gòn trên nền tảng số', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:38:26', '2025-01-01 07:15:48'),
+	(12, 'Những yếu tố ảnh hưởng đến triển khai Chuyển đổi số tại trường cao đẳng Bách Khoa Sài Gòn', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:38:54', '2025-01-01 07:15:48'),
+	(13, 'Nâng cao hiệu quả Social Media marketing cho thương hiệu Gumac ', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:39:14', '2025-01-01 07:15:48'),
+	(14, 'Nghiên cứu về vai trò của trải nghiệm mua sắm trực tuyến trong việc thay đổi thói quen tiêu dùng của người tiêu dùng', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:39:55', '2025-01-01 07:15:48'),
+	(15, 'Nghiên cứu xu hướng thanh toán không tiền mặt và ảnh hưởng đến thương mại điện tử tại Việt Nam ', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:40:33', '2025-01-01 07:15:48'),
+	(16, 'Xây dựng hệ thống quản lý bán hàng sử dụng mã nguồn mở (OpenCart) ', 'Mô tả', NULL, NULL, 'not_started', 3, '2024-12-27 00:41:00', '2025-01-01 07:15:48'),
+	(17, 'Xây dựng hệ thống mạng cho doanh nghiệp Thành Phát (Side - to - side)', 'Mô tả', NULL, NULL, 'not_started', 2, '2024-12-27 00:41:34', '2025-01-01 07:15:48'),
+	(18, 'Thiết kế mạng và giải pháp quản trị mạng cho công ty Gia Hoà ', 'Mô tả', NULL, NULL, 'not_started', 2, '2024-12-27 00:42:06', '2025-01-01 07:15:48');
 
 -- Dumping structure for table database00.projectsregister
 DROP TABLE IF EXISTS `projectsregister`;
@@ -282,11 +283,11 @@ CREATE TABLE IF NOT EXISTS `projectsregister` (
   CONSTRAINT `fk_project` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectsregister: ~0 rows (approximately)
+-- Dumping data for table database00.projectsregister: ~3 rows (approximately)
 REPLACE INTO `projectsregister` (`project_id`, `status`, `note`, `createdAt`, `updatedAt`) VALUES
-	(1, 'approved', '', '2024-12-29 16:26:34', '2024-12-31 04:45:33'),
-	(2, 'pending', NULL, '2024-12-31 17:19:44', '2024-12-31 17:19:49'),
-	(22, 'approved', NULL, '2024-12-31 16:24:33', '2024-12-31 16:25:56');
+	(1, 'pending', NULL, '2025-01-01 14:49:35', '2025-01-01 14:49:35'),
+	(2, 'approved', NULL, '2025-01-01 14:48:42', '2025-01-01 14:49:14'),
+	(3, 'approved', NULL, '2025-01-01 14:48:50', '2025-01-01 14:49:11');
 
 -- Dumping structure for table database00.projectstudents
 DROP TABLE IF EXISTS `projectstudents`;
@@ -301,13 +302,15 @@ CREATE TABLE IF NOT EXISTS `projectstudents` (
   CONSTRAINT `projectstudents_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.projectstudents: ~2 rows (approximately)
+-- Dumping data for table database00.projectstudents: ~7 rows (approximately)
 REPLACE INTO `projectstudents` (`project_id`, `student_id`, `createdAt`, `updatedAt`) VALUES
-	(1, 1, '2024-12-29 13:44:23', '2024-12-29 13:44:23'),
-	(1, 2, '2024-12-29 13:44:23', '2024-12-29 13:44:23'),
-	(2, 4, '2024-12-31 17:19:37', '2024-12-31 17:20:55'),
-	(22, 3, '2024-12-31 16:24:33', '2024-12-31 16:24:33'),
-	(22, 5, '2024-12-31 16:24:33', '2024-12-31 16:24:33');
+	(1, 9, '2025-01-01 07:51:12', '2025-01-01 07:51:12'),
+	(1, 10, '2025-01-01 07:51:12', '2025-01-01 07:51:12'),
+	(1, 11, '2025-01-01 07:51:12', '2025-01-01 07:51:12'),
+	(1, 12, '2025-01-01 07:51:12', '2025-01-01 07:51:12'),
+	(2, 1, '2025-01-01 07:47:49', '2025-01-01 07:47:49'),
+	(2, 2, '2025-01-01 07:47:49', '2025-01-01 07:47:49'),
+	(3, 3, '2025-01-01 07:48:24', '2025-01-01 07:48:24');
 
 -- Dumping structure for procedure database00.ResetAutoIncrement
 DROP PROCEDURE IF EXISTS `ResetAutoIncrement`;
@@ -366,13 +369,41 @@ CREATE TABLE IF NOT EXISTS `students` (
   CONSTRAINT `students_ibfk_2` FOREIGN KEY (`usersID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.students: ~6 rows (approximately)
+-- Dumping data for table database00.students: ~29 rows (approximately)
 REPLACE INTO `students` (`id`, `studentID`, `lastname`, `firstname`, `date_of_birth`, `gender`, `address`, `majorsID`, `usersID`, `classID`, `createdAt`, `updatedAt`) VALUES
-	(1, '22001976', 'Trần Nguyên', 'Phát', '2004-07-27', 'Nam', '999/3A Quận 12, Tp. Hồ Chí Minh', 1, 4, 1, '2024-12-27 00:14:33', '2024-12-27 00:14:33'),
-	(2, '22001955', 'Lê Thanh', 'Ngân', '2004-12-27', 'Nữ', '111/5A Gò Vấp, Tp. Hồ Chí Minh', 2, 5, 3, '2024-12-27 00:17:52', '2024-12-27 00:17:52'),
-	(3, '22002044', 'Nguyễn Văn', 'Thanh', '2003-12-27', 'Nam', '333/4B Gò Vấp, Tp. Hồ Chí Minh', 3, 6, 2, '2024-12-27 00:19:22', '2024-12-27 00:20:50'),
-	(4, '22007865', 'Hoàng Minh', 'Nhân', '2002-12-27', 'Nam', '17/2D Bình Thạnh, Tp. Hồ Chí Minh', 1, 7, 1, '2024-12-27 00:20:45', '2024-12-27 00:20:45'),
-	(5, '22009999', 'Lê Nhật', 'Linh', '2004-10-27', 'Nữ', '55/2E Gò Vấp, Tp. Hồ Chí Minh', 2, 8, 3, '2024-12-27 00:22:32', '2024-12-27 00:22:32');
+	(1, '22001965', 'Trang Quốc', 'Trường', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 8, 1, '2025-01-01 07:25:58', '2025-01-01 07:25:58'),
+	(2, '22001970', 'Trần Minh', 'Nhật', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 9, 1, '2025-01-01 07:26:29', '2025-01-01 07:26:29'),
+	(3, '22001881', 'Phan Phạm', 'Hoàng Hải', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 10, 1, '2025-01-01 07:26:58', '2025-01-01 07:26:58'),
+	(4, '22001795', 'Phạm Nguyễn', 'Minh Huy', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 11, 1, '2025-01-01 07:27:25', '2025-01-01 07:27:25'),
+	(5, '22002451', 'Trần An', 'Phước', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 12, 1, '2025-01-01 07:27:55', '2025-01-01 07:27:55'),
+	(6, '22000290', 'Nguyễn Vũ', 'Gia Bảo', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 13, 1, '2025-01-01 07:28:43', '2025-01-01 07:28:43'),
+	(7, '22001460', 'Nguyễn Bạch', 'Dương', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 14, 1, '2025-01-01 07:29:04', '2025-01-01 07:29:04'),
+	(8, '22001599', 'Nguyễn Hoài', 'Vũ', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 15, 1, '2025-01-01 07:29:30', '2025-01-01 07:29:30'),
+	(9, '22001846', 'Huỳnh Chí', 'Thành', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 16, 1, '2025-01-01 07:30:07', '2025-01-01 07:30:07'),
+	(10, '22001976', 'Trần Nguyên', 'Phát', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 17, 1, '2025-01-01 07:30:41', '2025-01-01 07:30:41'),
+	(11, '22002070', 'Nguyễn Văn', 'An', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 18, 1, '2025-01-01 07:31:17', '2025-01-01 07:31:17'),
+	(12, '22001786', 'Nguyễn Quốc', 'Bảo', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 19, 1, '2025-01-01 07:31:45', '2025-01-01 07:31:45'),
+	(13, '22002398', 'Vũ Minh', 'Hiền', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 20, 1, '2025-01-01 07:32:12', '2025-01-01 07:32:12'),
+	(14, '22002240', 'Nguyễn Thành', 'Thông', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 21, 1, '2025-01-01 07:32:37', '2025-01-01 07:32:37'),
+	(15, '22001579', 'Lê Nguyễn', 'Thành Tâm', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 22, 1, '2025-01-01 07:33:18', '2025-01-01 07:33:18'),
+	(16, '22002009', 'Trần Minh', 'Quang', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 23, 1, '2025-01-01 07:33:41', '2025-01-01 07:33:41'),
+	(17, '22001666', 'Nguyễn Tuấn', 'Anh', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 24, 1, '2025-01-01 07:34:16', '2025-01-01 07:34:16'),
+	(18, '22001817', 'Đỗ Quốc', 'Nghĩa', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 25, 2, '2025-01-01 07:35:59', '2025-01-01 07:35:59'),
+	(19, '22002085', 'Trương Quốc', 'Huy', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 26, 2, '2025-01-01 07:36:35', '2025-01-01 07:36:35'),
+	(20, '22002088', 'Trần Thị', 'Yến Nhi', '2025-01-01', 'Nữ', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 27, 2, '2025-01-01 07:37:02', '2025-01-01 07:44:11'),
+	(21, '22001445', 'Nguyễn Đức', 'Danh', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 28, 2, '2025-01-01 07:37:37', '2025-01-01 07:37:37'),
+	(22, '22001501', 'Trần Duy', 'Linh', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 29, 2, '2025-01-01 07:38:05', '2025-01-01 07:38:05'),
+	(23, '22001909', 'Ngô Thị', 'Hồng Nhung', '2025-01-01', 'Nữ', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 30, 2, '2025-01-01 07:38:27', '2025-01-01 07:44:11'),
+	(24, '22001963', 'Ngô Nhật', 'Khang', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 31, 2, '2025-01-01 07:38:58', '2025-01-01 07:38:58'),
+	(25, '22002094', 'Lê Hoàng', 'Quân', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 32, 2, '2025-01-01 07:39:24', '2025-01-01 07:39:24'),
+	(26, '22000214', 'Dương Thành', 'Tiến', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 33, 2, '2025-01-01 07:39:48', '2025-01-01 07:39:48'),
+	(27, '22002414', 'Lê Thị', 'Thu Linh', '2025-01-01', 'Nữ', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 34, 2, '2025-01-01 07:40:15', '2025-01-01 07:44:11'),
+	(28, '22002415', 'Nguyễn Kim', 'Thủy', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 35, 2, '2025-01-01 07:40:36', '2025-01-01 07:40:36'),
+	(29, '22000279', 'Trần Thị', 'Minh Trang', '2025-01-01', 'Nữ', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 36, 2, '2025-01-01 07:40:57', '2025-01-01 07:44:11'),
+	(30, '22001816', 'Nguyễn Lê', 'Hải Âu', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 37, 3, '2025-01-01 07:41:23', '2025-01-01 07:41:23'),
+	(31, '22002108', 'Nguyễn Minh', 'Chánh', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 38, 3, '2025-01-01 07:42:13', '2025-01-01 07:42:13'),
+	(32, '22002376', 'Nguyễn Trung', 'Hiếu', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 39, 3, '2025-01-01 07:42:38', '2025-01-01 07:42:38'),
+	(33, '22002345', 'Nguyễn Ngọc', 'Quốc Thông', '2025-01-01', 'Nam', '34 - 34A Nguyễn Bỉnh Khiêm, Phường 1, Quận Gò Vấp, TP. HCM', 1, 40, 3, '2025-01-01 07:43:03', '2025-01-01 07:43:03');
 
 -- Dumping structure for table database00.users
 DROP TABLE IF EXISTS `users`;
@@ -391,16 +422,48 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table database00.users: ~10 rows (approximately)
+-- Dumping data for table database00.users: ~36 rows (approximately)
 REPLACE INTO `users` (`id`, `username`, `password`, `role`, `gmail`, `phone`, `createdAt`, `updatedAt`, `active`) VALUES
 	(1, 'admin', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'admin', '123123@gmail.com', '1111111111', '2024-12-27 00:01:01', '2024-12-27 00:01:14', 1),
-	(2, '19992707', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'advisor', '123321@gmail.com', '2222222222', '2024-12-27 00:02:47', '2024-12-27 00:03:24', 1),
-	(3, '19992222', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'advisor', '123333@gmail.com', '2222222223', '2024-12-27 00:04:12', '2024-12-27 00:45:17', 1),
-	(4, '22001976', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', 'kem@gmail.com', '8743254765', '2024-12-27 00:06:08', '2024-12-27 00:45:18', 1),
-	(5, '22001955', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '05@gmail.com', '8632456781', '2024-12-27 00:06:44', '2024-12-27 00:45:19', 1),
-	(6, '22002044', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '06@gmail.com', '0486534475', '2024-12-27 00:07:17', '2024-12-27 00:45:20', 1),
-	(7, '22007865', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '07@gmail.com', '9435658323', '2024-12-27 00:07:50', '2024-12-27 00:45:21', 1),
-	(8, '22009999', '$2b$10$6jMp5LqDK1evCv46dWT3RONdSdJ9m7BLDBOcRUuu8bq/T5R91tNOe', 'student', '08@gmail.com', '1268553537', '2024-12-27 00:08:20', '2024-12-27 00:45:22', 1);
+	(2, '11002221', '$2b$10$wS375ac0kgJM3nod1Lkq6OTJyJsCk2dOUFJMV1IOt8p8Md1s/Fbyi', 'advisor', NULL, NULL, '2025-01-01 07:21:47', '2025-01-01 07:21:47', 1),
+	(3, '11002222', '$2b$10$raJqfGjzww8ZYfEH8nPt5O4bCJHQSbQVI/94Jwv5HsM3XPId31PFC', 'advisor', NULL, NULL, '2025-01-01 07:22:57', '2025-01-01 07:22:57', 1),
+	(4, '11002223', '$2b$10$Vcku6j32yIb1EWkCRInjW.HDaebqBfnNr88Qg3ga5Nt7dh5.KMLS6', 'advisor', NULL, NULL, '2025-01-01 07:23:30', '2025-01-01 07:23:30', 1),
+	(5, '11002224', '$2b$10$.rxSHwEMEuDC2VIKMyruROahM.qPXAo9AX4hQ0U24kZ2nlxcSjlKW', 'advisor', NULL, NULL, '2025-01-01 07:24:00', '2025-01-01 07:24:00', 1),
+	(6, '11002225', '$2b$10$dlsWZSEaACY8DlXTM5//Bes9O7q0jY39foUfFyMwe6i7i7uEqlzoW', 'advisor', NULL, NULL, '2025-01-01 07:24:25', '2025-01-01 07:24:25', 1),
+	(7, '11002226', '$2b$10$MVqZ1esa/aPsGc4TzZddk.zOv0pN8Jbe4/e27wrudKg6cJn1oI0iO', 'advisor', NULL, NULL, '2025-01-01 07:25:00', '2025-01-01 07:25:00', 1),
+	(8, '22001965', '$2b$10$UatrNxs8yI46HYyBV/pT.evdRc9Igjq.bYpDWjk/AK2faenROJocG', 'student', NULL, NULL, '2025-01-01 07:25:58', '2025-01-01 07:25:58', 1),
+	(9, '22001970', '$2b$10$eVd7mdonbsyDV30HPX7BZuZXWduG30Pm/mrvqk.lqYiqYzy6rPcN2', 'student', NULL, NULL, '2025-01-01 07:26:29', '2025-01-01 07:26:29', 1),
+	(10, '22001881', '$2b$10$.KIBjtbw/Pu4dV7uJdOoNO5hiyUfpY95kjbwpJYoJex0u8EJYyy1G', 'student', NULL, NULL, '2025-01-01 07:26:58', '2025-01-01 07:26:58', 1),
+	(11, '22001795', '$2b$10$KeY1j5IKJEmokivQ5J1ig.sv2GyHKbsyAZPMeGxsuwZN5jVN8gHRm', 'student', NULL, NULL, '2025-01-01 07:27:25', '2025-01-01 07:27:25', 1),
+	(12, '22002451', '$2b$10$rI8b5jtZTo5KNnFBoNiv8OzRlIdy16G6RW.JarIuoN6W6/Q7cfdja', 'student', NULL, NULL, '2025-01-01 07:27:55', '2025-01-01 07:27:55', 1),
+	(13, '22000290', '$2b$10$.9tZVNC6Sx.Q3HPPBfNBveOk5gZGng4havytdUgn.xxOAWGI8VdpO', 'student', NULL, NULL, '2025-01-01 07:28:43', '2025-01-01 07:28:43', 1),
+	(14, '22001460', '$2b$10$8Vua0PtM1ok/h0.atiCRiO5nNAL1goZ8yncdB/MN5nTLElJAya/LG', 'student', NULL, NULL, '2025-01-01 07:29:04', '2025-01-01 07:29:04', 1),
+	(15, '22001599', '$2b$10$L4VF.qifSPuE/bmh0iBBkucUXsmtJXiHtuFLDxLRmWTj0Ug7ounyu', 'student', NULL, NULL, '2025-01-01 07:29:30', '2025-01-01 07:29:30', 1),
+	(16, '22001846', '$2b$10$7JVsz.x1UxzSBGvf9Qeut.hYCnp8MWQWP7WqzcHQy/iaBzTBlJcfK', 'student', NULL, NULL, '2025-01-01 07:30:07', '2025-01-01 07:30:07', 1),
+	(17, '22001976', '$2b$10$Faw3mgwaRXqjryTom1kmCehOAV6QxNKEGeGJkqTYQjGOfjM/1yhN.', 'student', NULL, NULL, '2025-01-01 07:30:41', '2025-01-01 07:30:41', 1),
+	(18, '22002070', '$2b$10$VUCYNid5CIYcVtvLEDNLweunDnIDqd9XbTh1l8bYOZPqMJjUs/ePi', 'student', NULL, NULL, '2025-01-01 07:31:17', '2025-01-01 07:31:17', 1),
+	(19, '22001786', '$2b$10$81mP.muZHvJoaYXy5wVZW.wSOHYynUvzwYSadeSoPRKYlpwtOAXZK', 'student', NULL, NULL, '2025-01-01 07:31:45', '2025-01-01 07:31:45', 1),
+	(20, '22002398', '$2b$10$6frrg/RY9m4T/extGXmHAu5NX3Vqt.FjtaBWsRrysthR3jTk4DG3i', 'student', NULL, NULL, '2025-01-01 07:32:12', '2025-01-01 07:32:12', 1),
+	(21, '22002240', '$2b$10$sivgvKFJwL4AXyHVNSan3.onZvwXU83fpQdiIYIl.zcQ8DYsSFjfK', 'student', NULL, NULL, '2025-01-01 07:32:37', '2025-01-01 07:32:37', 1),
+	(22, '22001579', '$2b$10$UelDZomrhS4PDG.6SY6gK.P1WMdK1XOdbV2lV6ozPkpVpBZcEGqu2', 'student', NULL, NULL, '2025-01-01 07:33:18', '2025-01-01 07:33:18', 1),
+	(23, '22002009', '$2b$10$G2XwaEc6YPDaPRx0op8MTO.V9UtOBqtY1Gtst4InsLJzbuPAhflF.', 'student', NULL, NULL, '2025-01-01 07:33:41', '2025-01-01 07:33:41', 1),
+	(24, '22001666', '$2b$10$kNQuFAS2Es04u0IsBFNpmOET9gldRSGSXJDSUtJxYOkHGGwZjOnrW', 'student', NULL, NULL, '2025-01-01 07:34:16', '2025-01-01 07:34:16', 1),
+	(25, '22001817', '$2b$10$YDtEgmqX5hzV1vPtzY3NQO/x4fpQFVWt62ul0vpMNZ680Zn0PW0HS', 'student', NULL, NULL, '2025-01-01 07:35:59', '2025-01-01 07:35:59', 1),
+	(26, '22002085', '$2b$10$z1XDF5KqXuC.jV35wsq7U.IZSRY7802EyRJPpRbP3yAbpfvgVHwRe', 'student', NULL, NULL, '2025-01-01 07:36:35', '2025-01-01 07:36:35', 1),
+	(27, '22002088', '$2b$10$E1Dao6F67VQobsKWt2UtWOl1Cl05G9rCZOvBbQhiKRaursNBOBv86', 'student', NULL, NULL, '2025-01-01 07:37:02', '2025-01-01 07:37:02', 1),
+	(28, '22001445', '$2b$10$MlXsKinb2SPijeioMDTWB.5B7k9plVl2FVEpJXlqf42qUImP.hNaq', 'student', NULL, NULL, '2025-01-01 07:37:37', '2025-01-01 07:37:37', 1),
+	(29, '22001501', '$2b$10$H1JrZDoU9E8j1ixBEMqNwOhlf4Wq5/eQQoSf0LQ16FkitdkPvGq7K', 'student', NULL, NULL, '2025-01-01 07:38:05', '2025-01-01 07:38:05', 1),
+	(30, '22001909', '$2b$10$y3mKHPeM.nP/9OS8K8z28OFp4bVpDqx9pK7XUtLnwLpBMUHau0OZC', 'student', NULL, NULL, '2025-01-01 07:38:27', '2025-01-01 07:38:27', 1),
+	(31, '22001963', '$2b$10$F6g6TwckcJmpMKEJ4Yo1dOZ0qfnqanIxF226/xmMJ9.UAAaiPWIsO', 'student', NULL, NULL, '2025-01-01 07:38:58', '2025-01-01 07:38:58', 1),
+	(32, '22002094', '$2b$10$2F4kEFBmysalGncELlstKOffSF46oejKH6iBeIJAILINLCkRjyL6q', 'student', NULL, NULL, '2025-01-01 07:39:24', '2025-01-01 07:39:24', 1),
+	(33, '22000214', '$2b$10$O1YR/x57kNzjOAPWusM2Ue60tklh4haEVslXABsfD6MhtQrCWwl02', 'student', NULL, NULL, '2025-01-01 07:39:48', '2025-01-01 07:39:48', 1),
+	(34, '22002414', '$2b$10$RdMV.Aj8XGMXL3N.oCKqBe4reU9tsdJdUxUVPXfOjs/ub95WuaXWy', 'student', NULL, NULL, '2025-01-01 07:40:15', '2025-01-01 07:40:15', 1),
+	(35, '22002415', '$2b$10$9uRSDRDfA9aNzGa07m2z0udTu1PyAoAaFseU5a9SrrHB4r4gxFMaa', 'student', NULL, NULL, '2025-01-01 07:40:36', '2025-01-01 07:40:36', 1),
+	(36, '22000279', '$2b$10$6KF6JM0zJK4BQTvYSQQbiO0nCnnn0kHq4R4FflLEZ1/W95Yadg3W6', 'student', NULL, NULL, '2025-01-01 07:40:57', '2025-01-01 07:40:57', 1),
+	(37, '22001816', '$2b$10$9SOs0QTmgmFwOft1Qt/qf.NAX/ns6anp5I9cBV/4IFbIm3TxqHiAK', 'student', NULL, NULL, '2025-01-01 07:41:23', '2025-01-01 07:41:23', 1),
+	(38, '22002108', '$2b$10$laOK7YfA3mZbR4VVVDEsauuxmmfSfBlkBAWfu8a2ZT2ztj.6qIoDu', 'student', NULL, NULL, '2025-01-01 07:42:13', '2025-01-01 07:42:13', 1),
+	(39, '22002376', '$2b$10$e.mJuWzu.RE8XDbWv03uG.bbhXc9PoSWtKM1Qz5ksk.6.GLKyRfnq', 'student', NULL, NULL, '2025-01-01 07:42:38', '2025-01-01 07:42:38', 1),
+	(40, '22002345', '$2b$10$cLl/T.pO66yAbqmlMOM99.U9YGZl6I93LLWqkz3KoKwPd0FYQhURq', 'student', NULL, NULL, '2025-01-01 07:43:03', '2025-01-01 07:43:03', 1);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
