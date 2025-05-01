@@ -1,73 +1,67 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
+const { DataTypes } = require('sequelize');
+module.exports = (sequelize) => {
   return sequelize.define('advisors', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
     },
     advisorID: {
       type: DataTypes.STRING(10),
       allowNull: false,
-      unique: "advisorID"
+      unique: 'advisorID',
     },
     lastname: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: false,
     },
     firstname: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: false,
     },
     date_of_birth: {
       type: DataTypes.DATEONLY,
-      allowNull: false
+      allowNull: false,
     },
     gender: {
-      type: DataTypes.ENUM('Nam','Nữ','Khác'),
-      allowNull: false
+      type: DataTypes.ENUM('Nam', 'Nữ', 'Khác'),
+      allowNull: false,
     },
     address: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: false,
     },
     userID: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
-        key: 'id'
-      }
-    }
+        key: 'id',
+      },
+    },
   }, {
     sequelize,
     tableName: 'advisors',
     timestamps: true,
     indexes: [
       {
-        name: "PRIMARY",
+        name: 'PRIMARY',
         unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "id" },
-        ]
+        using: 'BTREE',
+        fields: [{ name: 'id' }],
       },
       {
-        name: "advisorID",
+        name: 'advisorID',
         unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "advisorID" },
-        ]
+        using: 'BTREE',
+        fields: [{ name: 'advisorID' }],
       },
       {
-        name: "userID",
-        using: "BTREE",
-        fields: [
-          { name: "userID" },
-        ]
+        name: 'userID',
+        using: 'BTREE',
+        fields: [{ name: 'userID' }],
       },
-    ]
+    ],
   });
 };
