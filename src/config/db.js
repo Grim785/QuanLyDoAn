@@ -1,18 +1,19 @@
-require('dotenv').config("../../../env");
-const { Sequelize } = require('sequelize');
+const mysql = require('mysql2');
 
-// console.log('DB_NAME:', process.env.DB_NAME);
-// console.log('DB_USERNAME:', process.env.DB_USERNAME);
-// console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT || 3306,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME
+});
 
-const sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USERNAME,
-    process.env.DB_PASSWORD,
-    {
-        host: process.env.DB_HOST,
-        dialect: 'mysql',
-    }
-);
+connection.connect((err) => {
+  if (err) {
+    console.error('Kết nối thất bại:', err.message);
+  } else {
+    console.log('Kết nối MySQL thành công!');
+  }
+});
 
-module.exports = sequelize;
+module.exports = connection;
