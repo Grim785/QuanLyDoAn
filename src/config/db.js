@@ -1,17 +1,13 @@
-require('dotenv').config();  // Tải các biến môi trường từ .env
-
+require('dotenv').config();
 const { Sequelize } = require('sequelize');
 
-// Kết nối với cơ sở dữ liệu MySQL bằng cách sử dụng các biến môi trường
-const sequelize = new Sequelize(process.env.CONNECT_URI, {
-  dialect: 'mysql',
-  logging: false,  // Tắt logging nếu không cần thiết
-});
+// console.log('DB_NAME:', process.env.DB_NAME);
+// console.log('DB_USERNAME:', process.env.DB_USERNAME);
+// console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
 
-sequelize.authenticate()
-  .then(() => {
-    console.log('Kết nối thành công!');
-  })
-  .catch(err => {
-    console.error('Không thể kết nối: ', err);
+const sequelize = new Sequelize(process.env.CONNECT_URI, {
+    dialect: 'mysql',
+    logging: false,
   });
+
+module.exports = sequelize;
